@@ -29,6 +29,7 @@ export default {
         "on-surface-variant": "#40484c",
         "outline": "#70787d",
         "outline-variant": "#c0c8cd",
+        "link": "#008BEE",
       },
       backgroundImage: {
         "landing":

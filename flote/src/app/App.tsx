@@ -1,6 +1,6 @@
 import { Routes, Route } from "react-router-dom";
-import Landing from "../components/Landing";
-import SignIn from "../components/SignIn";
+import Landing from "../pages/Landing";
+import SignIn from "../pages/SignIn";
 
 export default function App() {
   return (
