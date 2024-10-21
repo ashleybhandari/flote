@@ -3,7 +3,7 @@ import LandingBackground from "./LandingBackground";
 export default function Landing() {
   return (
     <LandingBackground className="flex flex-col">
-      <button className="self-end w-fit mt-6 mr-5 px-9 py-2 bg-primary/90 rounded text-white text-lg">
+      <button className="self-end w-fit mt-6 mr-5 px-9 py-2 rounded text-white text-lg bg-primary/90 hover:bg-primary/70 active:bg-primary/80">
         Sign in
       </button>
       <div className="self-center text-center mt-28">
