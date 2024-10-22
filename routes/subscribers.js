@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
+// TODO: Set up the asynchronous CRUD requests
 // Getting all
 router.get('/', (req, res) => {
 
