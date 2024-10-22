@@ -2,19 +2,19 @@ import { Link } from "react-router-dom";
 
 import LandingCard from "../components/templates/LandingCard";
 
-export default function SignIn() {
-  const handleClick = () => console.log("sign in clicked!");
+export default function SignUp() {
+  const handleClick = () => console.log("create account clicked!");
 
   return (
     <LandingCard
-      headerText="Welcome back!"
-      buttonText="sign in"
+      headerText="Let's get started"
+      buttonText="create account"
       onClick={handleClick}
     >
       <div>
         Already have an account?{" "}
-        <Link className="text-link hover:underline" to="/sign-up">
-          Sign up
+        <Link className="text-link hover:underline" to="/sign-in">
+          Sign in
         </Link>
       </div>
     </LandingCard>

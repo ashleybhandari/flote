@@ -20,11 +20,11 @@ export default function Landing() {
 
   return (
     <LandingBackground className="flex flex-col">
-      <RoundedButton fontSize="lg" className="self-end" onClick={goToSignIn}>
+      <RoundedButton className="self-end text-lg" onClick={goToSignIn}>
         sign in
       </RoundedButton>
       <div className="self-center text-center m-auto pb-44">
-        <Logo fontSizePx="96" className="mb-4"></Logo>
+        <Logo className="text-[96px] mb-4"></Logo>
         <div
           className="flex flex-row w-72 sm:w-96 md:w-[550px] bg-white rounded"
           onKeyDown={searchLogs}
