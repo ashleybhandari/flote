@@ -19,6 +19,5 @@ app.use(express.json());
 const subscribersRouter = require('./routes/subscribers');
 app.use('/subscribers', subscribersRouter);
 
-
 // Start server on local host
 app.listen(3000, () => console.log('server started')); // start server on local host
