@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-import LandingCard from "../components/templates/LandingCard";
+import LandingCard from "../../components/templates/LandingCard";
 
 export default function SignIn() {
   const handleClick = () => console.log("sign in clicked!");

@@ -1,9 +1,9 @@
 import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
-import Logo from "../components/atoms/Logo";
-import RoundedButton from "../components/atoms/RoundedButton";
-import LandingBackground from "../components/templates/LandingBackground";
+import Logo from "../../components/atoms/Logo";
+import RoundedButton from "../../components/atoms/RoundedButton";
+import LandingBackground from "../../components/templates/LandingBackground";
 
 export default function Landing() {
   const queryRef = useRef<HTMLInputElement>(null);

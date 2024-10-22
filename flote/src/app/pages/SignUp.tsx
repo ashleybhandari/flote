@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-import LandingCard from "../components/templates/LandingCard";
+import LandingCard from "../../components/templates/LandingCard";
 
 export default function SignUp() {
   const handleClick = () => console.log("create account clicked!");
