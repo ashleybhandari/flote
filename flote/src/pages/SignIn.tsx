@@ -1,13 +1,15 @@
 import LandingCard from "../components/templates/LandingCard";
 
 export default function SignIn() {
-  const handleClick = () => console.log('clicked!');
+  const handleClick = () => console.log("sign in clicked!");
 
   return (
     <LandingCard
       headerText="Welcome back!"
-      buttonText="Sign in"
+      buttonText="sign in"
       onClick={handleClick}
-    ></LandingCard>
+    >
+      content...
+    </LandingCard>
   );
 }
