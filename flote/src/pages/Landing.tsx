@@ -11,8 +11,9 @@ export default function Landing() {
 
   const goToSignIn = () => navigate("sign-in");
   const searchLogs = (event) => {
-    if (!event || event.key === "Enter") {
-      event?.preventDefault();
+    const isKeypress = event.nativeEvent instanceof KeyboardEvent;
+    if (!isKeypress || (isKeypress && event.key === "Enter")) {
+      event.preventDefault();
       console.log("search query:", queryRef.current?.value);
     }
   };
@@ -26,7 +27,7 @@ export default function Landing() {
         <Logo fontSizePx="96" className="mb-4"></Logo>
         <div
           className="flex flex-row w-72 sm:w-96 md:w-[550px] bg-white rounded"
-          onKeyDown={(e) => searchLogs(e)}
+          onKeyDown={searchLogs}
         >
           <input
             ref={queryRef}
