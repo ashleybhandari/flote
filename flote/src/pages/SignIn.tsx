@@ -12,7 +12,7 @@ export default function SignIn() {
       onClick={handleClick}
     >
       <div>
-        Already have an account?{" "}
+        Don't have an account?{" "}
         <Link className="text-link hover:underline" to="/sign-up">
           Sign up
         </Link>
