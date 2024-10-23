@@ -2,16 +2,13 @@ import { createRequire } from "module";
 const require = createRequire(import.meta.url);
 require('dotenv').config();
 
-// import 'dotenv/config.js';
-// import { createRequire } from 'module';
-// const require = createRequire(import.meta.url);
-
+// Create app with express and mongoose
 const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
 
-// Connect to our database using dotenv
-mongoose.connect(process.env.DB_URL, {useNewUrlParser: true});
+// Connect to our database using mongoose and dotenv
+mongoose.connect(process.env.DB_URL);
 const db = mongoose.connection;
 
 // View problem or success when connecting to db
