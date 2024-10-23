@@ -1,4 +1,10 @@
+import { createRequire } from "module";
+const require = createRequire(import.meta.url);
 require('dotenv').config();
+
+// import 'dotenv/config.js';
+// import { createRequire } from 'module';
+// const require = createRequire(import.meta.url);
 
 const express = require('express');
 const app = express();
@@ -16,7 +22,7 @@ db.once('open', () => console.log('Connected to database'));
 app.use(express.json());
 
 // Routing
-const subscribersRouter = require('./routes/subscribers');
+import subscribersRouter from './routes/subscribers.js';
 app.use('/subscribers', subscribersRouter);
 
 // Start server on local host
