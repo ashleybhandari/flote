@@ -1,0 +1,24 @@
+{
+  "name": "flote",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "devStart": "nodemon server.js"
+  },
+  "dependencies": {
+    "express": "^4.21.1",
+    "mongodb": "^6.10.0",
+    "mongoose": "^8.7.2"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.11.1",
+    "autoprefixer": "^10.4.20",
+    "dotenv": "^16.4.5",
+    "eslint": "^9.11.1",
+    "globals": "^15.9.0",
+    "nodemon": "^3.1.7",
+    "typescript": "^5.5.3",
+    "typescript-eslint": "^8.7.0"
+  }
+}

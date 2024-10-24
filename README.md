@@ -3,12 +3,14 @@ The current method for tracking finishing times in a boat race presents two prob
 
 ## Opening the React project
 ```
+cd flote
 npm run dev
 ```
 Open http://localhost:5173/ in your browser if it does not open automatically.
 
 ## Starting the server
 ```
+cd server
 npm run devStart
 ```
 
