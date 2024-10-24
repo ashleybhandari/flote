@@ -9,6 +9,7 @@ const client = new MongoClient(uri);
 // function getRegatta(id: number): Regatta
 // function getRace(id: number): Race
 // function getBoat(id: number): Boat
+
 // function updateUser(email: string, user: User): void 
 // function updateRegatta(id: number, regatta: Regatta): void
 // function updateRace(id: number, race: Race): void
@@ -67,7 +68,7 @@ async function run() {
     }
 
   } finally {
-    // Ensures that the client will close when you finish/error
+    // Ensures that the client closes
     await client.close();
   }
 }
