@@ -1,13 +1,16 @@
 # flotE
 The current method for tracking finishing times in a boat race presents two problems: (1) two people are required for timekeeping, one for keeping time and the other for recording results; and (2) the finish line is not clearly visible from shore, resulting in a delay between when a boat finishes and when viewers receive its finishing time. Our clients proposed flotE to solve these problems. The application has two main features: administration and timekeeping. flotE helps users organize and save regattas, races, and participants, in addition to providing a way to search these stored records. The application also provides timekeeping capabilities: a built-in stopwatch and boat ID suggestions as the user types allow a single user to timekeep a race on their own; additionally, as results are recorded, they are posted to the application in real time (via SMS) for viewers to see.
 
-## Setup instructions
+## Opening the React project
 ```
-cd flote
-npm install
 npm run dev
 ```
 Open http://localhost:5173/ in your browser if it does not open automatically.
+
+## Starting the server
+```
+npm run devStart
+```
 
 ## Project structure
 ```sh
