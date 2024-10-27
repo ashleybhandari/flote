@@ -10,13 +10,13 @@ require("dotenv").config();
 const express = require("express");
 const app = express();
 
-//auth0 code 
+//sets up auth0
 const { auth } = require('express-openid-connect');
 
 const config = {
   authRequired: false,
   auth0Logout: true,
-  secret: 'a long, randomly-generated string stored in env',
+  secret: '374515c555b791c32a01ec4b018c76abbbe62d625581cbc18652f4f93a7af23d',
   baseURL: 'http://localhost:3000',
   clientID: 'izgea8EQWehX3fGtMY0a6hM5ByiToMRb',
   issuerBaseURL: 'https://dev-rvwwzp45gttpuq7a.us.auth0.com'
@@ -25,11 +25,11 @@ const config = {
 // auth router attaches /login, /logout, and /callback routes to the baseURL
 app.use(auth(config));
 
-// req.isAuthenticated is provided from the auth router
 app.get('/', (req, res) => {
   res.send(req.oidc.isAuthenticated() ? 'Logged in' : 'Logged out');
 });
 
+/*
 // Connect to our database using mongoose and dotenv
 const mongoose = require("mongoose");
 mongoose.connect(process.env.DB_URL);
@@ -42,7 +42,7 @@ db.once("open", () => console.log("Connected to database"));
 // Set up routes with express as a body
 app.use(express.json());
 app.use("/subscribers", subscribersRouter);
-
+*/
 // Set up socket.io
 const cors = require("cors");
 app.use(cors());
