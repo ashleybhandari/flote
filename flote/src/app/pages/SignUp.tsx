@@ -1,21 +1,27 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import LandingCard from "../../components/templates/LandingCard";
+import Input from "../../components/molecules/Input";
 
 export default function SignUp() {
-  const handleClick = () => console.log("create account clicked!");
+  const navigate = useNavigate();
+  const handleSignUp = () => navigate("/home");
 
   return (
     <LandingCard
       headerText="Let's get started"
-      buttonText="create account"
-      onClick={handleClick}
+      buttonText="continue"
+      onClick={handleSignUp}
     >
-      <div>
+      <div className="text-slate-600">
         Already have an account?{" "}
         <Link className="text-link hover:underline" to="/sign-in">
-          Sign in
+          Sign in.
         </Link>
+      </div>
+      <div className="flex flex-col mt-9 mb-2">
+        <Input label="First Name"></Input>
+        <Input label="Last Name"></Input>
       </div>
     </LandingCard>
   );

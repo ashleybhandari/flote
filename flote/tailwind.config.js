@@ -10,10 +10,10 @@ export default {
     },
     extend: {
       colors: {
-        "primary": "#116682",
-        "secondary": "#4d616c",
-        "tertiary": "#5d5b7d",
-        "error": "#ba1a1a",
+        primary: "#116682",
+        secondary: "#4d616c",
+        tertiary: "#5d5b7d",
+        error: "#ba1a1a",
         "primary-container": "#bde9ff",
         "secondary-container": "#d0e6f2",
         "tertiary-container": "#e3dfff",
@@ -22,17 +22,18 @@ export default {
         "on-secondary-container": "#081e27",
         "on-tertiary-container": "#191836",
         "on-error-container": "#410002",
-        "surface": "#f6fafd",
+        surface: "#f6fafd",
         "surface-dim": "#d6dbde",
         "surface-bright": "#f6fafd",
+        "surface-container": "#eaeef2",
         "on-surface": "#171c1f",
         "on-surface-variant": "#40484c",
-        "outline": "#70787d",
+        outline: "#70787d",
         "outline-variant": "#c0c8cd",
-        "link": "#008BEE",
+        link: "#008BEE",
       },
       backgroundImage: {
-        "landing":
+        landing:
           "linear-gradient(rgba(0, 0, 0, .7), rgba(0, 0, 0, 0)), url('src/assets/landing.jpg')",
       },
     },
