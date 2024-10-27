@@ -7,7 +7,7 @@ type Props = {
 export default function RoundedButton({ className, onClick, children }: Props) {
   return (
     <button
-      className={`px-12 py-3 text-white rounded-full bg-primary hover:bg-primary/90 ${className}`}
+      className={`px-12 py-3 text-white rounded-full bg-primary hover:bg-primary/90 active:bg-primary ${className}`}
       onClick={onClick}
     >
       {children}

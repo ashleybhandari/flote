@@ -14,7 +14,7 @@ export default function SignIn() {
       <div>
         Don't have an account?{" "}
         <Link className="text-link hover:underline" to="/sign-up">
-          Sign up
+          Sign up.
         </Link>
       </div>
     </LandingCard>

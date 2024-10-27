@@ -9,7 +9,7 @@ export default function Landing() {
   const queryRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
 
-  const goToSignIn = () => navigate("sign-in");
+  const goToSignUp = () => navigate("sign-up");
   const searchLogs = (event) => {
     const isKeypress = event.nativeEvent instanceof KeyboardEvent;
     if (!isKeypress || (isKeypress && event.key === "Enter")) {
@@ -20,8 +20,8 @@ export default function Landing() {
 
   return (
     <LandingBackground className="flex flex-col">
-      <RoundedButton className="self-end text-lg" onClick={goToSignIn}>
-        sign in
+      <RoundedButton className="self-end text-lg" onClick={goToSignUp}>
+        sign up
       </RoundedButton>
       <div className="self-center text-center m-auto pb-44">
         <Logo className="text-[96px] mb-4"></Logo>
@@ -32,7 +32,7 @@ export default function Landing() {
           <input
             ref={queryRef}
             className="grow py-4 pl-6 bg-transparent border-none focus:outline-none"
-            placeholder="search for a regatta, race, or participant"
+            placeholder="Search for a regatta, race, or participant"
           ></input>
           <button
             className="fa-solid fa-magnifying-glass pr-6 text-outline"

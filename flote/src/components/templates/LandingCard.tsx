@@ -23,12 +23,17 @@ export default function LandingCard({
   return (
     <LandingBackground className="flex flex-col">
       <Logo className="text-[40px]" onClick={goToLanding}></Logo>
-      <div className="flex flex-col items-center gap-3 w-[600px] min-h-44 m-auto bg-white rounded pt-8 pb-10 px-2">
+      <div className="flex flex-col items-center gap-1 w-[380px] sm:w-[600px] min-h-44 m-auto bg-white rounded px-1 pt-2 pb-10">
+        <button
+          className="self-start flex flex-row items-center px-4 py-2 mb-2 rounded-full hover:bg-secondary/20 active:bg-secondary/30"
+          onClick={goToLanding}
+        >
+          <i className="fa-solid fa-arrow-left text-[9px] pr-2"></i>
+          <span className="text-sm">home</span>
+        </button>
         <div className="font-header font-bold text-[30px]">{headerText}</div>
-        <div>{children}</div>
-        <RoundedButton className="mt-2" onClick={onClick}>
-          {buttonText}
-        </RoundedButton>
+        <div className="flex flex-col items-center">{children}</div>
+        <RoundedButton onClick={onClick}>{buttonText}</RoundedButton>
       </div>
     </LandingBackground>
   );
