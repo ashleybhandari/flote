@@ -29,7 +29,7 @@ export default function LandingCard({
           onClick={goToLanding}
         >
           <i className="fa-solid fa-arrow-left text-[9px] pr-2"></i>
-          <span className="text-sm">home</span>
+          <span className="text-sm">Home</span>
         </button>
         <div className="font-header font-bold text-[30px]">{headerText}</div>
         <div className="flex flex-col items-center">{children}</div>

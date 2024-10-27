@@ -11,7 +11,7 @@ export default function SignIn() {
       buttonText="sign in"
       onClick={handleClick}
     >
-      <div>
+      <div className="text-slate-600">
         Don't have an account?{" "}
         <Link className="text-link hover:underline" to="/sign-up">
           Sign up.
