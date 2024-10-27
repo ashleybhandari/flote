@@ -1,4 +1,8 @@
+import { useEffect } from "react";
 import { Navigate, Outlet, Routes, Route } from "react-router-dom";
+
+import { socket } from "../socket";
+
 import Landing from "./pages/Landing";
 import SignUp from "./pages/SignUp";
 import SignIn from "./pages/SignIn";
@@ -10,6 +14,10 @@ const PrivateRoutes = () => {
 };
 
 export default function App() {
+  useEffect(() => {
+    socket.on("getUser", (data) => console.log(data));
+  }, []);
+
   return (
     <Routes>
       <Route path="/" element={<Landing />} />
