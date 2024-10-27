@@ -18,7 +18,7 @@ export default function SignUp() {
           Sign in.
         </Link>
       </div>
-      <div className="flex flex-col gap-3 my-9">
+      <div className="flex flex-col gap-4 my-9">
         <Input label="First Name"></Input>
         <Input label="Last Name"></Input>
       </div>
