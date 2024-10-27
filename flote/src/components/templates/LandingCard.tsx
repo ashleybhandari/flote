@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 
 import LandingBackground from "./LandingBackground";
 import Logo from "../atoms/Logo";
-import RoundedButton from "../atoms/RoundedButton";
+import SolidButton from "../molecules/SolidButton";
 
 type Props = {
   headerText: string;
@@ -33,7 +33,7 @@ export default function LandingCard({
         </button>
         <div className="font-header font-bold text-[30px]">{headerText}</div>
         <div className="flex flex-col items-center">{children}</div>
-        <RoundedButton onClick={onClick}>{buttonText}</RoundedButton>
+        <SolidButton onClick={onClick}>{buttonText}</SolidButton>
       </div>
     </LandingBackground>
   );

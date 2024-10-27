@@ -2,7 +2,7 @@ import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
 import Logo from "../../components/atoms/Logo";
-import RoundedButton from "../../components/atoms/RoundedButton";
+import SolidButton from "../../components/molecules/SolidButton";
 import LandingBackground from "../../components/templates/LandingBackground";
 
 export default function Landing() {
@@ -20,9 +20,9 @@ export default function Landing() {
 
   return (
     <LandingBackground className="flex flex-col">
-      <RoundedButton className="self-end text-lg" onClick={goToSignUp}>
+      <SolidButton className="self-end text-lg" onClick={goToSignUp}>
         sign up
-      </RoundedButton>
+      </SolidButton>
       <div className="self-center text-center m-auto pb-44">
         <Logo className="text-[96px] mb-4"></Logo>
         <div

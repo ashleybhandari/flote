@@ -1,16 +1,17 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import LandingCard from "../../components/templates/LandingCard";
-import Input from "../../components/atoms/Input";
+import Input from "../../components/molecules/Input";
 
 export default function SignUp() {
-  const handleClick = () => console.log("create account clicked!");
+  const navigate = useNavigate();
+  const handleSignUp = () => navigate("/home");
 
   return (
     <LandingCard
       headerText="Let's get started"
       buttonText="continue"
-      onClick={handleClick}
+      onClick={handleSignUp}
     >
       <div className="text-slate-600">
         Already have an account?{" "}
@@ -18,7 +19,7 @@ export default function SignUp() {
           Sign in.
         </Link>
       </div>
-      <div className="flex flex-col gap-4 my-9">
+      <div className="flex flex-col mt-9 mb-2">
         <Input label="First Name"></Input>
         <Input label="Last Name"></Input>
       </div>
