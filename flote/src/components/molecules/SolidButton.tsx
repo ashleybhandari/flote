@@ -1,15 +1,23 @@
-import RoundedButton from "../atoms/RoundedButton"
+import RoundedButton from "../atoms/RoundedButton";
 
 type Props = {
-  className?: string;
   onClick: () => void;
   children: React.ReactNode;
+  bgClasses?: string;
+  className?: string;
 };
 
-export default function SolidButton({ className, onClick, children }: Props) {
+export default function SolidButton({
+  onClick,
+  children,
+  bgClasses,
+  className,
+}: Props) {
   return (
     <RoundedButton
-      className={`text-white bg-primary hover:bg-primary/90 active:bg-primary ${className}`}
+      className={`text-white ${
+        bgClasses ?? "bg-primary hover:bg-primary/90 active:bg-primary"
+      } ${className}`}
       onClick={onClick}
     >
       {children}

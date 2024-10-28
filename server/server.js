@@ -40,30 +40,6 @@ mongoose
   .then(() => console.log("Connected to database"))
   .catch((err) => console.error("Database connection error:", err));
 
-// temporary data to prove that mongodb is communicating with the server
-const temporaryData = async () => {
-  const { Regatta } = await import("./models/subscribers.js");
-  const newRegatta = new Regatta({
-    id: 1,
-    name: "Temporary Regatta",
-    adminId: 111,
-    timeKeeperIds: [111, 222],
-  });
-
-  try {
-    const tempRegattaCall = await newRegatta.save();
-    console.log(
-      "Data successfully obtained from the temporary Regatta:",
-      tempRegattaCall
-    );
-  } catch (error) {
-    console.error(
-      "Could not establish connection to the database",
-      error.message
-    );
-  }
-};
-
 // set up socket.io
 const cors = require("cors");
 app.use(cors());
@@ -82,10 +58,21 @@ io.on("connection", (socket) => {
     const data = {};
     socket.emit("getRegatta", data);
   });
-});
 
-// calling temporaryData
-temporaryData();
+  socket.on("createRegatta", async (regatta) => {
+    const { Regatta } = await import("./models/subscribers.js");
+
+    try {
+      data = await new Regatta(...regatta).save();
+      console.log("Data saved", data);
+    } catch (error) {
+      console.error(
+        "Could not establish connection to the database",
+        error.message
+      );
+    }
+  });
+});
 
 // start server on port 3000
 server.listen(3000, () => console.log("server started"));

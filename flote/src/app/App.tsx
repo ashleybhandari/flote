@@ -1,7 +1,7 @@
 import { Navigate, Outlet, Route, Routes } from "react-router-dom";
 import { useEffect } from "react";
 
-import { socket } from "../socket";
+// import { socket } from "../socket";
 
 import AccountHome from "./pages/AccountHome";
 import Landing from "./pages/Landing";
@@ -13,7 +13,7 @@ const PrivateRoutes = () => {
 
 export default function App() {
   useEffect(() => {
-    socket.on("getRegatta", (data) => console.log(data));
+    // TODO socket functions
   }, []);
 
   return (
