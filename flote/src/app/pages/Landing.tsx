@@ -24,9 +24,7 @@ export default function Landing() {
         </SolidButton>
         <div className="grow flex flex-col items-center justify-center pb-44">
           <Logo isLink={false} className="text-[96px] mb-4"></Logo>
-          <div className="w-72 sm:w-96 md:w-[550px]">
-            <SearchBar handleSearch={console.log}></SearchBar>
-          </div>
+          <SearchBar className="w-72 sm:w-96 lg:w-[600px]"></SearchBar>
         </div>
       </div>
     </div>
