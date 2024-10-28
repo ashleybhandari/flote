@@ -1,3 +1,4 @@
+import { env } from 'node:process';
 import { createRequire } from "module";
 const require = createRequire(import.meta.url);
 require('dotenv').config();
@@ -8,7 +9,8 @@ const app = express();
 const mongoose = require('mongoose');
 
 // Connect to our database using mongoose and dotenv
-mongoose.connect(process.env.DB_URL);
+// should hide credentials in .env
+mongoose.connect('mongodb+srv://megraves:B0a+s@flotedbcluster.qq2og.mongodb.net/?retryWrites=true&w=majority&appName=flotEdbCluster'); //process.env.DB_URL
 const db = mongoose.connection;
 
 // View problem or success when connecting to db
