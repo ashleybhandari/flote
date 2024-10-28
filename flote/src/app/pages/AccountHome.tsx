@@ -1,41 +1,46 @@
 import { socket } from "../../socket";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import AppLayout from "../../components/templates/AppLayout";
-import SolidButton from "../../components/molecules/SolidButton";
+import { EventResponse } from "../../types/EventResponse";
 import RegattaList from "../../components/molecules/RegattaList";
 import { Regatta } from "../../types/Regatta";
+import SolidButton from "../../components/molecules/SolidButton";
 
-// temp data
+// mock data
 const NEW_REGATTA: Regatta = {
-  id: "",
+  id: "2",
   name: "a new one",
   adminId: "0",
   timekeeperIds: ["2", "3"],
 };
 
-const REGATTAS: Regatta[] = [
-  {
-    id: "0",
-    name: "a regatta",
-    adminId: "0",
-    timekeeperIds: ["2", "3"],
-  },
-  {
-    id: "1",
-    name: "another one",
-    adminId: "0",
-    timekeeperIds: ["2", "4"],
-  },
-];
-
 export default function AccountHome() {
-  const [regattas, setRegattas] = useState(REGATTAS); // TODO get request
+  const [regattas, setRegattas] = useState<Regatta[]>([]);
 
   const handleCreateRegatta = () => {
-    socket.emit("createRegatta", NEW_REGATTA);
-    // TODO update UI
+    socket.emit("createRegatta", NEW_REGATTA, (res: EventResponse) => {
+      if (res.error) {
+        console.error(res.error);
+      } else {
+        // update UI
+        setRegattas((prev) => [...prev, NEW_REGATTA]);
+      }
+    });
   };
+
+  // initialize regattas
+  useEffect(() => {
+    const userId = "0"; // TODO get actual id
+    
+    socket.emit("getRegattas", userId, (res: EventResponse) => {
+      if (res.error) {
+        console.error(res.error);
+      } else {
+        setRegattas(res.data);
+      }
+    });
+  }, []);
 
   // TODO form to get regatta details
   return (
