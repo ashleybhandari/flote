@@ -4,12 +4,13 @@ import { useNavigate } from "react-router-dom";
 import Logo from "../../components/atoms/Logo";
 import SolidButton from "../../components/molecules/SolidButton";
 import LandingBackground from "../../components/templates/LandingBackground";
+import { useAuth0 } from "@auth0/auth0-react";
 
 export default function Landing() {
   const queryRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
+  const { loginWithRedirect, isAuthenticated} = useAuth0();
 
-  const goToSignUp = () => navigate("sign-up");
   const searchLogs = (event) => {
     const isKeypress = event.nativeEvent instanceof KeyboardEvent;
     if (!isKeypress || (isKeypress && event.key === "Enter")) {
@@ -17,10 +18,14 @@ export default function Landing() {
       console.log("search query:", queryRef.current?.value);
     }
   };
+	if(isAuthenticated){
+		navigate("/home");
 
+
+	}	
   return (
     <LandingBackground className="flex flex-col">
-      <SolidButton className="self-end text-lg" onClick={goToSignUp}>
+      <SolidButton className="self-end text-lg" onClick={()=>{loginWithRedirect(); }}>
         sign up
       </SolidButton>
       <div className="self-center text-center m-auto pb-44">
