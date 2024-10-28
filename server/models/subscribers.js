@@ -104,7 +104,8 @@ const raceSchema = new mongoose.Schema({
   
 
 //exporting the schemas
-module.exports = mongoose.model('User', userSchema);
-module.exports = mongoose.model('Regatta', regattaSchema);
-module.exports = mongoose.model('Race', raceSchema);
-module.exports = mongoose.model('Boat', boatSchema);
+// editing how these are exported - dila
+export const User = mongoose.model('User', userSchema);
+export const Regatta = mongoose.model('Regatta', regattaSchema);
+export const Race = mongoose.model('Race', raceSchema);
+export const Boat = mongoose.model('Boat', boatSchema);

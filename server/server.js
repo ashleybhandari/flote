@@ -29,20 +29,34 @@ app.get('/', (req, res) => {
   res.send(req.oidc.isAuthenticated() ? 'Logged in' : 'Logged out');
 });
 
-/*
-// Connect to our database using mongoose and dotenv
+// database connection
 const mongoose = require("mongoose");
-mongoose.connect(process.env.DB_URL);
-const db = mongoose.connection;
-
-// View problem or success when connecting to db
-db.on("error", (err) => console.error(err));
-db.once("open", () => console.log("Connected to database"));
+mongoose.connect('mongodb+srv://megraves:B0a+s@flotedbcluster.qq2og.mongodb.net/?retryWrites=true&w=majority&appName=flotEdbCluster')
+  .then(() => console.log("Connected to database"))
+  .catch(err => console.error("Database connection error:", err));
 
 // Set up routes with express as a body
 app.use(express.json());
 app.use("/subscribers", subscribersRouter);
-*/
+
+// temporary data to prove that MONGODB is communicating with the server
+const temporaryData = async () => {
+  const { Regatta } = await import('./models/subscribers.js');
+  const newRegatta = new Regatta({
+    id: 1,
+    name: "Temporary Regatta",
+    adminId: 111,
+    timeKeeperIds: [111, 222]
+  });
+
+  try {
+    const tempRegattaCall = await newRegatta.save();
+    console.log("Data successfully obtained from the temporary Regatta:", tempRegattaCall);
+  } catch (error) {
+    console.error("Could not establish connection to the database", error.message);
+  }
+}
+
 // Set up socket.io
 const cors = require("cors");
 app.use(cors());
@@ -63,6 +77,9 @@ io.on("connection", (socket) => {
     socket.emit("getUser", data);
   });
 });
+
+// calling temporaryData
+temporaryData();
 
 // Start server on local host
 server.listen(3000, () => console.log("server started"));

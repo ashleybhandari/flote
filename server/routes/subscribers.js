@@ -1,11 +1,8 @@
-import { createRequire } from "module";
-const require = createRequire(import.meta.url);
-
-const express = require('express');
+import express from 'express';
 const router = express.Router();
 
 //Importing the models to the controller 
-const Model = require("../models/subscribers");
+import { User, Regatta, Race, Boat } from '../models/subscribers.js';
 
 // TODO: Set up the asynchronous CRUD requests
 
