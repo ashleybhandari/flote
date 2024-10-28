@@ -13,7 +13,7 @@ export default function OutlinedButton({
 }: Props) {
   return (
     <RoundedButton
-      className={`text-secondary border-solid border-2 border-secondary hover:bg-secondary/20 active:bg-secondary/30 ${className}`}
+      className={`text-white border-solid border-2 border-white hover:bg-white/10 active:bg-white/20 ${className}`}
       onClick={onClick}
     >
       {children}

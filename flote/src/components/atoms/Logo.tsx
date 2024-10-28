@@ -1,15 +1,20 @@
+import { useNavigate } from "react-router-dom";
+
 type Props = {
+  isLink?: boolean;
   className?: string;
-  onClick?: () => void;
 };
 
-export default function Logo({ className, onClick }: Props) {
+export default function Logo({ isLink = true, className }: Props) {
+  const navigate = useNavigate();
+  const goToHome = () => navigate("/home");
+
   return (
     <h1
       className={`font-header font-bold text-white ${className}`}
-      onClick={onClick}
+      onClick={isLink ? goToHome : () => {}}
     >
-      <span className={onClick ? "cursor-pointer" : ""}>flotE</span>
+      <span className={isLink ? "cursor-pointer" : ""}>flotE</span>
     </h1>
   );
 }

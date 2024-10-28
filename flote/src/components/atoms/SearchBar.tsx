@@ -1,6 +1,8 @@
 import { useRef } from "react";
 
-type Props = { handleSearch: (arg0: string | undefined) => void };
+type Props = {
+  handleSearch: (arg0: string | undefined) => void;
+};
 
 export default function SearchBar({ handleSearch }: Props) {
   const queryRef = useRef<HTMLInputElement>(null);

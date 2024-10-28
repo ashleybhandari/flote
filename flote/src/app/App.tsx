@@ -13,7 +13,7 @@ const PrivateRoutes = () => {
 
 export default function App() {
   useEffect(() => {
-    socket.on("getUser", (data) => console.log(data));
+    socket.on("getRegatta", (data) => console.log(data));
   }, []);
 
   return (
