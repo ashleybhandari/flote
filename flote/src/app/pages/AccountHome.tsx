@@ -37,16 +37,15 @@ export default function AccountHome() {
   useEffect(() => {
     if (!user?.sub) return;
 
-    socket.emit("getRegattas", user.sub, (res: EventResponse) => {
+    socket.emit("getRegattasAdmin", user.sub, (res: EventResponse) => {
       if (res.error) {
         console.error(res.error);
       } else {
-        setRegattas(res.data);
+        setRegattas(res.data.regattas);
       }
     });
   }, [user]);
 
-  // TODO form to get regatta details
   return (
     <AppLayout>
       <div className="flex flex-row items-center">
