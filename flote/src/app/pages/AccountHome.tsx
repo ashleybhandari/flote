@@ -6,8 +6,8 @@ import { Regatta } from "../../types/Regatta";
 import { socket } from "../../socket";
 
 import AppLayout from "../../components/templates/AppLayout";
+import Input from "../../components/molecules/Input";
 import RegattaList from "../../components/molecules/RegattaList";
-import SolidButton from "../../components/molecules/SolidButton";
 
 export default function AccountHome() {
   const [regattas, setRegattas] = useState<Regatta[]>([]);
@@ -16,11 +16,12 @@ export default function AccountHome() {
   const handleCreateRegatta = () => {
     if (!user?.sub) return;
 
-    // mock data
+    // temp for demo
+    const input = document.getElementsByTagName("input")[0];
     const NEW_REGATTA: Regatta = {
-      name: "a new one",
+      name: input.value,
       adminId: user.sub,
-      timekeeperIds: ["2", "3"],
+      timekeeperIds: [],
     };
 
     socket.emit("createRegatta", NEW_REGATTA, (res: EventResponse) => {
@@ -29,7 +30,7 @@ export default function AccountHome() {
       } else {
         // update UI
         const id = res.data;
-        setRegattas((prev) => [...prev, {...NEW_REGATTA, id }]);
+        setRegattas((prev) => [...prev, { ...NEW_REGATTA, id }]);
       }
     });
   };
@@ -50,13 +51,14 @@ export default function AccountHome() {
   // TODO form to get regatta details
   return (
     <AppLayout>
-      <SolidButton
-        className="bg-tertiary hover:bg-tertiary/90 active:bg-tertiary"
-        onClick={handleCreateRegatta}
-      >
-        create regatta
-      </SolidButton>
-      <RegattaList regattas={regattas} className="mt-20" />
+      <div className="flex flex-row items-center">
+        <Input label="Regatta Name" />
+        <button
+          className="fa-solid fa-plus text-white rounded-full w-10 h-10 bg-tertiary hover:bg-tertiary/90 active:bg-tertiary"
+          onClick={handleCreateRegatta}
+        ></button>
+      </div>
+      <RegattaList regattas={regattas} className="mt-14" />
     </AppLayout>
   );
 }

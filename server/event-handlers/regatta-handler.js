@@ -1,5 +1,6 @@
 import { Regatta } from "../models/subscribers.js";
-import { REGATTAS } from "../mock-data.js";
+
+const REGATTAS = [];
 
 export function RegattaHandler(io, socket) {
   socket.on("createRegatta", createRegatta);
