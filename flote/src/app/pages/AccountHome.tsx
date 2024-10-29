@@ -1,3 +1,4 @@
+import { useAuth0 } from "@auth0/auth0-react";
 import { useEffect, useState } from "react";
 
 import { EventResponse } from "../../types/EventResponse";
@@ -10,13 +11,16 @@ import SolidButton from "../../components/molecules/SolidButton";
 
 export default function AccountHome() {
   const [regattas, setRegattas] = useState<Regatta[]>([]);
+  const { user } = useAuth0();
 
   const handleCreateRegatta = () => {
+    if (!user?.sub) return;
+
     // mock data
     const NEW_REGATTA: Regatta = {
       id: "2",
       name: "a new one",
-      adminId: "0", // TODO get actual id
+      adminId: user.sub,
       timekeeperIds: ["2", "3"],
     };
 
@@ -32,16 +36,16 @@ export default function AccountHome() {
 
   // initialize regattas
   useEffect(() => {
-    const userId = "0"; // TODO get actual id
+    if (!user?.sub) return;
 
-    socket.emit("getRegattas", userId, (res: EventResponse) => {
+    socket.emit("getRegattas", user.sub, (res: EventResponse) => {
       if (res.error) {
         console.error(res.error);
       } else {
         setRegattas(res.data);
       }
     });
-  }, []);
+  }, [user]);
 
   // TODO form to get regatta details
   return (
