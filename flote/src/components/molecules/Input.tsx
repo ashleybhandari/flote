@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import InputError from "../atoms/InputError";
+import InputError from "@atoms/InputError";
 
 type Props = {
   label: string;

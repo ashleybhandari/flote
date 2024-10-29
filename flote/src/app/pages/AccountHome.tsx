@@ -1,13 +1,13 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import { useEffect, useState } from "react";
 
-import { EventResponse } from "../../types/EventResponse";
-import { Regatta } from "../../types/Regatta";
-import { socket } from "../../socket";
+import { EventResponse } from "@models/EventResponse";
+import { Regatta } from "@models/Regatta";
+import { socket } from "@src/socket";
 
-import AppLayout from "../../components/templates/AppLayout";
-import Input from "../../components/molecules/Input";
-import RegattaList from "../../components/molecules/RegattaList";
+import AppLayout from "@templates/AppLayout";
+import Input from "@molecules/Input";
+import RegattaList from "@molecules/RegattaList";
 
 export default function AccountHome() {
   const [regattas, setRegattas] = useState<Regatta[]>([]);
@@ -25,7 +25,7 @@ export default function AccountHome() {
 
     socket.emit("createRegatta", NEW_REGATTA, (res: EventResponse) => {
       if (res.error) {
-        console.error(res.error);
+        console.error("createRegatta failed:", res.error);
       } else {
         const id = res.data.id;
         setRegattas((prev) => [...prev, { ...NEW_REGATTA, id }]);
@@ -39,7 +39,7 @@ export default function AccountHome() {
 
     socket.emit("getRegattasAdmin", user.sub, (res: EventResponse) => {
       if (res.error) {
-        console.error(res.error);
+        console.error("getRegattaAdmin failed:", res.error);
       } else {
         setRegattas(res.data.regattas);
       }

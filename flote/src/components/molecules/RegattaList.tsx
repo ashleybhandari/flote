@@ -1,6 +1,6 @@
-import { Regatta } from "../../types/Regatta";
+import { Regatta } from "@models/Regatta";
 
-import RegattaListItem from "../atoms/RegattaListItem";
+import RegattaListItem from "@atoms/RegattaListItem";
 
 type Props = {
   regattas: Regatta[];

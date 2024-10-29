@@ -2,9 +2,9 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-import Logo from "../../components/atoms/Logo";
-import RoundedButton from "../../components/atoms/RoundedButton";
-import SearchBar from "../../components/atoms/SearchBar";
+import Logo from "@atoms/Logo";
+import RoundedButton from "@atoms/RoundedButton";
+import SearchBar from "@atoms/SearchBar";
 
 export default function Landing() {
   const { isAuthenticated, loginWithRedirect } = useAuth0();

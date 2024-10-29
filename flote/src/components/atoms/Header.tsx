@@ -1,7 +1,7 @@
 import { useAuth0 } from "@auth0/auth0-react";
 
-import Logo from "./Logo";
-import RoundedButton from "./RoundedButton";
+import Logo from "@atoms/Logo";
+import RoundedButton from "@atoms/RoundedButton";
 
 export default function Header() {
   const { logout } = useAuth0();

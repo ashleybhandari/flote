@@ -1,4 +1,4 @@
-import { Regatta } from "../../types/Regatta";
+import { Regatta } from "@models/Regatta";
 
 type Props = {
   regatta: Regatta;
