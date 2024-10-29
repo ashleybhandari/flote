@@ -1,17 +1,64 @@
-import { useNavigate } from "react-router-dom";
+import { useAuth0 } from "@auth0/auth0-react";
+import { useEffect, useState } from "react";
 
-import OutlinedButton from "../../components/molecules/OutlinedButton";
+import { EventResponse } from "../../types/EventResponse";
+import { Regatta } from "../../types/Regatta";
+import { socket } from "../../socket";
+
+import AppLayout from "../../components/templates/AppLayout";
+import Input from "../../components/molecules/Input";
+import RegattaList from "../../components/molecules/RegattaList";
 
 export default function AccountHome() {
-  const navigate = useNavigate();
-  const handleSignOut = () => navigate("/");
+  const [regattas, setRegattas] = useState<Regatta[]>([]);
+  const { user } = useAuth0();
 
+  const handleCreateRegatta = () => {
+    if (!user?.sub) return;
+
+    // temp for demo
+    const input = document.getElementsByTagName("input")[0];
+    const NEW_REGATTA: Regatta = {
+      name: input.value,
+      adminId: user.sub,
+      timekeeperIds: [],
+    };
+
+    socket.emit("createRegatta", NEW_REGATTA, (res: EventResponse) => {
+      if (res.error) {
+        console.error(res.error);
+      } else {
+        // update UI
+        const id = res.data;
+        setRegattas((prev) => [...prev, { ...NEW_REGATTA, id }]);
+      }
+    });
+  };
+
+  // initialize regattas
+  useEffect(() => {
+    if (!user?.sub) return;
+
+    socket.emit("getRegattas", user.sub, (res: EventResponse) => {
+      if (res.error) {
+        console.error(res.error);
+      } else {
+        setRegattas(res.data);
+      }
+    });
+  }, [user]);
+
+  // TODO form to get regatta details
   return (
-    <div className="flex flex-col items-center justify-center w-screen h-screen">
-      <div className="mb-10 font-header font-bold text-[30px]">Home</div>
-      <OutlinedButton onClick={handleSignOut}>
-        sign out
-      </OutlinedButton>
-    </div>
+    <AppLayout>
+      <div className="flex flex-row items-center">
+        <Input label="Regatta Name" />
+        <button
+          className="fa-solid fa-plus text-white rounded-full w-10 h-10 bg-tertiary hover:bg-tertiary/90 active:bg-tertiary"
+          onClick={handleCreateRegatta}
+        ></button>
+      </div>
+      <RegattaList regattas={regattas} className="mt-14" />
+    </AppLayout>
   );
 }
