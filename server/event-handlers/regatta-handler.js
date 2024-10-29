@@ -1,39 +1,42 @@
+import mongoose from 'mongoose';
 import { Regatta } from "../models/subscribers.js";
 
 const REGATTAS = [];
 
 export function RegattaHandler(io, socket) {
   socket.on("createRegatta", createRegatta);
-  socket.on("getRegattas", getRegattas);
+  socket.on("getRegattasAdmin", getRegattasAdmin);
 }
 
 /**
  * Creates a new regatta. The callback is called with an object containing the
  * ID of the newly created regatta: callback({ data: regattaId }).
- * @param {Regatta} regatta 
+ * @param {Regatta} regatta
  * @param {Function} callback
  */
 async function createRegatta(regatta, callback) {
-  // only for the demo
-  const id = REGATTAS.length.toString();
-  REGATTAS.push({ ...regatta, id });
-  callback({ data: id });
+  const response = {};
 
-  // uncomment
-  // const response = {};
+  try {
+    const doc = await (new Regatta(regatta)).save();
+    response.data = { id: doc._id };
+  } catch (error) {
+    response.error = error.message;
+  }
 
-  // try {
-  //   data = await new Regatta(regatta).save();
-  //   response.data = data._id;
-  // } catch (error) {
-  //   response.error = error.message;
-  // }
-
-  // callback(response);
+  callback(response);
 }
 
 // only for demo
-function getRegattas(userId, callback) {
-  const response = { data: REGATTAS };
+async function getRegattasAdmin(userId, callback) {
+  const response = {};
+
+  try {
+    const docs = await Regatta.find({ adminId: userId }).exec()
+    response.data = { regattas: docs }
+  } catch (error) {
+    response.error = error.message;
+  }
+  
   callback(response);
 }
