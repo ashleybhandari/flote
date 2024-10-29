@@ -1,24 +1,25 @@
-import { socket } from "../../socket";
 import { useEffect, useState } from "react";
 
-import AppLayout from "../../components/templates/AppLayout";
 import { EventResponse } from "../../types/EventResponse";
-import RegattaList from "../../components/molecules/RegattaList";
 import { Regatta } from "../../types/Regatta";
-import SolidButton from "../../components/molecules/SolidButton";
+import { socket } from "../../socket";
 
-// mock data
-const NEW_REGATTA: Regatta = {
-  id: "2",
-  name: "a new one",
-  adminId: "0",
-  timekeeperIds: ["2", "3"],
-};
+import AppLayout from "../../components/templates/AppLayout";
+import RegattaList from "../../components/molecules/RegattaList";
+import SolidButton from "../../components/molecules/SolidButton";
 
 export default function AccountHome() {
   const [regattas, setRegattas] = useState<Regatta[]>([]);
 
   const handleCreateRegatta = () => {
+    // mock data
+    const NEW_REGATTA: Regatta = {
+      id: "2",
+      name: "a new one",
+      adminId: "0", // TODO get actual id
+      timekeeperIds: ["2", "3"],
+    };
+
     socket.emit("createRegatta", NEW_REGATTA, (res: EventResponse) => {
       if (res.error) {
         console.error(res.error);
@@ -32,7 +33,7 @@ export default function AccountHome() {
   // initialize regattas
   useEffect(() => {
     const userId = "0"; // TODO get actual id
-    
+
     socket.emit("getRegattas", userId, (res: EventResponse) => {
       if (res.error) {
         console.error(res.error);

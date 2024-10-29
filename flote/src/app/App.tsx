@@ -1,20 +1,15 @@
 import { Navigate, Outlet, Route, Routes } from "react-router-dom";
-import { useEffect } from "react";
-
-// import { socket } from "../socket";
+import { useAuth0 } from "@auth0/auth0-react";
 
 import AccountHome from "./pages/AccountHome";
 import Landing from "./pages/Landing";
 
-const PrivateRoutes = () => {
-  const auth = { token: true };
-  return auth.token ? <Outlet /> : <Navigate to="/sign-in" />;
-};
-
 export default function App() {
-  useEffect(() => {
-    // TODO socket functions
-  }, []);
+  const { isAuthenticated } = useAuth0();
+
+  const PrivateRoutes = () => {
+    return isAuthenticated ? <Outlet /> : <Navigate to="/" />;
+  };
 
   return (
     <Routes>

@@ -1,4 +1,5 @@
 import { Regatta } from "../../types/Regatta";
+
 import RegattaListItem from "../atoms/RegattaListItem";
 
 type Props = {
