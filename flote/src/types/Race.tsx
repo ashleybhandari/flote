@@ -1,5 +1,5 @@
 export type Race = {
-  id: string;
+  id?: string;
   name: string;
   startTime: Date;
   finishTime: Date;

@@ -18,7 +18,6 @@ export default function AccountHome() {
 
     // mock data
     const NEW_REGATTA: Regatta = {
-      id: "2",
       name: "a new one",
       adminId: user.sub,
       timekeeperIds: ["2", "3"],
@@ -29,7 +28,8 @@ export default function AccountHome() {
         console.error(res.error);
       } else {
         // update UI
-        setRegattas((prev) => [...prev, NEW_REGATTA]);
+        const id = res.data;
+        setRegattas((prev) => [...prev, {...NEW_REGATTA, id }]);
       }
     });
   };

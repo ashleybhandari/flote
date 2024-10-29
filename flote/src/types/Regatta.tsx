@@ -1,5 +1,5 @@
 export type Regatta = {
-  id: string;
+  id?: string;
   name: string;
   adminId: string;
   timekeeperIds: string[];

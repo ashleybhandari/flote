@@ -1,5 +1,6 @@
 import { createRequire } from "module";
 import { createServer } from "http";
+import { RegattaHandler } from "./event-handlers/regatta-handler.js";
 import { Server } from "socket.io";
 import subscribersRouter from "./routes/subscribers.js";
 
@@ -52,42 +53,8 @@ const io = new Server(server, {
   },
 });
 
-// listen for events
 io.on("connection", (socket) => {
-  socket.on("getRegattas", (userId, callback) => {
-    const response = {};
-
-    // mock data
-    response.data = [
-      {
-        id: "0",
-        name: "a regatta",
-        adminId: "0",
-        timekeeperIds: ["2", "3"],
-      },
-      {
-        id: "1",
-        name: "another one",
-        adminId: "0",
-        timekeeperIds: ["2", "4"],
-      },
-    ];
-
-    callback(response);
-  });
-
-  socket.on("createRegatta", async (regatta, callback) => {
-    const { Regatta } = await import("./models/subscribers.js");
-    const response = {};
-
-    try {
-      data = await new Regatta(regatta).save();
-    } catch (error) {
-      response.error = error.message;
-    }
-
-    callback(response);
-  });
+  RegattaHandler(io, socket);
 });
 
 // start server on port 3000
