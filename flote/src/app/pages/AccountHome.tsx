@@ -17,9 +17,8 @@ export default function AccountHome() {
     if (!user?.sub) return;
 
     // temp for demo
-    const input = document.getElementsByTagName("input")[0];
     const NEW_REGATTA: Regatta = {
-      name: input.value,
+      name: document.getElementsByTagName("input")[0].value,
       adminId: user.sub,
       timekeeperIds: [],
     };
@@ -28,8 +27,7 @@ export default function AccountHome() {
       if (res.error) {
         console.error(res.error);
       } else {
-        // update UI
-        const id = res.data;
+        const id = res.data.id;
         setRegattas((prev) => [...prev, { ...NEW_REGATTA, id }]);
       }
     });

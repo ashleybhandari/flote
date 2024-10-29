@@ -1,4 +1,5 @@
 import { createRequire } from "module";
+
 const require = createRequire(import.meta.url);
 const mongoose = require("mongoose");
 
@@ -20,10 +21,6 @@ const userSchema = new mongoose.Schema({
 
 const regattaSchema = new mongoose.Schema({
   // Create schema for regattas
-  id: {
-    type: String,
-    required: true,
-  },
   name: {
     type: String,
     required: true,
@@ -40,10 +37,6 @@ const regattaSchema = new mongoose.Schema({
 
 const raceSchema = new mongoose.Schema({
   // Create schema for races
-  id: {
-    type: String,
-    required: true,
-  },
   name: {
     type: String,
     required: true,
@@ -68,10 +61,6 @@ const raceSchema = new mongoose.Schema({
 
 const boatSchema = new mongoose.Schema({
   // Create schema for boats
-  id: {
-    type: String,
-    required: true,
-  },
   registrationId: {
     type: Number,
     required: true,
