@@ -6,7 +6,8 @@ import { Regatta } from "@models/Regatta";
 import { socket } from "@src/socket";
 
 import AppLayout from "@templates/AppLayout";
-import Input from "@molecules/Input";
+import { Button } from "@nextui-org/button";
+import { Input } from "@nextui-org/input";
 import RegattaList from "@molecules/RegattaList";
 
 export default function AccountHome() {
@@ -48,12 +49,15 @@ export default function AccountHome() {
 
   return (
     <AppLayout>
-      <div className="flex flex-row items-center">
-        <Input label="Regatta Name" />
-        <button
-          className="fa-solid fa-plus text-white rounded-full w-10 h-10 bg-tertiary hover:bg-tertiary/90 active:bg-tertiary"
+      <div className="flex flex-row items-center gap-2">
+        <Input label="Regatta Name" className="w-72" />
+        <Button
+          isIconOnly
+          color="primary"
+          radius="full"
           onClick={handleCreateRegatta}
-        ></button>
+          className="fa-solid fa-plus"
+        ></Button>
       </div>
       <RegattaList regattas={regattas} className="mt-14" />
     </AppLayout>
