@@ -30,7 +30,7 @@ src
 |
 +-- test              # test utilities and mocks
 |
-+-- types             # shared types used across the application
++-- models            # shared types used across the application
 |
 +-- utils             # shared utility functions
 ```
