@@ -1,6 +1,6 @@
-import { Regatta } from "../../types/Regatta";
+import { Regatta } from "@models/Regatta";
 
-import RegattaListItem from "../atoms/RegattaListItem";
+import { Card, CardBody } from "@nextui-org/card";
 
 type Props = {
   regattas: Regatta[];
@@ -8,12 +8,24 @@ type Props = {
 };
 
 export default function RegattaList({ regattas, className }: Props) {
+  const handleSelectRegatta = (regatta: Regatta) => console.log(regatta);
+
   return (
     <div className={className}>
       <h2 className="font-header font-bold text-lg mb-3">your regattas</h2>
-      <ul className="flex flex-col gap-2">
+      <ul className="flex flex-row gap-3">
         {regattas.map((regatta) => (
-          <RegattaListItem key={regatta.id} regatta={regatta} />
+          <Card
+            shadow="sm"
+            key={regatta._id}
+            isPressable
+            onPress={() => handleSelectRegatta(regatta)}
+            className="w-40 min-h-20"
+          >
+            <CardBody className="flex justify-center items-center text-small">
+              <b>{regatta.name}</b>
+            </CardBody>
+          </Card>
         ))}
       </ul>
     </div>

@@ -1,7 +1,7 @@
 import { useAuth0 } from "@auth0/auth0-react";
 
-import Logo from "./Logo";
-import RoundedButton from "./RoundedButton";
+import { Button } from "@nextui-org/button";
+import Logo from "@atoms/Logo";
 
 export default function Header() {
   const { logout } = useAuth0();
@@ -17,12 +17,15 @@ export default function Header() {
   return (
     <div className="bg-secondary flex flex-row items-center justify-between py-5 px-6 md:px-10">
       <Logo className="text-[35px]"></Logo>
-      <RoundedButton
-        className="text-white border-solid border-2 border-white hover:bg-white/10 active:bg-white/20"
-        onClick={handleSignOut}
+      <Button
+        variant="bordered"
+        size="lg"
+        radius="full"
+        onPress={() => handleSignOut()}
+        className="self-end w-32 text-white"
       >
         sign out
-      </RoundedButton>
+      </Button>
     </div>
   );
 }
