@@ -1,16 +1,22 @@
-import { Routes, Route } from "react-router-dom";
-import Landing from "./pages/Landing";
-import SignIn from "./pages/SignIn";
-import SignUp from "./pages/SignUp";
+import { Navigate, Outlet, Route, Routes } from "react-router-dom";
+import { useAuth0 } from "@auth0/auth0-react";
+
+import AccountHome from "@pages/AccountHome";
+import Landing from "@pages/Landing";
 
 export default function App() {
+  const { isAuthenticated } = useAuth0();
+
+  const PrivateRoutes = () => {
+    return isAuthenticated ? <Outlet /> : <Navigate to="/" />;
+  };
+
   return (
-    <div>
-      <Routes>
-        <Route path="/" element={<Landing />} />
-        <Route path="sign-in" element={<SignIn />} />
-        <Route path="sign-up" element={<SignUp />} />
-      </Routes>
-    </div>
+    <Routes>
+      <Route path="/" element={<Landing />} />
+      <Route element={<PrivateRoutes />}>
+        <Route path="home" element={<AccountHome />} />
+      </Route>
+    </Routes>
   );
 }
