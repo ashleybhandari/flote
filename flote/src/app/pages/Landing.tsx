@@ -2,8 +2,8 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
+import { Button } from "@nextui-org/react";
 import Logo from "@atoms/Logo";
-import { Button } from "@nextui-org/button";
 import SearchBar from "@atoms/SearchBar";
 
 export default function Landing() {

@@ -1,6 +1,6 @@
 import { useAuth0 } from "@auth0/auth0-react";
 
-import { Button } from "@nextui-org/button";
+import { Button } from "@nextui-org/react";
 import Logo from "@atoms/Logo";
 
 export default function Header() {

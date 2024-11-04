@@ -1,6 +1,6 @@
 import { Regatta } from "@models/Regatta";
 
-import { Card, CardBody } from "@nextui-org/card";
+import { Card, CardBody } from "@nextui-org/react";
 
 type Props = {
   regattas: Regatta[];

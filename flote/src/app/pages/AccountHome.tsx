@@ -6,8 +6,7 @@ import { Regatta } from "@models/Regatta";
 import { socket } from "@src/socket";
 
 import AppLayout from "@templates/AppLayout";
-import { Button } from "@nextui-org/button";
-import { Input } from "@nextui-org/input";
+import { Button, Input } from "@nextui-org/react";
 import RegattaList from "@molecules/RegattaList";
 
 export default function AccountHome() {
