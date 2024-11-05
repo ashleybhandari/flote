@@ -2,6 +2,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
+import Background from "@atoms/Background";
 import { Button } from "@nextui-org/react";
 import Logo from "@atoms/Logo";
 import SearchBar from "@atoms/SearchBar";
@@ -16,22 +17,23 @@ export default function Landing() {
   }, [isAuthenticated, navigate]);
 
   return (
-    <div className="bg-landing bg-no-repeat bg-cover bg-center bg-fixed h-screen w-screen">
-      <div className="backdrop-blur-[2px] p-6 h-screen w-screen flex flex-col">
-        <Button
-          variant="bordered"
-          size="lg"
-          radius="full"
-          onPress={() => loginWithRedirect()}
-          className="self-end w-32 text-white bg-black/40"
-        >
-          sign in
-        </Button>
-        <div className="grow flex flex-col items-center justify-center pb-44">
-          <Logo isLink={false} className="text-[96px] mb-6"></Logo>
-          <SearchBar className="w-72 sm:w-96 lg:w-[600px]"></SearchBar>
-        </div>
+    <Background className="bg-gradient-to-b from-slate-800">
+      <Button
+        color="primary"
+        size="lg"
+        radius="sm"
+        onPress={() => loginWithRedirect()}
+        className="self-end w-32 m-6"
+      >
+        sign in
+      </Button>
+      <div className="grow flex flex-col items-center justify-center pb-44">
+        <Logo isLink={false} className="text-[96px] mb-6" />
+        <SearchBar size="lg" className="w-72 sm:w-96 lg:w-[600px]" />
       </div>
-    </div>
+      <p className="self-end mx-2 my-1 text-xs text-black/60">
+        Image designed by <a href="https://www.freepik.com/">Freepik</a>
+      </p>
+    </Background>
   );
 }
