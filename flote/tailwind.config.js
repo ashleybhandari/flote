@@ -15,8 +15,7 @@ export default {
     },
     extend: {
       backgroundImage: {
-        landing:
-          "linear-gradient(rgba(0, 0, 0, .7), rgba(0, 0, 0, 0)), url('src/assets/landing.jpg')",
+        landing: "url('src/assets/landing.jpg')",
       },
     },
   },

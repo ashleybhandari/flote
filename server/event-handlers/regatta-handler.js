@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 import { Regatta } from "../models/subscribers.js";
 
 const REGATTAS = [];
@@ -18,7 +18,7 @@ async function createRegatta(regatta, callback) {
   const response = {};
 
   try {
-    const doc = await (new Regatta(regatta)).save();
+    const doc = await new Regatta(regatta).save();
     response.data = { id: doc._id };
   } catch (error) {
     response.error = error.message;
@@ -27,16 +27,15 @@ async function createRegatta(regatta, callback) {
   callback(response);
 }
 
-// only for demo
 async function getRegattasAdmin(userId, callback) {
   const response = {};
 
   try {
-    const docs = await Regatta.find({ adminId: userId }).exec()
-    response.data = { regattas: docs }
+    const docs = await Regatta.find({ adminId: userId }).exec();
+    response.data = { regattas: docs };
   } catch (error) {
     response.error = error.message;
   }
-  
+
   callback(response);
 }
