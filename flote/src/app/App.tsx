@@ -1,16 +1,19 @@
-import { Routes, Route } from "react-router-dom";
-import Landing from "./pages/Landing";
-import SignIn from "./pages/SignIn";
-import SignUp from "./pages/SignUp";
+import { Route, Routes } from "react-router-dom";
 
+import { AuthenticationGuard } from "./AuthenticationGuard";
+
+import AccountHome from "@pages/AccountHome";
+import Landing from "@pages/Landing";
+
+// TODO figure out why refresh is so slow
 export default function App() {
   return (
-    <div>
-      <Routes>
-        <Route path="/" element={<Landing />} />
-        <Route path="sign-in" element={<SignIn />} />
-        <Route path="sign-up" element={<SignUp />} />
-      </Routes>
-    </div>
+    <Routes>
+      <Route path="/" element={<Landing />} />
+      <Route
+        path="home"
+        element={<AuthenticationGuard component={AccountHome} />}
+      />
+    </Routes>
   );
 }
