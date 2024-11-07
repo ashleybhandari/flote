@@ -1,6 +1,6 @@
 import { useAuth0 } from "@auth0/auth0-react";
 
-import { Avatar } from "@nextui-org/react";
+import { Avatar } from "@nextui-org/avatar";
 
 export default function HeaderProfile() {
   const { user, isAuthenticated, loginWithRedirect, logout } = useAuth0();
