@@ -1,4 +1,4 @@
-import Logo from "@atoms/Logo";
+import Wordmark from "@src/components/atoms/Wordmark";
 
 type Props = {
   className?: string;
@@ -7,7 +7,7 @@ type Props = {
 export default function Footer({ className }: Props) {
   return (
     <div className={`py-4 bg-slate-800 text-white ${className}`}>
-      <Logo className="text-2xl" />
+      <Wordmark className="text-2xl" />
     </div>
   );
 }

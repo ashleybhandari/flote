@@ -1,6 +1,6 @@
 import { useAuth0 } from "@auth0/auth0-react";
 
-import { Avatar } from "@nextui-org/avatar";
+import Logo from "@atoms/Logo";
 
 export default function HeaderProfile() {
   const { user, isAuthenticated, loginWithRedirect, logout } = useAuth0();
@@ -25,7 +25,7 @@ export default function HeaderProfile() {
 
   return (
     <div className="flex flex-row gap-3">
-      <Avatar color="primary" />
+      <Logo />
       <div>
         <h2 className="font-bold -mb-1">{welcomeMessage}</h2>
         <button
