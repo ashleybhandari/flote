@@ -16,7 +16,7 @@ export default function RegattaList({ ariaLabel, regattas }: Props) {
       classNames={{ list: "max-h-[400px] overflow-y-scroll" }}
     >
       {regattas.map((r, i) => (
-        <ListboxItem key={i} href="/home">
+        <ListboxItem key={i} href={`/regatta/${r._id}`}>
           {r.name}
         </ListboxItem>
       ))}
