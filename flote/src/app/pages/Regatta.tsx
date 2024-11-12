@@ -1,7 +1,9 @@
 import { useParams } from "react-router-dom";
 
+import AppLayout from "@templates/AppLayout";
+
 export default function Regatta() {
   const { regattaId } = useParams();
 
-  return <div>regatta id: {regattaId}</div>;
+  return <AppLayout>regatta id: {regattaId}</AppLayout>;
 }
