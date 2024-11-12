@@ -1,22 +1,24 @@
-import { Navigate, Outlet, Route, Routes } from "react-router-dom";
-import { useAuth0 } from "@auth0/auth0-react";
+import { NextUIProvider } from "@nextui-org/react";
+import { Route, Routes, useHref, useNavigate } from "react-router-dom";
+
+import { AuthenticationGuard } from "./AuthenticationGuard";
 
 import AccountHome from "@pages/AccountHome";
 import Landing from "@pages/Landing";
 
+// TODO figure out why refresh is so slow
 export default function App() {
-  const { isAuthenticated } = useAuth0();
-
-  const PrivateRoutes = () => {
-    return isAuthenticated ? <Outlet /> : <Navigate to="/" />;
-  };
+  const navigate = useNavigate();
 
   return (
-    <Routes>
-      <Route path="/" element={<Landing />} />
-      <Route element={<PrivateRoutes />}>
-        <Route path="home" element={<AccountHome />} />
-      </Route>
-    </Routes>
+    <NextUIProvider navigate={navigate} useHref={useHref}>
+      <Routes>
+        <Route path="/" element={<Landing />} />
+        <Route
+          path="home"
+          element={<AuthenticationGuard component={AccountHome} />}
+        />
+      </Routes>
+    </NextUIProvider>
   );
 }

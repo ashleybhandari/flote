@@ -1,11 +1,8 @@
-import mongoose from 'mongoose';
 import { Regatta } from "../models/subscribers.js";
-
-const REGATTAS = [];
 
 export function RegattaHandler(io, socket) {
   socket.on("createRegatta", createRegatta);
-  socket.on("getRegattasAdmin", getRegattasAdmin);
+  socket.on("getRegattas", getRegattas);
 }
 
 /**
@@ -18,7 +15,7 @@ async function createRegatta(regatta, callback) {
   const response = {};
 
   try {
-    const doc = await (new Regatta(regatta)).save();
+    const doc = await new Regatta(regatta).save();
     response.data = { id: doc._id };
   } catch (error) {
     response.error = error.message;
@@ -27,16 +24,18 @@ async function createRegatta(regatta, callback) {
   callback(response);
 }
 
-// only for demo
-async function getRegattasAdmin(userId, callback) {
+async function getRegattas(userId, callback) {
   const response = {};
 
   try {
-    const docs = await Regatta.find({ adminId: userId }).exec()
-    response.data = { regattas: docs }
+    const admin = await Regatta.find({ adminId: userId }).exec();
+    const timekeeper = await Regatta.find({ timekeeperIds: userId }).exec();
+    response.data = {
+      regattas: { admin, timekeeper },
+    };
   } catch (error) {
     response.error = error.message;
   }
-  
+
   callback(response);
 }
