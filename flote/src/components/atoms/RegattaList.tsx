@@ -7,7 +7,7 @@ type Props = {
   regattas: Regatta[];
 };
 
-// TODO: href to regatta page, remove scrollbars if no overflow
+// TODO: remove scrollbars if no overflow
 export default function RegattaList({ ariaLabel, regattas }: Props) {
   return (
     <Listbox
