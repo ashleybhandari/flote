@@ -1,20 +1,21 @@
 import { useNavigate } from "react-router-dom";
 
+import logo from "@assets/logo.svg";
+
 type Props = {
-  isLink?: boolean;
   className?: string;
 };
 
-export default function Logo({ isLink = true, className }: Props) {
+export default function Logo({ className }: Props) {
   const navigate = useNavigate();
   const goToHome = () => navigate("/home");
 
   return (
-    <h1
-      className={`font-header font-bold text-white ${className}`}
-      onClick={isLink ? goToHome : () => {}}
-    >
-      <span className={isLink ? "cursor-pointer" : ""}>flotE</span>
-    </h1>
+    <img
+      src={logo}
+      alt="Logo"
+      className={`w-10 cursor-pointer ${className}`}
+      onClick={goToHome}
+    />
   );
 }
