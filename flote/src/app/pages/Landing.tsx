@@ -4,8 +4,8 @@ import { useNavigate } from "react-router-dom";
 
 import Background from "@atoms/Background";
 import { Button } from "@nextui-org/button";
-import Logo from "@atoms/Logo";
 import SearchBar from "@atoms/SearchBar";
+import Wordmark from "@src/components/atoms/Wordmark";
 
 export default function Landing() {
   const { isAuthenticated, loginWithRedirect } = useAuth0();
@@ -28,7 +28,7 @@ export default function Landing() {
         sign in
       </Button>
       <div className="grow flex flex-col items-center justify-center pb-44">
-        <Logo isLink={false} className="text-[96px] mb-6" />
+        <Wordmark isLink={false} className="text-[96px] mb-6" />
         <SearchBar size="lg" className="w-72 sm:w-96 lg:w-[600px]" />
       </div>
       <p className="self-end mx-2 my-1 text-xs text-black/60">
