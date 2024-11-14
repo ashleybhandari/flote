@@ -3,17 +3,18 @@ import Header from "@molecules/Header";
 import Footer from "@molecules/Footer";
 
 type Props = {
+  className?: string;
   children: React.ReactNode;
 };
 
-export default function AppLayout({ children }: Props) {
+export default function AppLayout({ className, children }: Props) {
   return (
     <Background className="flex flex-col h-screen justify-between bg-white/40">
-      <Header className="px-8 lg:px-[15%]" />
-      <main className="h-full m-8 lg:mx-[15%] p-6 rounded-lg bg-white/90">
+      <Header className="px-8 lg:px-[5%] xl:px-[15%]" />
+      <main className={`h-full m-8 lg:mx-[5%] xl:mx-[15%] ${className}`}>
         {children}
       </main>
-      <Footer className="px-8 lg:px-[15%]" />
+      <Footer className="px-8 lg:px-[5%] xl:px-[15%]" />
     </Background>
   );
 }

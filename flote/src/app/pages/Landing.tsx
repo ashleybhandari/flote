@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 import Background from "@atoms/Background";
-import { Button } from "@nextui-org/react";
+import { Button } from "@nextui-org/button";
 import Logo from "@atoms/Logo";
 import SearchBar from "@atoms/SearchBar";
 
