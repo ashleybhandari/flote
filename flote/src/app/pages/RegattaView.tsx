@@ -1,5 +1,9 @@
-import AppLayout from '@templates/AppLayout';
+import { useParams } from "react-router-dom";
 
-export default function AccountHome() {
-    return <AppLayout>content goes here</AppLayout>;
+import AppLayout from "@templates/AppLayout";
+
+export default function RegattaView() {
+  const { regattaId } = useParams();
+
+  return <AppLayout>regatta id: {regattaId}</AppLayout>;
 }
