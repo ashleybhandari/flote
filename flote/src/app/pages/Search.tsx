@@ -1,7 +1,9 @@
 import { useSearchParams } from "react-router-dom";
 
-import SearchAccordion from "@molecules/SearchAccordion";
 import AppLayout from "@templates/AppLayout";
+import BoatTable from "@molecules/tables/BoatTable";
+import RaceTable from "@molecules/tables/RaceTable";
+import RegattaTable from "@molecules/tables/RegattaTable";
 
 export default function Search() {
   const [searchParams] = useSearchParams();
@@ -9,8 +11,9 @@ export default function Search() {
 
   return (
     <AppLayout className="flex flex-col gap-3">
-      <SearchAccordion title="regattas" searchQuery={searchQuery} />
-      <SearchAccordion title="races" searchQuery={searchQuery} />
+      <RegattaTable searchQuery={searchQuery} />
+      <RaceTable searchQuery={searchQuery} />
+      <BoatTable searchQuery={searchQuery} />
     </AppLayout>
   );
 }
