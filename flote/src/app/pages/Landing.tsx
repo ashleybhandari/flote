@@ -31,7 +31,7 @@ export default function Landing() {
         <Wordmark isLink={false} className="text-[96px] mb-6" />
         <SearchBar size="lg" className="w-72 sm:w-96 lg:w-[600px]" />
       </div>
-      <p className="self-end mx-2 my-1 text-xs text-black/60">
+      <p className="self-end mx-2 my-1 text-xs text-black/40">
         Image designed by <a href="https://www.freepik.com/">Freepik</a>
       </p>
     </Background>
