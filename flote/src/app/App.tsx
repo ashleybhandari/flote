@@ -5,8 +5,8 @@ import { AuthenticationGuard } from "./AuthenticationGuard";
 
 import AccountHome from "@pages/AccountHome";
 import Landing from "@pages/Landing";
-import RegattaView from "@src/app/pages/RegattaView";
-import Search from "@src/app/pages/Search";
+import RegattaView from "@pages/RegattaView";
+import Search from "@pages/Search";
 
 // TODO figure out why refresh is so slow
 export default function App() {
