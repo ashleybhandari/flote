@@ -1,6 +1,6 @@
 import Background from "@atoms/Background";
 import Header from "@molecules/Header";
-import Footer from "@molecules/Footer";
+import Footer from "@molecules/Footer/Footer";
 
 type Props = {
   children: React.ReactNode;
