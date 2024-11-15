@@ -1,6 +1,7 @@
 import { createRequire } from "module";
 import { createServer } from "http";
 import { RegattaHandler } from "./event-handlers/regatta-handler.js";
+import { SearchHandler } from "./event-handlers/search-handler.js";
 import { Server } from "socket.io";
 import subscribersRouter from "./routes/subscribers.js";
 
@@ -55,6 +56,7 @@ const io = new Server(server, {
 
 io.on("connection", (socket) => {
   RegattaHandler(io, socket);
+  SearchHandler(io, socket);
 });
 
 // start server on port 3000

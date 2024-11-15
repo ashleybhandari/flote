@@ -6,8 +6,8 @@ export function RegattaHandler(io, socket) {
 }
 
 /**
- * Creates a new regatta. The callback is called with an object containing the
- * ID of the newly created regatta: callback({ data: regattaId }).
+ * Creates a new regatta. The callback is called with an object with a data
+ * field that holds the ID of the newly created regatta: { id: string }.
  * @param {Regatta} regatta
  * @param {Function} callback
  */
@@ -24,6 +24,13 @@ async function createRegatta(regatta, callback) {
   callback(response);
 }
 
+/**
+ * Gets all regattas the user with the specified ID admins and timekeeps. The
+ * callback is called with an object with a data field that holds the regattas:
+ * { regattas: { admin: Regatta[], timekeeper: Regatta[] } }.
+ * @param {string} userId
+ * @param {Function} callback
+ */
 async function getRegattas(userId, callback) {
   const response = {};
 

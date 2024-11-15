@@ -21,10 +21,7 @@ export default function App() {
           path="home"
           element={<AuthenticationGuard component={AccountHome} />}
         />
-        <Route
-          path="regatta/:regattaId"
-          element={<AuthenticationGuard component={RegattaView} />}
-        />
+        <Route path="regatta/:regattaId" element={<RegattaView />} />
       </Routes>
     </NextUIProvider>
   );

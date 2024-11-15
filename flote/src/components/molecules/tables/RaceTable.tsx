@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { SearchTableColumn } from "@models/SearchTableColumn";
 import { SearchTableRow } from "@models/SearchTableRow";
 
-import OpenExternalLinkIcon from "@atoms/icons/OpenExternalLinkIcon";
+import OpenExternalLinkButton from "@atoms/icon-buttons/OpenExternalLinkButton";
 import ResultsTable from "@atoms/ResultsTable";
 
 import { RACES } from "./mock-data"; // TODO delete
@@ -24,17 +24,12 @@ export default function RaceTable({ searchQuery }: Props) {
   ];
 
   const rows: SearchTableRow[] = data.map((e) => {
-    // TODO get date, regatta
     return {
       id: e._id!,
-      date: new Date().toLocaleString(),
+      date: new Date().toLocaleString(), // TODO
       name: e.name,
-      regatta: "regatta",
-      action: (
-        <button className="float-end">
-          <OpenExternalLinkIcon />
-        </button>
-      ),
+      regatta: "regatta", // TODO
+      action: <OpenExternalLinkButton />,
     };
   });
 

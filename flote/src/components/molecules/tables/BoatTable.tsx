@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { SearchTableColumn } from "@models/SearchTableColumn";
 import { SearchTableRow } from "@models/SearchTableRow";
 
-import OpenExternalLinkIcon from "@atoms/icons/OpenExternalLinkIcon";
+import OpenExternalLinkButton from "@atoms/icon-buttons/OpenExternalLinkButton";
 import ResultsTable from "@atoms/ResultsTable";
 
 import { BOATS } from "./mock-data"; // TODO delete
@@ -32,11 +32,7 @@ export default function BoatTable({ searchQuery }: Props) {
       name: e.name ?? "---",
       registrationId: e.registrationId,
       race: "race",
-      action: (
-        <button className="float-end">
-          <OpenExternalLinkIcon />
-        </button>
-      ),
+      action: <OpenExternalLinkButton />,
     };
   });
 
