@@ -11,7 +11,9 @@ export default function Background({ className, children }: Props) {
           className={`backdrop-blur-[2px] w-screen h-screen ${className}`}
         ></div>
       </div>
-      <div className={`absolute w-screen h-screen flex flex-col`}>
+      <div
+        className={`absolute overflow-x-hidden w-screen h-screen flex flex-col`}
+      >
         {children}
       </div>
     </div>
