@@ -1,4 +1,5 @@
-import { useRef } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { useRef, useState } from "react";
 
 type Props = {
   size?: "sm" | "lg";
@@ -6,13 +7,20 @@ type Props = {
 };
 
 export default function SearchBar({ size = "sm", className }: Props) {
+  const [searchParams] = useSearchParams();
+  const [query, setQuery] = useState(searchParams.get("q") ?? "");
   const queryRef = useRef<HTMLInputElement>(null);
+  const navigate = useNavigate();
 
   const handleSearch = (event) => {
     const isKeypress = event.nativeEvent instanceof KeyboardEvent;
     if (!isKeypress || (isKeypress && event.key === "Enter")) {
       event.preventDefault();
-      console.log(queryRef.current?.value);
+      const query = queryRef.current?.value ?? "";
+      if (query) {
+        queryRef.current?.blur();
+        navigate(`/search?q=${encodeURIComponent(query)}`);
+      }
     }
   };
 
@@ -28,6 +36,8 @@ export default function SearchBar({ size = "sm", className }: Props) {
             size === "sm" ? "py-2 pl-4" : "py-4 pl-6"
           }`}
           placeholder="Search for a regatta, race, or participant"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
         ></input>
         <button
           className={`fa-solid fa-magnifying-glass text-slate-600 pl-2 ${

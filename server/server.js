@@ -1,5 +1,7 @@
 import { createRequire } from "module";
 import { createServer } from "http";
+import { BoatHandler } from "./event-handlers/boat-handler.js";
+import { RaceHandler } from "./event-handlers/race-handler.js";
 import { RegattaHandler } from "./event-handlers/regatta-handler.js";
 import { Server } from "socket.io";
 import subscribersRouter from "./routes/subscribers.js";
@@ -54,6 +56,8 @@ const io = new Server(server, {
 });
 
 io.on("connection", (socket) => {
+  BoatHandler(io, socket);
+  RaceHandler(io, socket);
   RegattaHandler(io, socket);
 });
 

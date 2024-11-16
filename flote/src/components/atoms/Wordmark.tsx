@@ -1,3 +1,4 @@
+import { useAuth0 } from "@auth0/auth0-react";
 import { useNavigate } from "react-router-dom";
 
 type Props = {
@@ -6,8 +7,10 @@ type Props = {
 };
 
 export default function Wordmark({ isLink = true, className }: Props) {
+  const { isAuthenticated } = useAuth0();
   const navigate = useNavigate();
-  const goToHome = () => navigate("/home");
+
+  const goToHome = () => navigate(isAuthenticated ? "/home" : "/");
 
   return (
     <h1

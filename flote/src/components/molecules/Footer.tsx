@@ -1,4 +1,4 @@
-import Wordmark from "@src/components/atoms/Wordmark";
+import Wordmark from "@atoms/Wordmark";
 
 type Props = {
   className?: string;
