@@ -62,7 +62,7 @@ const raceSchema = new mongoose.Schema({
 const boatSchema = new mongoose.Schema({
   // Create schema for boats
   registrationId: {
-    type: Number,
+    type: String,
     required: true,
   },
   name: {

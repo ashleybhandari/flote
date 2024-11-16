@@ -3,6 +3,7 @@ import { Regatta } from "../models/subscribers.js";
 export function RegattaHandler(io, socket) {
   socket.on("createRegatta", createRegatta);
   socket.on("getRegattas", getRegattas);
+  socket.on("searchRegattas", searchRegattas);
 }
 
 /**
@@ -37,9 +38,33 @@ async function getRegattas(userId, callback) {
   try {
     const admin = await Regatta.find({ adminId: userId }).exec();
     const timekeeper = await Regatta.find({ timekeeperIds: userId }).exec();
+
     response.data = {
       regattas: { admin, timekeeper },
     };
+  } catch (error) {
+    response.error = error.message;
+  }
+
+  callback(response);
+}
+
+/**
+ * Searches the database for all regattas that match the query. The callback is
+ * called with an object with a data field that holds the matching regattas:
+ * { regattas: Regatta[] }
+ * @param {string} query
+ * @param {Function} callback
+ */
+async function searchRegattas(query, callback) {
+  const response = {};
+
+  try {
+    const regattas = await Regatta.find({
+      name: new RegExp(query, "i"),
+    }).exec();
+
+    response.data = { regattas };
   } catch (error) {
     response.error = error.message;
   }

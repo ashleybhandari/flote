@@ -1,6 +1,6 @@
 export type Boat = {
   _id?: string;
-  registrationId: number;
+  registrationId: string;
   name?: string;
   finishTime?: Date;
   dns?: boolean;
