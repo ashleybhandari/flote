@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 import { EventResponse } from "@models/EventResponse";
 import { Boat } from "@models/Boat";
-import { SearchTableColumn } from "@models/SearchTableColumn";
+import { BOAT_COLUMNS } from "./columns";
 import { SearchTableRow } from "@models/SearchTableRow";
 import { socket } from "@src/socket";
 
@@ -16,29 +16,21 @@ type Props = {
 
 export default function BoatTable({ searchQuery }: Props) {
   const [boats, setBoats] = useState<Boat[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
 
-  const columns: SearchTableColumn[] = [
-    { key: "date", label: "date" },
-    { key: "name", label: "name" },
-    { key: "registrationId", label: "id" },
-    { key: "race", label: "race" },
-    { key: "action", label: "" },
-  ];
-
   const rows: SearchTableRow[] = boats.map((e) => {
-    // TODO get date, race
     return {
       id: e._id!,
-      date: new Date().toLocaleString(),
+      date: new Date().toLocaleString(), // TODO
       name: e.name ?? "---",
       registrationId: e.registrationId,
-      race: "race",
+      race: "", // TODO
       action: <OpenExternalLinkButton />,
     };
   });
 
-  const handleRowAction = (id) => {
+  const handleRowAction = (id: React.Key) => {
     // TODO get link
     // navigate(`/regatta/${id}`);
   };
@@ -49,6 +41,7 @@ export default function BoatTable({ searchQuery }: Props) {
         console.error("searchBoats failed:", res.error);
       } else {
         setBoats(res.data.boats);
+        setIsLoading(false);
       }
     });
   }, [searchQuery]);
@@ -56,9 +49,10 @@ export default function BoatTable({ searchQuery }: Props) {
   return (
     <ResultsTable
       title="boats"
-      columns={columns}
+      columns={BOAT_COLUMNS}
       rows={rows}
       onRowAction={handleRowAction}
+      isLoading={isLoading}
     />
   );
 }

@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 import { EventResponse } from "@models/EventResponse";
 import { Regatta } from "@models/Regatta";
-import { SearchTableColumn } from "@models/SearchTableColumn";
+import { REGATTA_COLUMNS } from "./columns";
 import { SearchTableRow } from "@models/SearchTableRow";
 import { socket } from "@src/socket";
 
@@ -16,13 +16,8 @@ type Props = {
 
 export default function RegattaTable({ searchQuery }: Props) {
   const [regattas, setRegattas] = useState<Regatta[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
-
-  const columns: SearchTableColumn[] = [
-    { key: "date", label: "date" },
-    { key: "name", label: "name" },
-    { key: "action", label: "" },
-  ];
 
   const rows: SearchTableRow[] = regattas.map((e) => {
     return {
@@ -33,7 +28,7 @@ export default function RegattaTable({ searchQuery }: Props) {
     };
   });
 
-  const handleRowAction = (id) => {
+  const handleRowAction = (id: React.Key) => {
     navigate(`/regatta/${id}`);
   };
 
@@ -43,6 +38,7 @@ export default function RegattaTable({ searchQuery }: Props) {
         console.error("searchRegattas failed:", res.error);
       } else {
         setRegattas(res.data.regattas);
+        setIsLoading(false);
       }
     });
   }, [searchQuery]);
@@ -50,9 +46,10 @@ export default function RegattaTable({ searchQuery }: Props) {
   return (
     <ResultsTable
       title="regattas"
-      columns={columns}
+      columns={REGATTA_COLUMNS}
       rows={rows}
       onRowAction={handleRowAction}
+      isLoading={isLoading}
     />
   );
 }
