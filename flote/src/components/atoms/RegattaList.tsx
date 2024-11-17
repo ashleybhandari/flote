@@ -1,10 +1,11 @@
 import { Listbox, ListboxItem } from "@nextui-org/listbox";
 
 import { Regatta } from "@models/Regatta";
+import { Boat } from "@models/Boat";
 
 type Props = {
   ariaLabel: string;
-  regattas: Regatta[];
+  regattas: Regatta[] | Boat[];
 };
 
 export default function RegattaList({ ariaLabel, regattas }: Props) {

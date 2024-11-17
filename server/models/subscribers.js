@@ -83,12 +83,15 @@ const boatSchema = new mongoose.Schema({
   },
   raceId: {
     type: String,
+    required: null,
+  },
+  regattaId: {
+    type: String,
     required: true,
   },
 });
 
 //exporting the schemas
-// editing how these are exported - dila
 export const User = mongoose.model("User", userSchema);
 export const Regatta = mongoose.model("Regatta", regattaSchema);
 export const Race = mongoose.model("Race", raceSchema);

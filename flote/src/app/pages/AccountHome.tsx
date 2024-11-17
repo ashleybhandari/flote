@@ -1,7 +1,7 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import { useEffect, useState } from "react";
 
-import { EventResponse } from "@models/EventResponse";
+//import { EventResponse } from "@models/EventResponse";
 import { Regatta } from "@models/Regatta";
 import { socket } from "@src/socket";
 
@@ -15,7 +15,7 @@ export default function AccountHome() {
   const { user } = useAuth0();
 
   useEffect(() => {
-    socket.emit("getRegattas", user?.sub, (res: EventResponse) => {
+    socket.emit("getRegattas", user?.sub, (res) => {
       if (res.error) {
         console.error("getRegattas failed:", res.error);
       } else {
@@ -23,6 +23,14 @@ export default function AccountHome() {
         setRegattasTimekeeper(res.data.regattas.timekeeper);
       }
     });
+
+    socket.on("newRegatta", (newRegatta) => {
+      setRegattasAdmin((prevRegattas) => [...prevRegattas, newRegatta]);
+    });
+
+    return () => {
+      socket.off("newRegatta");
+    };
   }, [user]);
 
   return (

@@ -5,5 +5,6 @@ export type Boat = {
   finishTime?: Date;
   dns?: boolean;
   participantNames: string[];
-  raceId: string;
+  raceId?: string;
+  regattaId: string
 };
