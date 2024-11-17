@@ -4,7 +4,7 @@ import { AuthenticationGuard } from "./AuthenticationGuard";
 
 import AccountHome from "@pages/AccountHome";
 import Landing from "@pages/Landing";
-import RaceTimer from "@pages/RaceTimer";
+import RaceTimer from "@pages/RaceTimer/RaceTimer";
 
 // TODO figure out why refresh is so slow
 export default function App() {
