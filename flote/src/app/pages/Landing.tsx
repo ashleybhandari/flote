@@ -4,8 +4,9 @@ import { useNavigate } from "react-router-dom";
 
 import Background from "@atoms/Background";
 import { Button } from "@nextui-org/button";
+import FreepikAttribution from "@atoms/FreepikAttribution";
 import SearchBar from "@atoms/SearchBar";
-import Wordmark from "@src/components/atoms/Wordmark";
+import Wordmark from "@atoms/Wordmark";
 
 export default function Landing() {
   const { isAuthenticated, loginWithRedirect } = useAuth0();
@@ -31,9 +32,7 @@ export default function Landing() {
         <Wordmark isLink={false} className="text-[96px] mb-6" />
         <SearchBar size="lg" className="w-72 sm:w-96 lg:w-[600px]" />
       </div>
-      <p className="self-end mx-2 my-1 text-xs text-black/60">
-        Image designed by <a href="https://www.freepik.com/">Freepik</a>
-      </p>
+      <FreepikAttribution />
     </Background>
   );
 }
