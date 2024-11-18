@@ -43,11 +43,11 @@ const raceSchema = new mongoose.Schema({
   },
   startTime: {
     type: Date,
-    required: true,
+    required: false,
   },
   finishTime: {
     type: Date,
-    required: true,
+    required: false,
   },
   regattaId: {
     type: String,
@@ -62,20 +62,20 @@ const raceSchema = new mongoose.Schema({
 const boatSchema = new mongoose.Schema({
   // Create schema for boats
   registrationId: {
-    type: Number,
+    type: String,
     required: true,
   },
   name: {
     type: String,
-    required: true,
+    required: false,
   },
   finishTime: {
     type: Date,
-    required: true,
+    required: false,
   },
   dns: {
     type: Boolean,
-    required: true,
+    required: false,
   },
   participantNames: {
     type: [String],
