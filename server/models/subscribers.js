@@ -83,7 +83,7 @@ const boatSchema = new mongoose.Schema({
   },
   raceId: {
     type: String,
-    required: null,
+    required: false,
   },
   regattaId: {
     type: String,

@@ -15,7 +15,7 @@ export default function AccountHome() {
   const { user } = useAuth0();
 
   useEffect(() => {
-    socket.emit("getRegattas", user?.sub, (res) => {
+    socket.emit("getRegattas", user?.sub, (res: EventResponse) => {
       if (res.error) {
         console.error("getRegattas failed:", res.error);
       } else {
@@ -28,9 +28,6 @@ export default function AccountHome() {
       setRegattasAdmin((prevRegattas) => [...prevRegattas, newRegatta]);
     });
 
-    return () => {
-      socket.off("newRegatta");
-    };
   }, [user]);
 
   return (

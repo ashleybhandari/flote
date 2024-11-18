@@ -41,10 +41,6 @@ export default function RegattaView() {
     socket.on("boatAdded", (newBoat) => {
       setBoats((prevBoats) => [...prevBoats, newBoat]);
     });
-
-    return () => {
-      socket.off("boatAdded");
-    };
   }, [regattaId, location.state]);
 
   return (
