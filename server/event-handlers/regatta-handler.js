@@ -1,9 +1,10 @@
-import { Regatta } from "../models/subscribers.js";
+import { Regatta, Race } from "../models/subscribers.js";
 
 export function RegattaHandler(io, socket) {
   socket.on("createRegatta", createRegatta);
   socket.on("getRegattas", getRegattas);
   socket.on("searchRegattas", searchRegattas);
+  socket.on("getRegattaById", getRegattaById);
 }
 
 /**
@@ -65,6 +66,21 @@ async function searchRegattas(query, callback) {
     }).exec();
 
     response.data = { regattas };
+  } catch (error) {
+    response.error = error.message;
+  }
+
+  callback(response);
+}
+
+async function getRegattaById(regattaId, userId, callback) {
+  const response = {};
+  try {
+    const reg = await Regatta.find({_id: regattaId}).exec();
+    const races = await Race.find({regattaId: regattaId});
+    response.data = {
+      regatta: { reg, races, userId },
+    };
   } catch (error) {
     response.error = error.message;
   }
