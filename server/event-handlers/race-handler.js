@@ -55,8 +55,16 @@ async function deleteRaces(userId) {
 }
 
 
+/**
+ * Searches the database for all races that match the query. The callback is
+ * called with an object with a data field that holds the matching races:
+ * { races: Race[] }
+ * @param {string} query
+ * @param {Function} callback
+ */
 async function searchRaces(query, callback) {
   const response = {};
+
   try {
     const races = await Race.find({
       name: new RegExp(query, "i"),
