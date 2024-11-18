@@ -1,7 +1,7 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import { useEffect, useState } from "react";
 
-//import { EventResponse } from "@models/EventResponse";
+import { EventResponse } from "@models/EventResponse";
 import { Regatta } from "@models/Regatta";
 import { socket } from "@src/socket";
 
@@ -27,7 +27,6 @@ export default function AccountHome() {
     socket.on("newRegatta", (newRegatta) => {
       setRegattasAdmin((prevRegattas) => [...prevRegattas, newRegatta]);
     });
-
   }, [user]);
 
   return (

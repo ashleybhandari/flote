@@ -24,6 +24,8 @@ export default function RegattaView() {
     }
   }, [boatId, regattaId, location.state]);
 
+  if (!boat) return <div>Loading...</div>;
+
   return (
     <AppLayout>
       <div className="relative mb-8">
