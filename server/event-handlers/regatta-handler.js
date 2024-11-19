@@ -1,4 +1,4 @@
-import { Regatta } from "../models/subscribers.js";
+import { Regatta, Race, Boat } from "../models/subscribers.js";
 
 export function RegattaHandler(io, socket) {
   socket.on("createRegatta", createRegatta);
@@ -86,9 +86,11 @@ async function getRegattaById(regattaId, callback) {
 
   try {
     const regatta = await Regatta.findById(regattaId).exec();
+    const races = await Race.find({regattaId: regattaId}).exec();
+    const boats = await Boat.find({regattaId: regattaId}).exec();
     if (!regatta) throw new Error("Regatta not found");
 
-    response.data = { regatta };
+    response.data = { regatta, races, boats };
   } catch (error) {
     response.error = error.message;
   }

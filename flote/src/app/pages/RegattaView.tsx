@@ -3,25 +3,30 @@ import { useEffect, useState } from "react";
 import { socket } from "@src/socket";
 import AppLayout from "@templates/AppLayout";
 import BoatList from "@atoms/BoatList";
+import RaceList from "@atoms/RaceList";
 import ResponsiveCard from "@molecules/ResponsiveCard";
+import { Boat } from "@models/Boat";
+import { Race } from "@models/Race";
+import { EventResponse } from "@src/models/EventResponse";
 
 export default function RegattaView() {
   const { regattaId } = useParams();
   const location = useLocation();
   const [boats, setBoats] = useState<Boat[]>([]);
   const [regattaName, setRegattaName] = useState<string>("");
-  const [races, setRaces] = useState([]); // Placeholder for races
+  const [races, setRaces] = useState<Race[]>([]); // Placeholder for races
   const [timekeepers, setTimekeepers] = useState([]); // Placeholder for timekeepers
 
   useEffect(() => {
     if (location.state?.regatta?.name) {
       setRegattaName(location.state.regatta.name);
     } else if (regattaId) {
-      socket.emit("getRegattaById", regattaId, (res) => {
+      socket.emit("getRegattaById", regattaId, (res: EventResponse) => {
         if (res.error) {
           console.error("Failed to fetch regatta details:", res.error);
         } else {
           setRegattaName(res.data.regatta.name);
+          setRaces(res.data.races);
         }
       });
     }
@@ -29,7 +34,7 @@ export default function RegattaView() {
     if (location.state?.boats) {
       setBoats(location.state.boats);
     } else if (regattaId) {
-      socket.emit("getBoats", regattaId, (res) => {
+      socket.emit("getBoats", regattaId, (res: EventResponse) => {
         if (res.error) {
           console.error("Failed to fetch boats:", res.error);
         } else {
@@ -61,9 +66,7 @@ export default function RegattaView() {
         </ResponsiveCard>
         <ResponsiveCard title="Races">
           <div className="max-h-[300px] overflow-y-auto">
-            <ul>
-              <p>No races available yet!</p>
-            </ul>
+            <RaceList ariaLabel="List of races" races={races}/>
           </div>
         </ResponsiveCard>
         <ResponsiveCard title="Timekeepers">
