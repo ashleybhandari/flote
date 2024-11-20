@@ -6,7 +6,7 @@ import { Regatta } from "@models/Regatta";
 import { socket } from "@src/socket";
 
 import AppLayout from "@templates/AppLayout";
-import RegattaList from "@atoms/RegattaList";
+import List from "@atoms/List";
 import ResponsiveCard from "@molecules/ResponsiveCard";
 
 export default function AccountHome() {
@@ -28,16 +28,18 @@ export default function AccountHome() {
   return (
     <AppLayout className="flex flex-col md:flex-row gap-3">
       <ResponsiveCard title="my regattas">
-        <RegattaList
+        <List
           ariaLabel="list of regattas you admin"
-          regattas={regattasAdmin}
-        ></RegattaList>
+          itemType="regatta"
+          items={regattasAdmin}
+        ></List>
       </ResponsiveCard>
       <ResponsiveCard title="shared with me">
-        <RegattaList
+        <List
           ariaLabel="list of regattas you timekeep for"
-          regattas={regattasTimekeeper}
-        ></RegattaList>
+          itemType="regatta"
+          items={regattasTimekeeper}
+        ></List>
       </ResponsiveCard>
     </AppLayout>
   );
