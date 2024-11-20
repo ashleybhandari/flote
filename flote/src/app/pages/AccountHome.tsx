@@ -23,6 +23,10 @@ export default function AccountHome() {
         setRegattasTimekeeper(res.data.regattas.timekeeper);
       }
     });
+
+    socket.on("newRegatta", (newRegatta) => {
+      setRegattasAdmin((prevRegattas) => [...prevRegattas, newRegatta]);
+    });
   }, [user]);
 
   return (

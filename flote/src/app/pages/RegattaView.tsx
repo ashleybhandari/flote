@@ -1,59 +1,67 @@
-import { useParams } from "react-router-dom";
-
-import { useAuth0 } from "@auth0/auth0-react";
+import { useParams, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
-
-import { EventResponse } from "@models/EventResponse";
-import { Race } from "@models/Race";
 import { socket } from "@src/socket";
-
 import AppLayout from "@templates/AppLayout";
-import List from "@src/components/atoms/List";
+import List from "@atoms/List";
 import ResponsiveCard from "@molecules/ResponsiveCard";
+import { Boat } from "@models/Boat";
+import { Race } from "@models/Race";
+import { EventResponse } from "@src/models/EventResponse";
 
 export default function RegattaView() {
   const { regattaId } = useParams();
-  const [regattaName, setName] = useState<string>("");
-  const [adminId, setAdmin] = useState<string>("");
-  const [regTimekeepers, setTimekeepers] = useState<string[]>([]);
-  const [regattaRaces, setRaces] = useState<Race[]>([]);
-  const { user } = useAuth0();
+  const location = useLocation();
+  const [boats, setBoats] = useState<Boat[]>([]);
+  const [regattaName, setRegattaName] = useState<string>("");
+  const [races, setRaces] = useState<Race[]>([]); // Placeholder for races
+  const [timekeepers, setTimekeepers] = useState([]); // Placeholder for timekeepers
 
-  // Requires imports
   useEffect(() => {
-    socket.emit(
-      "getRegattaById",
-      regattaId,
-      user?.sub,
-      (res: EventResponse) => {
+    if (location.state?.regatta?.name) {
+      setRegattaName(location.state.regatta.name);
+    } else if (regattaId) {
+      socket.emit("getRegattaById", regattaId, (res: EventResponse) => {
         if (res.error) {
-          console.error("getRegattaById failed:", res.error);
+          console.error("Failed to fetch regatta details:", res.error);
         } else {
-          const reg = res.data.regatta.reg.at(0);
-          setName(reg.name);
-          setAdmin(res.data.regatta.userId); //Can get another way: reg.adminId
-          setTimekeepers(reg.timekeeperIds);
-          setRaces(res.data.regatta.races);
-          console.log(reg);
+          setRegattaName(res.data.regatta.name);
+          setRaces(res.data.races);
+          setBoats(res.data.boats);
+          setTimekeepers(res.data.regatta.timekeeperIds);
         }
-      }
-    );
-  }, [regattaId, user]);
+      });
+    }
+  }, [regattaId, location.state]);
 
   return (
-    <AppLayout className="flex flex-col gap-3">
-      <ResponsiveCard title={regattaName}>
-        <p>Admin: {adminId}</p>
-        <br></br>
-        <p>Timekeepers: {regTimekeepers}</p>
-      </ResponsiveCard>
-      <ResponsiveCard title="Races">
-        <List
-          ariaLabel="list of races in regatta"
-          itemType="race"
-          items={regattaRaces}
-        ></List>
-      </ResponsiveCard>
+    <AppLayout>
+      <div className="relative mb-8">
+        <div className="absolute inset-0 bg-primary opacity-50 rounded-lg"></div>
+
+        <div className="relative flex items-baseline space-x-4">
+          <h1 className="text-7xl font-bold text-white leading-tight">
+            {regattaName}
+          </h1>
+          <span className="text-2xl font-medium text-white uppercase">
+            REGATTA
+          </span>
+        </div>
+      </div>
+      <div className="flex flex-col md:flex-row gap-3 flex-grow">
+        <ResponsiveCard title="Boats">
+          <List ariaLabel="List of boats" itemType="boat" items={boats} />
+        </ResponsiveCard>
+        <ResponsiveCard title="Races">
+          <List ariaLabel="List of races" itemType="race" items={races} />
+        </ResponsiveCard>
+        <ResponsiveCard title="Timekeepers">
+          <List
+            ariaLabel="Timekeepers"
+            itemType="timekeeper"
+            items={timekeepers}
+          />
+        </ResponsiveCard>
+      </div>
     </AppLayout>
   );
 }
