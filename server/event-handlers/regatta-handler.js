@@ -1,5 +1,6 @@
 import { Regatta, Race, Boat } from "../models/subscribers.js";
 
+
 export function RegattaHandler(io, socket) {
   socket.on("createRegatta", createRegatta);
   socket.on("getRegattas", getRegattas);
