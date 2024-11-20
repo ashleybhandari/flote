@@ -1,5 +1,6 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import { EventResponse } from "@models/EventResponse";
 import { Regatta } from "@models/Regatta";
@@ -13,6 +14,11 @@ export default function AccountHome() {
   const [regattasAdmin, setRegattasAdmin] = useState<Regatta[]>([]);
   const [regattasTimekeeper, setRegattasTimekeeper] = useState<Regatta[]>([]);
   const { user } = useAuth0();
+  const navigate = useNavigate();
+
+  const handleAddRegatta = () => {
+    navigate("/regatta/create");
+  };
 
   useEffect(() => {
     socket.emit("getRegattas", user?.sub, (res: EventResponse) => {
@@ -35,7 +41,7 @@ export default function AccountHome() {
       className="flex flex-col md:flex-row gap-3"
       hideBackButton
     >
-      <ResponsiveCard title="my regattas">
+      <ResponsiveCard title="my regattas" onAdd={handleAddRegatta}>
         <List
           ariaLabel="list of regattas you admin"
           itemType="regatta"

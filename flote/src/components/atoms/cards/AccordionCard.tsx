@@ -7,6 +7,7 @@ type Props = {
   title: string;
   subtitle?: string;
   isExpanded?: boolean;
+  addButton?: React.ReactNode;
   children: React.ReactNode;
 };
 
@@ -14,6 +15,7 @@ export default function AccordionCard({
   title,
   subtitle,
   isExpanded = true,
+  addButton,
   children,
 }: Props) {
   const [selectedKeys, setSelectedKeys] = useState(new Set(["1"]));
@@ -40,6 +42,7 @@ export default function AccordionCard({
       >
         <hr className={`-mt-3 ${classes.divider}`} />
         <div className="mt-4 mb-3">{children}</div>
+        {addButton ?? null}
       </AccordionItem>
     </Accordion>
   );

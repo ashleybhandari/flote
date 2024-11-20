@@ -13,14 +13,15 @@ export default function PageTitle({
   hideBackButton,
   marginX,
 }: Props) {
-  const classes = "text-white bg-primary/70 rounded-md py-2";
+  const classes = "text-white bg-primary/90 rounded-md py-2";
+
   return (
     <div
       className={`flex flex-row mb-3 gap-[5px] mx-2 ${marginX ?? "md:mx-0"}`}
     >
       {!hideBackButton && (
         <BackButton
-          className={`hover:bg-primary/90 active:bg-primary ${classes}`}
+          className={`hover:bg-primary/80 active:bg-primary/90 ${classes}`}
         />
       )}
       <div className={`grow px-4 ${classes}`}>

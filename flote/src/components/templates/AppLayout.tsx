@@ -24,7 +24,7 @@ export default function AppLayout({
   return (
     <Background className="justify-between bg-white/40">
       <Header className="px-8 lg:px-[5%] xl:px-[15%]" />
-      <main className="grow m-8 lg:mx-[5%] xl:mx-[15%]">
+      <main className="grow flex flex-col m-8 lg:mx-[5%] xl:mx-[15%]">
         {title && (
           <PageTitle
             title={title}
@@ -33,7 +33,7 @@ export default function AppLayout({
             marginX={titleMargin}
           ></PageTitle>
         )}
-        <div className={className}>{children}</div>
+        <div className={`grow ${className}`}>{children}</div>
       </main>
       <FreepikAttribution />
       <Footer className="px-8 lg:px-[5%] xl:px-[15%]" />

@@ -34,8 +34,8 @@ export default function RegattaView() {
   }, [regattaId, location.state]);
 
   return (
-    <AppLayout title={regattaName} subtitle="regatta">
-      <div className="flex flex-col md:flex-row gap-3 flex-grow">
+    <AppLayout title={regattaName} subtitle="regatta" className="flex">
+      <div className="grow flex flex-col lg:flex-row gap-3">
         <ResponsiveCard title="Boats">
           <List ariaLabel="List of boats" itemType="boat" items={boats} />
         </ResponsiveCard>

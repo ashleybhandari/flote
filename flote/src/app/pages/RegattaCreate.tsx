@@ -1,14 +1,18 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import { useState } from "react";
-import { Button, Input } from "@nextui-org/react";
+import { useNavigate } from "react-router-dom";
+
+import { Boat } from "@models/Boat";
+import { EventResponse } from "@models/EventResponse";
 import { Regatta } from "@models/Regatta";
 import { socket } from "@src/socket";
-import Background from "@atoms/Background";
-import { useNavigate } from "react-router-dom";
+
 import AppLayout from "@templates/AppLayout";
+import Background from "@atoms/Background";
+import { Button } from "@nextui-org/button";
+import { Input } from "@nextui-org/input";
 import List from "@atoms/List";
-import RegattaResponsiveCard from "@molecules/RegattaResponsiveCard";
-import { EventResponse } from "@src/models/EventResponse";
+import ResponsiveCard from "@molecules/ResponsiveCard";
 
 export default function RegattaCreate() {
   const [timekeepers, setTimekeepers] = useState<Regatta[]>([]);
@@ -75,41 +79,36 @@ export default function RegattaCreate() {
 
   return (
     <Background className="flex flex-col items-center justify-between min-h-screen overflow-hidden">
-      <AppLayout className="flex flex-col gap-6 flex-grow">
-        <center>
-          <div className="bg-white bg-opacity-70 rounded-lg shadow-lg p-6 w-full max-w-4xl mb-6">
-            <div className="flex flex-col items-center mb-6">
-              <h1 className="text-2xl font-semibold">Regatta Creation</h1>
-              <div className="mt-4 w-full max-w-md">
-                <Input
-                  aria-label="Enter Regatta name"
-                  value={regattaName}
-                  onChange={(x) => setRegattaName(x.target.value)}
-                  placeholder="Enter the name of the Regatta"
-                />
-                <Button
-                  onClick={regattaCreationHandler}
-                  className="mt-4"
-                  color="primary"
-                >
-                  Create Regatta
-                </Button>
-              </div>
-            </div>
-          </div>
+      <AppLayout
+        title="create regatta"
+        className="flex flex-col gap-3 flex-grow"
+      >
+        <center className="flex flex-row gap-2 items-center my-3">
+          <Input
+            aria-label="Enter Regatta name"
+            value={regattaName}
+            onChange={(x) => setRegattaName(x.target.value)}
+            label="Regatta name"
+          />
+          <Button
+            onClick={regattaCreationHandler}
+            color="secondary"
+            className="px-6 h-full"
+          >
+            Create Regatta
+          </Button>
         </center>
-
-        <div className="flex flex-col md:flex-row gap-3 flex-grow overflow-auto">
-          <RegattaResponsiveCard title="Time Keepers:" onClick={addBoat}>
+        <div className="grow flex flex-col md:flex-row gap-3">
+          <ResponsiveCard title="Timekeepers">
             <List
               ariaLabel="List of timekeepers"
               itemType="timekeeper"
               items={timekeepers}
             />
-          </RegattaResponsiveCard>
-          <RegattaResponsiveCard title="Boats" onClick={addBoat}>
+          </ResponsiveCard>
+          <ResponsiveCard title="Boats" onAdd={addBoat}>
             <List ariaLabel="List of boats" itemType="boat" items={boats} />
-          </RegattaResponsiveCard>
+          </ResponsiveCard>
         </div>
       </AppLayout>
     </Background>

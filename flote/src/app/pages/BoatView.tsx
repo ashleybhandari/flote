@@ -4,8 +4,9 @@ import { socket } from "@src/socket";
 
 import { Boat } from "@models/Boat";
 
-import StaticCard from "@atoms/cards/StaticCard";
 import AppLayout from "@templates/AppLayout";
+import PageSpinner from "@src/components/atoms/PageSpinner";
+import StaticCard from "@atoms/cards/StaticCard";
 
 export default function RegattaView() {
   const { regattaId, boatId } = useParams();
@@ -28,29 +29,25 @@ export default function RegattaView() {
     }
   }, [boatId, regattaId, location.state]);
 
-  if (!boat) return <div>Loading...</div>;
+  if (!boat) return <PageSpinner />;
 
+  const data = [
+    { key: "ID", value: boat._id },
+    { key: "Name", value: boat.name },
+    { key: "Participants", value: boat.participantNames.join(", ") },
+    { key: "Registration ID", value: boat.registrationId },
+    { key: "Regatta ID", value: boat.regattaId },
+  ];
   return (
     <AppLayout title={boat.name} subtitle="boat">
-      <StaticCard title="Boat Details">
+      <StaticCard title="details">
         <ul>
-          <li>
-            <span className="font-bold">ID:</span> {boat._id}
-          </li>
-          <li>
-            <span className="font-bold">Name:</span> {boat.name}
-          </li>
-          <li>
-            <span className="font-bold">Participants:</span>{" "}
-            {boat.participantNames.join(", ")}
-          </li>
-          <li>
-            <span className="font-bold">Registration ID:</span>{" "}
-            {boat.registrationId}
-          </li>
-          <li>
-            <span className="font-bold">Regatta ID:</span> {boat.regattaId}
-          </li>
+          {data.map((e) => (
+            <li>
+              <span className="font-bold">{e.key}: </span>
+              {e.value}
+            </li>
+          ))}
         </ul>
       </StaticCard>
     </AppLayout>
