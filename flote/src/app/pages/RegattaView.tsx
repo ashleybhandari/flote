@@ -8,6 +8,7 @@ import ResponsiveCard from "@molecules/ResponsiveCard";
 import { Boat } from "@models/Boat";
 import { Race } from "@models/Race";
 import { EventResponse } from "@src/models/EventResponse";
+import { Listbox, ListboxItem } from "@nextui-org/listbox";
 
 export default function RegattaView() {
   const { regattaId } = useParams();
@@ -15,7 +16,7 @@ export default function RegattaView() {
   const [boats, setBoats] = useState<Boat[]>([]);
   const [regattaName, setRegattaName] = useState<string>("");
   const [races, setRaces] = useState<Race[]>([]); // Placeholder for races
-  // const [timekeepers, setTimekeepers] = useState([]); // Placeholder for timekeepers
+  const [timekeepers, setTimekeepers] = useState([]); // Placeholder for timekeepers
 
   useEffect(() => {
     if (location.state?.regatta?.name) {
@@ -27,25 +28,11 @@ export default function RegattaView() {
         } else {
           setRegattaName(res.data.regatta.name);
           setRaces(res.data.races);
-        }
-      });
-    }
-
-    if (location.state?.boats) {
-      setBoats(location.state.boats);
-    } else if (regattaId) {
-      socket.emit("getBoats", regattaId, (res: EventResponse) => {
-        if (res.error) {
-          console.error("Failed to fetch boats:", res.error);
-        } else {
           setBoats(res.data.boats);
+          setTimekeepers(res.data.regatta.timekeeperIds);
         }
       });
     }
-
-    socket.on("boatAdded", (newBoat) => {
-      setBoats((prevBoats) => [...prevBoats, newBoat]);
-    });
   }, [regattaId, location.state]);
 
   return (
@@ -71,9 +58,17 @@ export default function RegattaView() {
         </ResponsiveCard>
         <ResponsiveCard title="Timekeepers">
           <div className="max-h-[300px] overflow-y-auto">
-            <ul>
-              <p>No timekeepers available yet!</p>
-            </ul>
+          <Listbox
+            aria-label="Timekeepers"
+            emptyContent={<p>Nothing yet!</p>}
+            classNames={{ list: "max-h-[400px] overflow-y-scroll" }}
+          >
+          {timekeepers.map((t, i) => (
+              <ListboxItem key={i} >
+                {t}
+          </ListboxItem>
+            ))}
+    </Listbox>
           </div>
         </ResponsiveCard>
       </div>
