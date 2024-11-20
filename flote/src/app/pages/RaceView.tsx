@@ -15,8 +15,8 @@ export default function RaceView() {
     <AppLayout title="race name" subtitle="race">
       <StaticCard title="details">
         <ul>
-          {data.map((e) => (
-            <li>
+          {data.map((e, i) => (
+            <li key={i}>
               <span className="font-bold">{e.key}: </span>
               {e.value}
             </li>

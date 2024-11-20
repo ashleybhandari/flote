@@ -42,8 +42,8 @@ export default function RegattaView() {
     <AppLayout title={boat.name} subtitle="boat">
       <StaticCard title="details">
         <ul>
-          {data.map((e) => (
-            <li>
+          {data.map((e, i) => (
+            <li key={i}>
               <span className="font-bold">{e.key}: </span>
               {e.value}
             </li>

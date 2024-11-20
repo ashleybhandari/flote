@@ -79,25 +79,14 @@ export default function RegattaCreate() {
 
   return (
     <Background className="flex flex-col items-center justify-between min-h-screen overflow-hidden">
-      <AppLayout
-        title="create regatta"
-        className="flex flex-col gap-3 flex-grow"
-      >
-        <center className="flex flex-row gap-2 items-center my-3">
-          <Input
-            aria-label="Enter Regatta name"
-            value={regattaName}
-            onChange={(x) => setRegattaName(x.target.value)}
-            label="Regatta name"
-          />
-          <Button
-            onClick={regattaCreationHandler}
-            color="secondary"
-            className="px-6 h-full"
-          >
-            Create Regatta
-          </Button>
-        </center>
+      <AppLayout title="new regatta" className="flex flex-col gap-3 flex-grow">
+        <Input
+          aria-label="Enter Regatta name"
+          value={regattaName}
+          onChange={(x) => setRegattaName(x.target.value)}
+          label="regatta name"
+          isRequired
+        />
         <div className="grow flex flex-col md:flex-row gap-3">
           <ResponsiveCard title="Timekeepers">
             <List
@@ -109,6 +98,16 @@ export default function RegattaCreate() {
           <ResponsiveCard title="Boats" onAdd={addBoat}>
             <List ariaLabel="List of boats" itemType="boat" items={boats} />
           </ResponsiveCard>
+        </div>
+        <div className="h-14">
+          <Button
+            color="secondary"
+            fullWidth
+            onClick={regattaCreationHandler}
+            className="h-full"
+          >
+            create regatta
+          </Button>
         </div>
       </AppLayout>
     </Background>
