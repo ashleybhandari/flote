@@ -1,16 +1,31 @@
+import { useEffect, useState } from "react";
+
 import { Accordion, AccordionItem } from "@nextui-org/accordion";
 import * as classes from "./card-classes";
 
 type Props = {
   title: string;
   subtitle?: string;
+  isExpanded?: boolean;
   children: React.ReactNode;
 };
 
-export default function AccordionCard({ title, subtitle, children }: Props) {
+export default function AccordionCard({
+  title,
+  subtitle,
+  isExpanded = true,
+  children,
+}: Props) {
+  const [selectedKeys, setSelectedKeys] = useState(new Set(["1"]));
+
+  useEffect(() => {
+    setSelectedKeys(new Set(isExpanded ? ["1"] : []));
+  }, [isExpanded]);
+
   return (
     <Accordion
-      defaultExpandedKeys={["1"]}
+      selectedKeys={selectedKeys}
+      onSelectionChange={setSelectedKeys}
       itemClasses={{
         base: `px-5 ${classes.base}`,
         title: classes.title,

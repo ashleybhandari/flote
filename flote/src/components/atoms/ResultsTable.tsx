@@ -31,7 +31,11 @@ export default function ResultsTable({
 
   // TODO table sorting
   return (
-    <AccordionCard title={title} subtitle={subtitle}>
+    <AccordionCard
+      title={title}
+      subtitle={subtitle}
+      isExpanded={rows.length > 0}
+    >
       <Table
         aria-label={title}
         removeWrapper
