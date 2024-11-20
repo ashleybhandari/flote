@@ -7,8 +7,8 @@ import Background from "@atoms/Background";
 import { useNavigate } from "react-router-dom";
 import AppLayout from "@templates/AppLayout";
 import RegattaList from "@atoms/RegattaList";
-import BoatList from "@atoms/BoatList";
 import RegattaResponsiveCard from "@molecules/RegattaResponsiveCard";
+import { EventResponse } from "@src/models/EventResponse";
 
 export default function RegattaCreate() {
   const [timekeepers, setTimekeepers] = useState<Regatta[]>([]);
@@ -29,7 +29,7 @@ export default function RegattaCreate() {
   const regattaCreationHandler = () => {
     if (!regattaName.trim()) return;
 
-    socket.emit("createRegatta", { name: regattaName, adminId: user?.sub }, (res) => {
+    socket.emit("createRegatta", { name: regattaName, adminId: user?.sub }, (res: EventResponse) => {
       if (res.error) {
         console.error("Regatta creation failed:", res.error);
       } else {
@@ -42,7 +42,7 @@ export default function RegattaCreate() {
         });
 
         boats.forEach((boat) => {
-          socket.emit("addBoats", boat, (x) => {
+          socket.emit("addBoats", boat, (x: EventResponse) => {
             if (x.error) {
               console.error("Boat addition failed:", x.error);
             } else {
@@ -106,7 +106,7 @@ export default function RegattaCreate() {
           </RegattaResponsiveCard>
           <RegattaResponsiveCard title="Boats" onClick={addBoat}>
           <div className="max-h-[300px] overflow-y-auto">
-            <BoatList ariaLabel="List of boats" boats={boats} />
+            <RegattaList ariaLabel="List of boats" regattas={boats} />
           </div>
         </RegattaResponsiveCard>
         </div>
