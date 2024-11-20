@@ -34,19 +34,7 @@ export default function RegattaView() {
   }, [regattaId, location.state]);
 
   return (
-    <AppLayout>
-      <div className="relative mb-8">
-        <div className="absolute inset-0 bg-primary opacity-50 rounded-lg"></div>
-
-        <div className="relative flex items-baseline space-x-4">
-          <h1 className="text-7xl font-bold text-white leading-tight">
-            {regattaName}
-          </h1>
-          <span className="text-2xl font-medium text-white uppercase">
-            REGATTA
-          </span>
-        </div>
-      </div>
+    <AppLayout title={regattaName} subtitle="regatta">
       <div className="flex flex-col md:flex-row gap-3 flex-grow">
         <ResponsiveCard title="Boats">
           <List ariaLabel="List of boats" itemType="boat" items={boats} />

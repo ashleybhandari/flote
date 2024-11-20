@@ -30,7 +30,11 @@ export default function AccountHome() {
   }, [user]);
 
   return (
-    <AppLayout className="flex flex-col md:flex-row gap-3">
+    <AppLayout
+      title="home"
+      className="flex flex-col md:flex-row gap-3"
+      hideBackButton
+    >
       <ResponsiveCard title="my regattas">
         <List
           ariaLabel="list of regattas you admin"
