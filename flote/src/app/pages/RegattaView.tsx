@@ -15,7 +15,7 @@ export default function RegattaView() {
   const [boats, setBoats] = useState<Boat[]>([]);
   const [regattaName, setRegattaName] = useState<string>("");
   const [races, setRaces] = useState<Race[]>([]); // Placeholder for races
-  const [timekeepers, setTimekeepers] = useState([]); // Placeholder for timekeepers
+  // const [timekeepers, setTimekeepers] = useState([]); // Placeholder for timekeepers
 
   useEffect(() => {
     if (location.state?.regatta?.name) {
