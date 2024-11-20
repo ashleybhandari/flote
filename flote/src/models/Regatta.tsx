@@ -3,4 +3,5 @@ export type Regatta = {
   name: string;
   adminId: string;
   timekeeperIds: string[];
+  boatIds: string[];
 };

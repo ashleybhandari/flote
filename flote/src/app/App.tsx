@@ -7,6 +7,8 @@ import AccountHome from "@pages/AccountHome";
 import Landing from "@pages/Landing";
 import RegattaView from "@pages/RegattaView";
 import Search from "@pages/Search";
+import RegattaCreation from "@pages/RegattaCreate";
+import BoatView from "@pages/BoatView";
 
 // TODO figure out why refresh is so slow
 export default function App() {
@@ -21,7 +23,12 @@ export default function App() {
           path="home"
           element={<AuthenticationGuard component={AccountHome} />}
         />
-        <Route path="regatta/:regattaId" element={<RegattaView />} />
+        <Route path="/regatta/:regattaId" element={<RegattaView />} />
+        <Route path="/regatta/:regattaId/boat/:boatId" element={<BoatView />} />
+        <Route
+          path="regatta/create"
+          element={<AuthenticationGuard component={RegattaCreation} />}
+        />
       </Routes>
     </NextUIProvider>
   );

@@ -1,4 +1,5 @@
-import { Regatta, Race } from "../models/subscribers.js";
+import { Regatta, Race, Boat } from "../models/subscribers.js";
+
 
 export function RegattaHandler(io, socket) {
   socket.on("createRegatta", createRegatta);
@@ -73,17 +74,27 @@ async function searchRegattas(query, callback) {
   callback(response);
 }
 
-async function getRegattaById(regattaId, userId, callback) {
+// temporarily testing displaying regatta info without messing up other calls
+/**
+ * Fetch a single regatta's details by ID.
+ * The callback is called with an object with a data field that holds the regatta:
+ * { regatta: Regatta }
+ * @param {string} regattaId
+ * @param {Function} callback
+ */
+async function getRegattaById(regattaId, callback) {
   const response = {};
+
   try {
-    const reg = await Regatta.find({_id: regattaId}).exec();
-    const races = await Race.find({regattaId: regattaId});
-    response.data = {
-      regatta: { reg, races, userId },
-    };
+    const regatta = await Regatta.findById(regattaId).exec();
+    const races = await Race.find({regattaId: regattaId}).exec();
+    const boats = await Boat.find({regattaId: regattaId}).exec();
+    if (!regatta) throw new Error("Regatta not found");
+
+    response.data = { regatta, races, boats };
   } catch (error) {
     response.error = error.message;
   }
 
   callback(response);
-}
+}  
