@@ -46,6 +46,7 @@ export default function AccountHome() {
           ariaLabel="list of regattas you admin"
           itemType="regatta"
           items={regattasAdmin}
+          onAdd={handleAddRegatta}
         ></List>
       </ResponsiveCard>
       <ResponsiveCard title="shared with me">
