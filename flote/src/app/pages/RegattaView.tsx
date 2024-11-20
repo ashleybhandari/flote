@@ -2,8 +2,7 @@ import { useParams, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { socket } from "@src/socket";
 import AppLayout from "@templates/AppLayout";
-import BoatList from "@atoms/BoatList";
-import RaceList from "@atoms/RaceList";
+import RegattaList from "@atoms/RegattaList";
 import ResponsiveCard from "@molecules/ResponsiveCard";
 import { Boat } from "@models/Boat";
 import { Race } from "@models/Race";
@@ -48,12 +47,12 @@ export default function RegattaView() {
       <div className="flex flex-col md:flex-row gap-3 flex-grow">
         <ResponsiveCard title="Boats">
           <div className="max-h-[300px] overflow-y-auto">
-            <BoatList ariaLabel="List of boats" boats={boats} />
+            <RegattaList ariaLabel="List of boats" regattas={boats} />
           </div>
         </ResponsiveCard>
         <ResponsiveCard title="Races">
           <div className="max-h-[300px] overflow-y-auto">
-            <RaceList ariaLabel="List of races" races={races}/>
+            <RegattaList ariaLabel="List of races" regattas={races}/>
           </div>
         </ResponsiveCard>
         <ResponsiveCard title="Timekeepers">
