@@ -25,14 +25,14 @@ export default function BoatTable({ searchQuery }: Props) {
       date: new Date().toLocaleString(), // TODO
       name: e.name ?? "---",
       registrationId: e.registrationId,
-      race: "", // TODO
+      participants: e.participantNames.join(", "),
       action: <OpenExternalLinkButton />,
     };
   });
 
   const handleRowAction = (id: React.Key) => {
-    // TODO get link
-    // navigate(`/regatta/${id}`);
+    const boat = boats.find((b) => b._id === id);
+    if (boat?.regattaId) navigate(`/regatta/${boat.regattaId}/boat/${id}`);
   };
 
   useEffect(() => {

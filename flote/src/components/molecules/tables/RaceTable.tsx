@@ -30,8 +30,8 @@ export default function RaceTable({ searchQuery }: Props) {
   });
 
   const handleRowAction = (id: React.Key) => {
-    // TODO get link
-    // navigate(`/regatta/${id}`);
+    const race = races.find((r) => r._id === id);
+    if (race?.regattaId) navigate(`/regatta/${race.regattaId}/race/${id}`);
   };
 
   useEffect(() => {

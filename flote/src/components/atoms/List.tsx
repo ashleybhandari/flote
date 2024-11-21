@@ -8,14 +8,20 @@ type Props = {
   ariaLabel: string;
   itemType: "regatta" | "race" | "boat" | "timekeeper";
   items: Regatta[] | Race[] | Boat[] | string[];
+  emptyContent?: string;
 };
 
-export default function List({ ariaLabel, itemType, items }: Props) {
+export default function List({
+  ariaLabel,
+  itemType,
+  items,
+  emptyContent,
+}: Props) {
   return (
     <div className="flex flex-col">
       <Listbox
         aria-label={ariaLabel}
-        emptyContent={<p>Nothing yet!</p>}
+        emptyContent={<p className="italic text-center">{emptyContent ?? "Nothing yet!"}</p>}
         classNames={{ list: "max-h-[400px] overflow-y-auto" }}
       >
         {items.map((e, i) => {

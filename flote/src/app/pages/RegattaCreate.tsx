@@ -93,10 +93,16 @@ export default function RegattaCreate() {
               ariaLabel="List of timekeepers"
               itemType="timekeeper"
               items={timekeepers}
+              emptyContent="Add timekeepers"
             />
           </ResponsiveCard>
           <ResponsiveCard title="Boats" onAdd={addBoat}>
-            <List ariaLabel="List of boats" itemType="boat" items={boats} />
+            <List
+              ariaLabel="List of boats"
+              itemType="boat"
+              items={boats}
+              emptyContent="Add boats"
+            />
           </ResponsiveCard>
         </div>
         <div className="h-14">
