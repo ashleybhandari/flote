@@ -4,7 +4,7 @@ export const BOAT_COLUMNS: SearchTableColumn[] = [
   { key: "date", label: "date" },
   { key: "name", label: "name" },
   { key: "registrationId", label: "id" },
-  { key: "race", label: "race" },
+  { key: "participants", label: "participants" },
   { key: "action", label: "" },
 ];
 

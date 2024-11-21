@@ -2,12 +2,11 @@ import { useParams, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { socket } from "@src/socket";
 import AppLayout from "@templates/AppLayout";
-import RegattaList from "@atoms/RegattaList";
+import List from "@atoms/List";
 import ResponsiveCard from "@molecules/ResponsiveCard";
 import { Boat } from "@models/Boat";
 import { Race } from "@models/Race";
 import { EventResponse } from "@src/models/EventResponse";
-import { Listbox, ListboxItem } from "@nextui-org/listbox";
 
 export default function RegattaView() {
   const { regattaId } = useParams();
@@ -35,40 +34,20 @@ export default function RegattaView() {
   }, [regattaId, location.state]);
 
   return (
-    <AppLayout>
-      <div className="relative mb-8">
-        <div className="absolute inset-0 bg-primary opacity-50 rounded-lg"></div>
-
-        <div className="relative flex items-baseline space-x-4">
-          <h1 className="text-7xl font-bold text-white leading-tight">{regattaName}</h1>
-          <span className="text-2xl font-medium text-white uppercase">REGATTA</span>
-        </div>
-      </div>
-      <div className="flex flex-col md:flex-row gap-3 flex-grow">
+    <AppLayout title={regattaName} subtitle="regatta" className="flex">
+      <div className="grow flex flex-col lg:flex-row gap-3">
         <ResponsiveCard title="Boats">
-          <div className="max-h-[300px] overflow-y-auto">
-            <RegattaList ariaLabel="List of boats" regattas={boats} />
-          </div>
+          <List ariaLabel="List of boats" itemType="boat" items={boats} />
         </ResponsiveCard>
         <ResponsiveCard title="Races">
-          <div className="max-h-[300px] overflow-y-auto">
-            <RegattaList ariaLabel="List of races" regattas={races}/>
-          </div>
+          <List ariaLabel="List of races" itemType="race" items={races} />
         </ResponsiveCard>
         <ResponsiveCard title="Timekeepers">
-          <div className="max-h-[300px] overflow-y-auto">
-          <Listbox
-            aria-label="Timekeepers"
-            emptyContent={<p>Nothing yet!</p>}
-            classNames={{ list: "max-h-[400px] overflow-y-scroll" }}
-          >
-          {timekeepers.map((t, i) => (
-              <ListboxItem key={i} >
-                {t}
-          </ListboxItem>
-            ))}
-    </Listbox>
-          </div>
+          <List
+            ariaLabel="Timekeepers"
+            itemType="timekeeper"
+            items={timekeepers}
+          />
         </ResponsiveCard>
       </div>
     </AppLayout>

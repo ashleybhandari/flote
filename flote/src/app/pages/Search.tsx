@@ -10,7 +10,11 @@ export default function Search() {
   const searchQuery = searchParams.get("q") ?? "";
 
   return (
-    <AppLayout className="flex flex-col gap-3">
+    <AppLayout
+      title="search"
+      className="flex flex-col gap-3"
+      titleMargin="mx-2"
+    >
       <RegattaTable searchQuery={searchQuery} />
       <RaceTable searchQuery={searchQuery} />
       <BoatTable searchQuery={searchQuery} />
