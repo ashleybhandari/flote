@@ -1,5 +1,9 @@
 import { Spinner } from "@nextui-org/spinner";
 
-export default function PageSpinner() {
-  return <Spinner size="lg" className="w-screen h-screen" />;
+type Props = {
+  className: string;
+};
+
+export default function PageSpinner({ className }: Props) {
+  return <Spinner size="lg" className={`w-full h-full ${className}`} />;
 }

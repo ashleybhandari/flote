@@ -4,7 +4,7 @@ import PageSpinner from "@src/components/atoms/PageSpinner";
 
 export const AuthenticationGuard = ({ component }) => {
   const Component = withAuthenticationRequired(component, {
-    onRedirecting: () => <PageSpinner />,
+    onRedirecting: () => <PageSpinner className="h-screen" />,
   });
 
   return <Component />;
