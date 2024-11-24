@@ -1,8 +1,8 @@
 import Background from "@atoms/Background";
 import Header from "@molecules/Header";
-import Footer from "@molecules/Footer";
 import PageTitle from "@atoms/PageTitle";
 import FreepikAttribution from "@atoms/FreepikAttribution";
+import Footer from "@molecules/Footer/Footer";
 
 type Props = {
   title?: string;
