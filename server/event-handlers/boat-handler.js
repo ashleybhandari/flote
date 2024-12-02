@@ -1,27 +1,12 @@
-import { Regatta, Race, Boat } from "../models/subscribers.js";
+import { Boat } from "../models/subscribers.js";
 
 export function BoatHandler(io, socket) {
-<<<<<<< HEAD
-  socket.on("createBoat", createBoat);
-  socket.on("updateBoats", updateBoats);
-  socket.on("deleteBoats", deleteBoats);
-=======
   socket.on("addBoats", addBoats);
   socket.on("getBoats", getBoats);
->>>>>>> 25cf5cdd8f6543f4c0239939c29b2ed07bdfd532
   socket.on("searchBoats", searchBoats);
   socket.on("getBoatsById", getBoatsById);
 }
 
-<<<<<<< HEAD
-
-async function createBoat(boat, callback) {
-  const response = {};
-
-  try {
-    const doc = await new Boat(boat).save();
-    response.data = { id: doc._id };
-=======
 /**
  * Creates a new boat and associates it with a regatta
  * @param {Object} boatData - The boat data from the frontend
@@ -40,7 +25,6 @@ async function addBoats(boat, callback) {
     const doc = await new Boat(boat).save();
 
     response.data = { boatId: doc._id, boatName: doc.name };
->>>>>>> 25cf5cdd8f6543f4c0239939c29b2ed07bdfd532
   } catch (error) {
     response.error = error.message;
   }
@@ -48,17 +32,6 @@ async function addBoats(boat, callback) {
   callback(response);
 }
 
-<<<<<<< HEAD
-
-async function updateBoats(registrationId) {
-  const response = {};
-
-  try {
-    const boat = await Boat.findByIdAndUpdate({ registrationId: registrationId });
-    response.data = {
-      boats: { boat },
-    };
-=======
 /**
  * Fetch all boats associated with a specific regatta
  * @param {String} regattaId - The regatta ID to fetch boats for
@@ -71,32 +44,10 @@ async function getBoats(regattaId, callback) {
     // Fetch the boats from the database that match the regattaId
     const boats = await Boat.find({ regattaId }).exec();
     response.data = { boats }; // Return boats in the response
->>>>>>> 25cf5cdd8f6543f4c0239939c29b2ed07bdfd532
   } catch (error) {
     response.error = error.message;
   }
 
-<<<<<<< HEAD
-  console.log("Boat updated.")
-}
-
-async function deleteBoats(registrationId) {
-  const response = {};
-
-  try {
-    const boat = await Boat.findByIdAndDelete({ registrationId: registrationId });
-    response.data = {
-      boats: { boat },
-    };
-  } catch (error) {
-    response.error = error.message;
-  }
-
-  console.log("Boat deleted.")
-}
-
-
-=======
   callback(response); // Send the response back to the client
 }
 
@@ -107,7 +58,6 @@ async function deleteBoats(registrationId) {
  * @param {string} query
  * @param {Function} callback
  */
->>>>>>> 25cf5cdd8f6543f4c0239939c29b2ed07bdfd532
 async function searchBoats(query, callback) {
   const response = {};
 
