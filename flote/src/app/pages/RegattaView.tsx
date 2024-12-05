@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { socket } from "@src/socket";
 import AppLayout from "@templates/AppLayout";
 import List from "@atoms/List";
+import { useNavigate } from "react-router-dom";
 import ResponsiveCard from "@molecules/ResponsiveCard";
 import { Boat } from "@models/Boat";
 import { Race } from "@models/Race";
@@ -15,6 +16,11 @@ export default function RegattaView() {
   const [regattaName, setRegattaName] = useState<string>("");
   const [races, setRaces] = useState<Race[]>([]); // Placeholder for races
   const [timekeepers, setTimekeepers] = useState([]); // Placeholder for timekeepers
+
+  const navigate = useNavigate();
+  const handleAddRace = () => {
+    navigate("/race/create");
+  };
 
   useEffect(() => {
     if (location.state?.regatta?.name) {
@@ -39,8 +45,8 @@ export default function RegattaView() {
         <ResponsiveCard title="Boats">
           <List ariaLabel="List of boats" itemType="boat" items={boats} />
         </ResponsiveCard>
-        <ResponsiveCard title="Races">
-          <List ariaLabel="List of races" itemType="race" items={races} />
+        <ResponsiveCard title="Races"  onAdd={handleAddRace}>
+          <List ariaLabel="List of races" itemType="race" items={races} onAdd={handleAddRace} />
         </ResponsiveCard>
         <ResponsiveCard title="Timekeepers">
           <List
