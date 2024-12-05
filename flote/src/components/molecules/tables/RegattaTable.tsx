@@ -22,7 +22,7 @@ export default function RegattaTable({ searchQuery }: Props) {
   const rows: SearchTableRow[] = regattas.map((e) => {
     return {
       id: e._id!,
-      date: new Date().toLocaleString(), // TODO
+      date: new Date().toLocaleDateString(), //e.date.toISOString(), // TODO: instead of current date, get date in regatta object
       name: e.name,
       action: <OpenExternalLinkButton />,
     };
