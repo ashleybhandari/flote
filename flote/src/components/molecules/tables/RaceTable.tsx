@@ -16,18 +16,9 @@ type Props = {
 
 export default function RaceTable({ searchQuery }: Props) {
   const [races, setRaces] = useState<Race[]>([]);
+  const [rows, setRows] = useState<SearchTableRow[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
-
-  const rows: SearchTableRow[] = races.map((e) => {
-    return {
-      id: e._id!,
-      date: new Date().toLocaleString(), // TODO
-      name: e.name,
-      regatta: "", // TODO
-      action: <OpenExternalLinkButton />,
-    };
-  });
 
   const handleRowAction = (id: React.Key) => {
     const race = races.find((r) => r._id === id);
@@ -44,6 +35,33 @@ export default function RaceTable({ searchQuery }: Props) {
       }
     });
   }, [searchQuery]);
+
+  useEffect(() => {
+    setRows([]);
+
+    races.forEach((race) => {
+      socket.emit("getRegattaById", race.regattaId, (res: EventResponse) => {
+        if (res.error) {
+          console.error("getRegattaById failed:", res.error);
+        } else {
+          const date = race.startTime
+            ? new Date(race.startTime).toLocaleDateString()
+            : "TBD";
+          const regatta = res.data.regatta.name ?? "---";
+
+          const row: SearchTableRow = {
+            id: race._id!,
+            date,
+            name: race.name,
+            regatta,
+            action: <OpenExternalLinkButton />,
+          };
+
+          setRows((rows) => [...rows, row]);
+        }
+      });
+    });
+  }, [races]);
 
   return (
     <ResultsTable

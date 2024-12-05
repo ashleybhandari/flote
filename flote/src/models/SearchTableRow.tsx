@@ -6,4 +6,5 @@ export type SearchTableRow = {
   regatta?: string;
   race?: string;
   registrationId?: string;
+  participants?: string;
 };
