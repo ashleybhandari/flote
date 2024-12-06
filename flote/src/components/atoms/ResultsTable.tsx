@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+
 import AccordionCard from "@atoms/cards/AccordionCard";
 import { SearchTableColumn } from "@models/SearchTableColumn";
 import { SearchTableRow } from "@models/SearchTableRow";
@@ -10,6 +12,7 @@ import {
   TableRow,
   TableCell,
   getKeyValue,
+  SortDescriptor,
 } from "@nextui-org/table";
 
 type Props = {
@@ -27,30 +30,63 @@ export default function ResultsTable({
   onRowAction,
   isLoading,
 }: Props) {
-  const subtitle = `${rows.length} result${rows.length === 1 ? "" : "s"}`;
+  const [tableRows, setTableRows] = useState(rows);
+  const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>();
+  const subtitle = `${tableRows.length} result${
+    tableRows.length === 1 ? "" : "s"
+  }`;
 
-  // TODO table sorting
+  const handleSortChange = (descriptor: SortDescriptor) => {
+    setTableRows((r) => {
+      const sorted = r.sort((a, b) => {
+        const column = descriptor.column as keyof SearchTableRow;
+        const first = a[column]?.toString() ?? "";
+        const second = b[column]?.toString() ?? "";
+        let cmp =
+          (parseInt(first) || first) < (parseInt(second) || second) ? -1 : 1;
+
+        if (descriptor.direction === "descending") {
+          cmp *= -1;
+        }
+
+        return cmp;
+      });
+
+      setSortDescriptor(descriptor);
+
+      return sorted;
+    });
+  };
+
+  useEffect(() => setTableRows(rows), [rows]);
+
   return (
     <AccordionCard
       title={title}
       subtitle={subtitle}
-      isExpanded={rows.length > 0}
+      isExpanded={tableRows.length > 0}
     >
       <Table
         aria-label={title}
         removeWrapper
         selectionMode="single"
         onRowAction={onRowAction}
+        onSortChange={handleSortChange}
+        sortDescriptor={sortDescriptor}
       >
         <TableHeader columns={columns}>
           {(column) => (
-            <TableColumn key={column.key} className="uppercase">
+            <TableColumn
+              key={column.key}
+              className="uppercase"
+              allowsSorting={column.label !== ""}
+            >
               {column.label}
             </TableColumn>
           )}
         </TableHeader>
         <TableBody
-          items={rows}
+          items={tableRows}
           isLoading={isLoading}
           loadingContent={<Spinner />}
           emptyContent="No results found"

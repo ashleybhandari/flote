@@ -1,3 +1,5 @@
+import "./Footer.css";
+
 import Wordmark from "@atoms/Wordmark";
 
 type Props = {
