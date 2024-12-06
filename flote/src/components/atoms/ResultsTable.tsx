@@ -62,11 +62,10 @@ export default function ResultsTable({
     });
   };
 
-  useEffect(
-    () => handleSortChange({ column: "date", direction: "ascending" }),
-    []
-  );
-  useEffect(() => setTableRows(rows), [rows]);
+  useEffect(() => {
+    setTableRows(rows);
+    handleSortChange({ column: "date", direction: "descending" });
+  }, [rows]);
 
   return (
     <AccordionCard
