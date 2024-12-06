@@ -38,12 +38,20 @@ export default function ResultsTable({
 
   const handleSortChange = (descriptor: SortDescriptor) => {
     setTableRows((r) => {
-      const sorted = r.sort((a, b) => {
+      setSortDescriptor(descriptor);
+
+      return r.sort((a, b) => {
         const column = descriptor.column as keyof SearchTableRow;
         const first = a[column]?.toString() ?? "";
         const second = b[column]?.toString() ?? "";
-        let cmp =
-          (parseInt(first) || first) < (parseInt(second) || second) ? -1 : 1;
+        let cmp;
+
+        if (descriptor.column === "date") {
+          cmp = new Date(first) < new Date(second) ? -1 : 1;
+        } else {
+          cmp =
+            (parseInt(first) || first) < (parseInt(second) || second) ? -1 : 1;
+        }
 
         if (descriptor.direction === "descending") {
           cmp *= -1;
@@ -51,13 +59,13 @@ export default function ResultsTable({
 
         return cmp;
       });
-
-      setSortDescriptor(descriptor);
-
-      return sorted;
     });
   };
 
+  useEffect(
+    () => handleSortChange({ column: "date", direction: "ascending" }),
+    []
+  );
   useEffect(() => setTableRows(rows), [rows]);
 
   return (
