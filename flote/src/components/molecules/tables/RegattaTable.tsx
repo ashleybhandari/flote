@@ -45,11 +45,10 @@ export default function RegattaTable({ searchQuery }: Props) {
         } else {
           const races = res.data.races.sort((r1, r2) => r1.startTime > r2.startTime ? r2 : r1);
           const date = races ? races[0].startTime : "TBD";
-          console.log(date);
 
           const row: SearchTableRow = {
             id: regatta._id!,
-            date: date.toLocaleString(),
+            date: new Date(date).toLocaleDateString(),
             name: regatta.name,
             action: <OpenExternalLinkButton />,
           }
