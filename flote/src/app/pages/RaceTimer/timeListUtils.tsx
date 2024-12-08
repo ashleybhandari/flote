@@ -43,6 +43,7 @@ export function renderCount(time, count, index, setTimes){
                 >Lap</Button>
 }
 
+
 export function renderBoatInfo(time, index, setTimes, linkingIndex, setLinkingIndex){
     //renders the boat part of a list element
     if(time[1] == null){
@@ -57,7 +58,7 @@ export function renderBoatInfo(time, index, setTimes, linkingIndex, setLinkingIn
                 className="self-end w-32 m-6"
                 >Link Boat </Button>
     }
-    return <> {time[1]}
+    return <> Boat ID: {time[1]}
                 <Button
                 color="warning"
                 size="lg"

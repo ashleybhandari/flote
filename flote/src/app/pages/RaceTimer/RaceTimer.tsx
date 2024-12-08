@@ -43,9 +43,7 @@ export default function RaceTimer(){
         </div>
     </div>
 
-    <div className = "bg-white/90 fixed center">
-        <TimeLinker boatIds = {boatIds} times = {times} setTimes = {setTimes} linkingIndex = {linkingIndex} setLinkingIndex = {setLinkingIndex}/>
-    </div>
+    <TimeLinker boatIds = {boatIds} times = {times} setTimes = {setTimes} linkingIndex = {linkingIndex} setLinkingIndex = {setLinkingIndex}/>
   </div>
 
 }
