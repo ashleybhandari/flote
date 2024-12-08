@@ -2,10 +2,14 @@ import { Button } from "@nextui-org/react";
 import {renderTime, addTime, linkTime, unLinkTime, deleteTime} from "./timeListUtils.tsx";
 import {DNF_CODE, DNS_CODE, UNLINKED_CODE} from "./RaceTimer.tsx";
 import {getCounterStr} from "./timeListUtils.tsx";
+import { useState } from "react";
+
+
 export function TimeLinker({boatIds, times, setTimes, linkingIndex, setLinkingIndex}){
     if(linkingIndex === -1)
         return <></>
-
+    
+    const [query, setQuery] = useState("");
     return <>
         <div className="bg-slate-400/50 w-screen h-screen fixed flex items-center justify-center">
             <div className = "p-8 w-[50%] rounded-md bg-white flex flex-col max-h-[80%]">
@@ -26,14 +30,23 @@ export function TimeLinker({boatIds, times, setTimes, linkingIndex, setLinkingIn
                 <div className="grow my-5 justify-between p-5 bg-slate-100" > 
                     <input 
                         className={"grow border-none focus:outline-none py-4 pl-6 m-5"}
-                        placeholder="Search For Boat ID">
+                        placeholder="Search For Boat ID"
+                        value={query}
+                        onChange={(e) => {
+                            setQuery(e.target.value);
+                        }}>
                     </input>
-                    <ul className="overflow-y-scroll"> {boatIds.map(boatId => renderBoat(boatId, setTimes, linkingIndex, setLinkingIndex))} </ul>
+                    <ul className="overflow-y-scroll"> {boatIds.filter((id) => filterBoats(id, query)).map(boatId => renderBoat(boatId, setTimes, linkingIndex, setLinkingIndex))} </ul>
                 </div>
             </div> 
         </div>
     </>
 
+}
+
+function filterBoats(boatId, query){
+    if(query.replaceAll(' ', '') == '') return true;
+    return boatId.includes(query); 
 }
 
 function renderBoat(boatId, setTimes, linkingIndex, setLinkingIndex){
