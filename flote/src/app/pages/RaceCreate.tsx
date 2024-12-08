@@ -1,6 +1,6 @@
-import { useAuth0 } from "@auth0/auth0-react";
+// import { useAuth0 } from "@auth0/auth0-react";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 import { Boat } from "@models/Boat";
 import { EventResponse } from "@models/EventResponse";
@@ -15,12 +15,13 @@ import List from "@atoms/List";
 import ResponsiveCard from "@molecules/ResponsiveCard";
 
 export default function RaceCreate() {
+  const { regattaId } = useParams();
   const [boats, setBoats] = useState<Boat[]>([]);
   const [raceName, setRaceName] = useState<string>("");
   const [raceId, setRaceId] = useState<string | null>(null);
-  const [regattaId, setRegattaId] = useState<string | null>(null);
+  // const [regattaId, setRegattaId] = useState<string | null>(null);
 
-  const { user } = useAuth0();
+  // const { user } = useAuth0();
   const navigate = useNavigate();
 
   const MockBoat = (): Boat => ({
@@ -43,15 +44,16 @@ export default function RaceCreate() {
         } else {
           console.log("New race created:", res.data);
           const createdRaceId = res.data.id;
-          const createdRegattaId = res.data.regattaId;
+          // const createdRegattaId = res.data.regattaId;
           setRaceId(createdRaceId);
-          setRegattaId(createdRegattaId);
+          // setRegattaId(createdRegattaId);
 
           console.log("Created Race ID:", createdRaceId, "Regatta ID:", createdRegattaId); //
 
           boats.forEach((boat) => {
             boat.raceId = createdRaceId;
-            boat.regattaId = createdRegattaId;
+            // boat.regattaId = createdRegattaId;
+            boat.regattaId = regattaId;
           });
 
           boats.forEach((boat) => {

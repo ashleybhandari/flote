@@ -1,11 +1,11 @@
-import { Race } from "../models/subscribers.js";
+import { Race, Regatta, Boat } from "../models/subscribers.js";
 
 export function RaceHandler(io, socket) {
   socket.on("createRace", createRace);
   socket.on("updateRaces", updateRaces);
   socket.on("deleteRaces", deleteRaces);
   socket.on("searchRaces", searchRaces);
-  socket.on("getRacesById", getRacesById);
+  socket.on("getRaceById", getRaceById);
 }
 
 
@@ -78,16 +78,37 @@ async function searchRaces(query, callback) {
   callback(response);
 }
 
-async function getRacesById(raceId, userId, callback) {
+
+async function getRaceById(raceId, callback) {
   const response = {};
   try {
-    const races = await Race.find({raceId: raceId});
-    response.data = {
-      race: { races, userId },
+    const race = await Race.findById(raceId).exec();
+    const boats = await Boat.find({ raceId }).exec();
+    // const boats = await Boat.find({raceId: raceId}).exec();
+
+    if (!race) {
+      throw new Error("Race not found");
     };
+
+    response.data = { race, boats };
+
   } catch (error) {
     response.error = error.message;
   }
 
   callback(response);
 }
+
+// async function getRaceById(raceId, userId, callback) {
+//   const response = {};
+//   try {
+//     const races = await Race.find({raceId: raceId});
+//     response.data = {
+//       race: { races, userId },
+//     };
+//   } catch (error) {
+//     response.error = error.message;
+//   }
+
+//   callback(response);
+// }
