@@ -41,7 +41,11 @@ export default function AccountHome() {
       className="flex flex-col md:flex-row gap-3"
       hideBackButton
     >
-      <ResponsiveCard title="my regattas" onAdd={handleAddRegatta}>
+      <ResponsiveCard
+        title="my regattas"
+        action="add"
+        onAction={handleAddRegatta}
+      >
         <List
           ariaLabel="list of regattas you admin"
           itemType="regatta"

@@ -65,7 +65,11 @@ export default function RegattaCreate() {
     setIsModalOpen(true);
   };
 
-  const handleCreateBoat = (data: { registrationId: string; name: string; participantNames: string[] }) => {
+  const handleCreateBoat = (data: {
+    registrationId: string;
+    name: string;
+    participantNames: string[];
+  }) => {
     const newBoat: Boat = {
       registrationId: data.registrationId,
       name: data.name,
@@ -89,7 +93,10 @@ export default function RegattaCreate() {
   return (
     <>
       <Background className="flex flex-col items-center justify-between min-h-screen overflow-hidden">
-        <AppLayout title="new regatta" className="flex flex-col gap-3 flex-grow">
+        <AppLayout
+          title="new regatta"
+          className="flex flex-col gap-3 flex-grow"
+        >
           <div className="mx-2 sm:mx-0">
             <Input
               aria-label="Enter Regatta name"
@@ -108,7 +115,7 @@ export default function RegattaCreate() {
                 emptyContent="Add timekeepers"
               />
             </ResponsiveCard>
-            <ResponsiveCard title="Boats" onAdd={addBoat}>
+            <ResponsiveCard title="Boats" action="add" onAction={addBoat}>
               <List
                 ariaLabel="List of boats"
                 itemType="boat"

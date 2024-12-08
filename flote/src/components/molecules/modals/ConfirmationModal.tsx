@@ -1,4 +1,3 @@
-import { Button } from "@nextui-org/react";
 import GenericModal from "@atoms/GenericModal";
 
 type Props = {

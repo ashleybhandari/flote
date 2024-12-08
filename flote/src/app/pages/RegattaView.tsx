@@ -23,7 +23,10 @@ export default function RegattaView() {
   const [regattaName, setRegattaName] = useState<string>("");
   const [races, setRaces] = useState<Race[]>([]);
   const [timekeepers, setTimekeepers] = useState([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState({
+    boats: false,
+    timekeepers: false,
+  });
   const [regatta, setRegatta] = useState<Regatta | null>(null);
 
   useEffect(() => {
@@ -64,7 +67,7 @@ export default function RegattaView() {
       } else {
         const addedBoat: Boat = { ...newBoat, _id: res.data.boatId };
         setBoats((prevBoats) => [...prevBoats, addedBoat]);
-        setIsModalOpen(false);
+        setIsModalOpen((m) => ({ ...m, boats: false }));
       }
     });
   };
@@ -74,14 +77,27 @@ export default function RegattaView() {
       <div className="grow flex flex-col lg:flex-row gap-3">
         <ResponsiveCard
           title="Boats"
-          onAdd={isRegattaAdmin ? () => setIsModalOpen(true) : undefined}
+          action="add"
+          onAction={
+            isRegattaAdmin
+              ? () => setIsModalOpen((m) => ({ ...m, boats: true }))
+              : undefined
+          }
         >
           <List ariaLabel="List of boats" itemType="boat" items={boats} />
         </ResponsiveCard>
         <ResponsiveCard title="Races">
           <List ariaLabel="List of races" itemType="race" items={races} />
         </ResponsiveCard>
-        <ResponsiveCard title="Timekeepers">
+        <ResponsiveCard
+          title="Timekeepers"
+          action="edit"
+          onAction={
+            isRegattaAdmin
+              ? () => setIsModalOpen((m) => ({ ...m, timekeepers: true }))
+              : undefined
+          }
+        >
           <List
             ariaLabel="Timekeepers"
             itemType="timekeeper"
@@ -91,8 +107,8 @@ export default function RegattaView() {
       </div>
 
       <CreateBoatModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
+        isOpen={isModalOpen.boats}
+        onClose={() => setIsModalOpen((m) => ({ ...m, boats: false }))}
         onCreate={handleCreateBoat}
         existingParticipants={boats.flatMap((boat) => boat.participantNames)}
         existingRegistrationIds={boats.map((boat) => boat.registrationId)}
