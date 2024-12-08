@@ -1,5 +1,6 @@
 import { Button } from "@nextui-org/react";
 import {renderTime, addTime, linkTime, unLinkTime, deleteTime} from "./timeListUtils.tsx";
+import {DNF_CODE, DNS_CODE, UNLINKED_CODE} from "./RaceTimer.tsx";
 
 export function TimeLinker({boatIds, times, setTimes, linkingIndex, setLinkingIndex}){
     if(linkingIndex === -1)
