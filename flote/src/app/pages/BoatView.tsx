@@ -1,4 +1,4 @@
-import { useParams, useLocation } from "react-router-dom";
+import { useParams, useLocation, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { socket } from "@src/socket";
 import { Boat } from "@models/Boat";
@@ -80,6 +80,14 @@ export default function BoatView() {
   if (!boat || !regatta) return <PageSpinner />;
 
   const data = [
+    {
+      key: "Regatta",
+      value: (
+        <Link to={`/regatta/${regattaId}`} className="text-primary-500 underline">
+          {regatta.name}
+        </Link>
+      ),
+    },
     { key: "Name", value: boat.name },
     { key: "Participants", value: boat.participantNames.join(", ") },
     { key: "Registration ID", value: boat.registrationId },
