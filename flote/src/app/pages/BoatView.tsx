@@ -13,8 +13,8 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { EventResponse } from "@models/EventResponse";
 import { useNavigate } from "react-router-dom";
 
-import EditModal from "@atoms/cards/EditModal";
-import ConfirmationModal from "@atoms/cards/ConfirmationModal";
+import EditBoatModal from "@molecules/modals/EditBoatModal";
+import ConfirmationModal from "@molecules/modals/ConfirmationModal";
 
 export default function BoatView() {
   const { regattaId, boatId } = useParams();
@@ -48,14 +48,18 @@ export default function BoatView() {
     }
   }, [boatId, regattaId, location.state]);
 
-  const updateBoat = (data: { name: string; registrationId: string; participantNames: string[] }) => {
+  const updateBoat = (data: {
+    name: string;
+    registrationId: string;
+    participantNames: string[];
+  }) => {
     const updatedBoat = {
       boatId: boatId,
       name: data.name,
       registrationId: data.registrationId,
-      participantNames: data.participantNames
+      participantNames: data.participantNames,
     };
-  
+
     socket.emit("updateBoat", updatedBoat, (res) => {
       if (res.error) {
         console.error("Failed to update boat:", res.error);
@@ -83,7 +87,10 @@ export default function BoatView() {
     {
       key: "Regatta",
       value: (
-        <Link to={`/regatta/${regattaId}`} className="text-primary-500 underline">
+        <Link
+          to={`/regatta/${regattaId}`}
+          className="text-primary-500 underline"
+        >
           {regatta.name}
         </Link>
       ),
@@ -97,8 +104,8 @@ export default function BoatView() {
 
   return (
     <AppLayout title={boat.name} subtitle="boat">
-      <StaticCard title="details">
-        <ul>
+      <StaticCard title="details" className="flex flex-col">
+        <ul className="grow">
           {data.map((e, i) => (
             <li key={i}>
               <span className="font-bold">{e.key}: </span>
@@ -106,25 +113,22 @@ export default function BoatView() {
             </li>
           ))}
         </ul>
-        <ul>
-          {isRegattaAdmin && (
-          <>
-          <center>
+        {isRegattaAdmin && (
+          <div className="self-end flex flex-row gap-2">
             <Button color="primary" onClick={() => setEditModalOpen(true)}>
               Edit Boat
             </Button>
-            <h1></h1>
-            <Button color="danger" onClick={() => setDeleteModalOpen(true)} className="mt-2">
+            <Button
+              color="danger"
+              onClick={() => setDeleteModalOpen(true)}
+            >
               Delete Boat
             </Button>
-          </center>
-          </>
+          </div>
         )}
-
-        </ul>
       </StaticCard>
 
-      <EditModal
+      <EditBoatModal
         isOpen={editModalOpen}
         onClose={() => setEditModalOpen(false)}
         onUpdate={updateBoat}

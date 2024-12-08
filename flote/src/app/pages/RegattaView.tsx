@@ -11,8 +11,8 @@ import { EventResponse } from "@src/models/EventResponse";
 import AppLayout from "@templates/AppLayout";
 import List from "@atoms/List";
 import ResponsiveCard from "@molecules/ResponsiveCard";
-import CreateModal from "@atoms/cards/CreateModal";
-//for later - import ConfirmationModal from "@atoms/cards/ConfirmationModal";
+import CreateBoatModal from "@molecules/modals/CreateBoatModal";
+//for later - import ConfirmationModal from "@molecules/modals/ConfirmationModal";
 
 export default function RegattaView() {
   const { regattaId } = useParams();
@@ -25,7 +25,6 @@ export default function RegattaView() {
   const [timekeepers, setTimekeepers] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [regatta, setRegatta] = useState<Regatta | null>(null);
-
 
   useEffect(() => {
     if (location.state?.regatta?.name) {
@@ -47,7 +46,11 @@ export default function RegattaView() {
 
   const isRegattaAdmin = user?.sub === regatta?.adminId;
 
-  const handleCreateBoat = (data: { registrationId: string; name: string; participantNames: string[] }) => {
+  const handleCreateBoat = (data: {
+    registrationId: string;
+    name: string;
+    participantNames: string[];
+  }) => {
     const newBoat: Boat = {
       registrationId: data.registrationId,
       name: data.name,
@@ -69,18 +72,25 @@ export default function RegattaView() {
   return (
     <AppLayout title={regattaName} subtitle="regatta" className="flex">
       <div className="grow flex flex-col lg:flex-row gap-3">
-        <ResponsiveCard title="Boats" onAdd={isRegattaAdmin ? () => setIsModalOpen(true) : undefined}>
+        <ResponsiveCard
+          title="Boats"
+          onAdd={isRegattaAdmin ? () => setIsModalOpen(true) : undefined}
+        >
           <List ariaLabel="List of boats" itemType="boat" items={boats} />
         </ResponsiveCard>
         <ResponsiveCard title="Races">
           <List ariaLabel="List of races" itemType="race" items={races} />
         </ResponsiveCard>
         <ResponsiveCard title="Timekeepers">
-          <List ariaLabel="Timekeepers" itemType="timekeeper" items={timekeepers} />
+          <List
+            ariaLabel="Timekeepers"
+            itemType="timekeeper"
+            items={timekeepers}
+          />
         </ResponsiveCard>
       </div>
 
-      <CreateModal
+      <CreateBoatModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onCreate={handleCreateBoat}

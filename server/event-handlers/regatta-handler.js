@@ -6,6 +6,8 @@ export function RegattaHandler(io, socket) {
   socket.on("searchRegattas", searchRegattas);
   socket.on("getRegattaById", getRegattaById);
   socket.on("deleteRegatta", deleteRegatta);
+  socket.on("addTimekeeper", addTimekeeper);
+  socket.on("removeTimekeeper", removeTimekeeper);
 }
 
 /**
@@ -86,8 +88,8 @@ async function getRegattaById(regattaId, callback) {
 
   try {
     const regatta = await Regatta.findById(regattaId).exec();
-    const races = await Race.find({regattaId: regattaId}).exec();
-    const boats = await Boat.find({regattaId: regattaId}).exec();
+    const races = await Race.find({ regattaId: regattaId }).exec();
+    const boats = await Boat.find({ regattaId: regattaId }).exec();
     if (!regatta) throw new Error("Regatta not found");
 
     response.data = { regatta, races, boats };
@@ -120,6 +122,52 @@ async function deleteRegatta(regattaId, callback) {
     await Boat.deleteMany({ regattaId });
 
     response.data = { message: "Regatta deleted successfully" };
+  } catch (error) {
+    response.error = error.message;
+  }
+
+  callback(response);
+}
+
+/**
+ * Adds a timekeeper to a regatta. The callback is called with an empty object.
+ * @param {string} regattaId
+ * @param {string} timekeeperId
+ * @param {Function} callback
+ */
+async function addTimekeeper(regattaId, timekeeperId, callback) {
+  const response = {};
+
+  try {
+    const regatta = await new Regatta.findById(regattaId).exec();
+    regatta.timekeeperIds = [...regatta.timekeeperIds, timekeeperId];
+    await regatta.save();
+  } catch (error) {
+    response.error = error.message;
+  }
+
+  callback(response);
+}
+
+/**
+ * Removes a timekeeper from a regatta. The callback is called with an empty
+ * object.
+ * @param {string} regattaId
+ * @param {string} timekeeperId
+ * @param {Function} callback
+ */
+async function removeTimekeeper(regattaId, timekeeperId, callback) {
+  const response = {};
+
+  try {
+    const regatta = await new Regatta.findById(regattaId).exec();
+    const timekeeperIndex = regatta.timekeeperIds.indexOf(timekeeperId);
+
+    if (timekeeperIndex) {
+      regatta.timekeeperIs.splice(timekeeperIndex, 1);
+    }
+
+    await regatta.save();
   } catch (error) {
     response.error = error.message;
   }

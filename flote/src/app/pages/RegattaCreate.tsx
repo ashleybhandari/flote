@@ -13,7 +13,7 @@ import { Button } from "@nextui-org/button";
 import { Input } from "@nextui-org/input";
 import List from "@atoms/List";
 import ResponsiveCard from "@molecules/ResponsiveCard";
-import CreateModal from "@atoms/cards/CreateModal";
+import CreateBoatModal from "@molecules/modals/CreateBoatModal";
 
 export default function RegattaCreate() {
   const [timekeepers, setTimekeepers] = useState<Regatta[]>([]);
@@ -124,12 +124,12 @@ export default function RegattaCreate() {
               onClick={regattaCreationHandler}
               className="h-full"
             >
-              create regatta
+              Create Regatta
             </Button>
           </div>
         </AppLayout>
       </Background>
-      <CreateModal
+      <CreateBoatModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onCreate={handleCreateBoat}
