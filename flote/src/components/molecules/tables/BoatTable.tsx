@@ -16,19 +16,9 @@ type Props = {
 
 export default function BoatTable({ searchQuery }: Props) {
   const [boats, setBoats] = useState<Boat[]>([]);
+  const [rows, setRows] = useState<SearchTableRow[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
-
-  const rows: SearchTableRow[] = boats.map((e) => {
-    return {
-      id: e._id!,
-      date: new Date().toLocaleString(), // TODO
-      name: e.name ?? "---",
-      registrationId: e.registrationId,
-      participants: e.participantNames.join(", "),
-      action: <OpenExternalLinkButton />,
-    };
-  });
 
   const handleRowAction = (id: React.Key) => {
     const boat = boats.find((b) => b._id === id);
@@ -45,6 +35,34 @@ export default function BoatTable({ searchQuery }: Props) {
       }
     });
   }, [searchQuery]);
+
+  useEffect(() => {
+    setRows([]);
+
+    boats.forEach((boat) => {
+      socket.emit("getRaceById", boat.raceId, (res: EventResponse) => {
+        if (res.error) {
+          console.error("getRegattaById failed:", res.error);
+        } else {
+          const startTime = res.data.race?.startTime;
+          const date = startTime
+            ? new Date(startTime).toLocaleDateString()
+            : "TBD";
+
+          const row: SearchTableRow = {
+            id: boat._id!,
+            date,
+            name: boat.name ?? "---",
+            registrationId: boat.registrationId,
+            participants: boat.participantNames.join(", "),
+            action: <OpenExternalLinkButton />,
+          };
+
+          setRows((rows) => [...rows, row]);
+        }
+      });
+    });
+  }, [boats]);
 
   return (
     <ResultsTable
