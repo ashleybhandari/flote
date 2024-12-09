@@ -4,7 +4,6 @@ import { useParams, useNavigate } from "react-router-dom";
 
 import { Boat } from "@models/Boat";
 import { EventResponse } from "@models/EventResponse";
-import { Race } from "@models/Race";
 import { socket } from "@src/socket";
 
 import AppLayout from "@templates/AppLayout";
@@ -35,45 +34,46 @@ export default function RaceCreate() {
   const raceCreationHandler = () => {
     if (!raceName.trim()) return;
 
-    socket.emit(
-      "createRace",
-      { name: raceName },
-      (res: EventResponse) => {
-        if (res.error) {
-          console.error("Race creation failed:", res.error);
-        } else {
-          console.log("New race created:", res.data);
-          const createdRaceId = res.data.id;
-          // const createdRegattaId = res.data.regattaId;
-          setRaceId(createdRaceId);
-          // setRegattaId(createdRegattaId);
+    socket.emit("createRace", { name: raceName }, (res: EventResponse) => {
+      if (res.error) {
+        console.error("Race creation failed:", res.error);
+      } else {
+        console.log("New race created:", res.data);
+        const createdRaceId = res.data.id;
+        // const createdRegattaId = res.data.regattaId;
+        setRaceId(createdRaceId);
+        // setRegattaId(createdRegattaId);
 
-          console.log("Created Race ID:", createdRaceId, "Regatta ID:", createdRegattaId); //
+        console.log(
+          "Created Race ID:",
+          createdRaceId,
+          "Regatta ID:",
+          createdRegattaId
+        ); //
 
-          boats.forEach((boat) => {
-            boat.raceId = createdRaceId;
-            // boat.regattaId = createdRegattaId;
-            boat.regattaId = regattaId;
+        boats.forEach((boat) => {
+          boat.raceId = createdRaceId;
+          // boat.regattaId = createdRegattaId;
+          boat.regattaId = regattaId;
+        });
+
+        boats.forEach((boat) => {
+          socket.emit("addBoats", boat, (x: EventResponse) => {
+            if (x.error) {
+              console.error("Boat addition failed:", x.error);
+            } else {
+              console.log("Boat successfully added:", x.data);
+            }
           });
+        });
 
-          boats.forEach((boat) => {
-            socket.emit("addBoats", boat, (x: EventResponse) => {
-              if (x.error) {
-                console.error("Boat addition failed:", x.error);
-              } else {
-                console.log("Boat successfully added:", x.data);
-              }
-            });
-          });
-
-          navigate(`/regatta/${createdRegattaId}`, {
+        navigate(`/regatta/${createdRegattaId}`, {
           // navigate(`/race/${createdRaceId}`, {
           // navigate(`/regatta/${createdRegattaId}/race/${createdRaceId}`, {
-            state: { race: res.data, boats: boats },
-          });
-        }
+          state: { race: res.data, boats: boats },
+        });
       }
-    );
+    });
   };
 
   const addBoat = () => {
@@ -89,7 +89,7 @@ export default function RaceCreate() {
 
   return (
     <Background className="flex flex-col items-center justify-between min-h-screen overflow-hidden">
-      <AppLayout title="new race" className="flex flex-col gap-3 flex-grow">
+      <AppLayout title="new race" className="flex-grow">
         <div className="mx-2 sm:mx-0">
           <Input
             aria-label="Enter Race name"

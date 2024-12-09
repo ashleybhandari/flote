@@ -29,7 +29,7 @@ export default function RaceTimer(){
         <div className="timerHeader flex-initial">
             <HeaderProfile/>
             <div className="m-5"></div>
-            <PageTitle title={getCounterStr(counter)} hideBackButton={false} subtitle={"race timer: "} />
+            <PageTitle title={getCounterStr(counter)} subtitle={"race timer: "} />
             <h1 className="text-2xl">Race Name: {}</h1>
         </div>
 

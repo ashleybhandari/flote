@@ -5,12 +5,13 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { useNavigate } from "react-router-dom";
 
 import { Boat } from "@models/Boat";
+import { Breadcrumb } from "@models/Breadcrumb";
 import { Race } from "@models/Race";
 import { Regatta } from "@models/Regatta";
 import { EventResponse } from "@src/models/EventResponse";
-import { Button } from "@nextui-org/button";
 
 import AppLayout from "@templates/AppLayout";
+import { Button } from "@nextui-org/button";
 import List from "@atoms/List";
 //import { useNavigate } from "react-router-dom";
 import ResponsiveCard from "@molecules/ResponsiveCard";
@@ -57,7 +58,10 @@ export default function RegattaView() {
   }, [regattaId, location.state]);
 
   const isRegattaAdmin = user?.sub === regatta?.adminId;
-  const isRegattaTimekeeper = Array.isArray(regatta?.timekeeperIds) && user?.sub && regatta.timekeeperIds.includes(user.sub);
+  const isRegattaTimekeeper =
+    Array.isArray(regatta?.timekeeperIds) &&
+    user?.sub &&
+    regatta.timekeeperIds.includes(user.sub);
 
   const handleCreateBoat = (data: {
     registrationId: string;
@@ -86,13 +90,13 @@ export default function RegattaView() {
     const selectedBoatIds = data.addedBoats
       .map((boatName) => boats.find((boat) => boat.name === boatName)?._id)
       .filter((id): id is string => id !== undefined);
-  
+
     const newRace: Race = {
       name: data.name,
       boatIds: selectedBoatIds,
       regattaId: regattaId || "",
     };
-  
+
     socket.emit("createRace", newRace, (res: EventResponse) => {
       if (res.error) {
         console.error("Race creation failed:", res.error);
@@ -103,7 +107,7 @@ export default function RegattaView() {
       }
     });
   };
-  
+
   const deleteRegatta = () => {
     socket.emit("deleteRegatta", regattaId, (res: EventResponse) => {
       if (res.error) {
@@ -114,7 +118,7 @@ export default function RegattaView() {
       }
     });
   };
-  
+
   const handleUpdateTimekeepers = (data: { timekeeperIds: string[] }) => {
     const regattaId = regatta?._id;
     const timekeeperIds = data.timekeeperIds;
@@ -133,8 +137,13 @@ export default function RegattaView() {
     );
   };
 
+  const breadcrumbs: Breadcrumb[] = [
+    { name: "Home", href: "/home" },
+    { name: regatta?.name ?? "regatta" },
+  ];
+
   return (
-    <AppLayout title={regattaName} subtitle="regatta" className="flex">
+    <AppLayout title={regattaName} subtitle="regatta" breadcrumbs={breadcrumbs}>
       <div className="grow flex flex-col lg:flex-row gap-3">
         <ResponsiveCard
           title="Boats"
@@ -151,36 +160,35 @@ export default function RegattaView() {
           title="Races"
           action="add"
           onAction={
-            ( isRegattaAdmin || isRegattaTimekeeper )
+            isRegattaAdmin || isRegattaTimekeeper
               ? () => setIsModalOpen((m) => ({ ...m, races: true }))
               : undefined
           }
         >
           <List ariaLabel="List of races" itemType="race" items={races} />
-          </ResponsiveCard>
-          <ResponsiveCard
-            title="Timekeepers"
-            action="edit"
-            onAction={
-              isRegattaAdmin
-                ? () => setIsModalOpen((m) => ({ ...m, timekeepers: true }))
-                : undefined
-            }
-          >
-            <List
-              ariaLabel="Timekeepers"
-              itemType="timekeeper"
-              items={timekeepers}
-            />
-          </ResponsiveCard>
-          {isRegattaAdmin && (
-          <Button
-            color="danger"
-            onClick={() => setDeleteModalOpen(true)}
-            className="mt-3"
-          >
-            Delete
-          </Button>)}
+        </ResponsiveCard>
+        <ResponsiveCard
+          title="Timekeepers"
+          action="edit"
+          onAction={
+            isRegattaAdmin
+              ? () => setIsModalOpen((m) => ({ ...m, timekeepers: true }))
+              : undefined
+          }
+        >
+          <List
+            ariaLabel="Timekeepers"
+            itemType="timekeeper"
+            items={timekeepers}
+          />
+        </ResponsiveCard>
+      </div>
+      <div className="mt-3 text-end">
+        {isRegattaAdmin && (
+          <Button color="danger" onClick={() => setDeleteModalOpen(true)}>
+            Delete Regatta
+          </Button>
+        )}
       </div>
 
       <CreateBoatModal
@@ -194,7 +202,9 @@ export default function RegattaView() {
         isOpen={isModalOpen.races}
         onClose={() => setIsModalOpen((m) => ({ ...m, races: false }))}
         onSubmit={handleCreateRace}
-        existingBoats={boats.map((boat) => boat.name).filter((name): name is string => !!name)}
+        existingBoats={boats
+          .map((boat) => boat.name)
+          .filter((name): name is string => !!name)}
         existingRaces={races.map((race) => race.name)}
         unavailableBoats={races.flatMap((race) => race.boatIds)}
       />

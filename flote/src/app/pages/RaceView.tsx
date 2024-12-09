@@ -1,16 +1,20 @@
 import { useParams, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 
+import { Breadcrumb } from "@src/models/Breadcrumb";
+import { Boat } from "@models/Boat";
+import { EventResponse } from "@src/models/EventResponse";
+import { Race } from "@src/models/Race";
+import { Regatta } from "@src/models/Regatta";
+import { socket } from "@src/socket";
+
 import AppLayout from "@templates/AppLayout";
 import List from "@atoms/List";
 import ResponsiveCard from "@molecules/ResponsiveCard";
 // import StaticCard from "@atoms/cards/StaticCard";
 
-import { Boat } from "@models/Boat";
 //import { useNavigate } from "react-router-dom";
-import { socket } from "@src/socket";
 //import { Button } from "@nextui-org/button";
-import { EventResponse } from "@src/models/EventResponse";
 //import ConfirmationModal from "@molecules/modals/ConfirmationModal";
 // import { format } from "date-fns";
 
@@ -19,38 +23,50 @@ export default function RaceView() {
   //const navigate = useNavigate();
   const location = useLocation();
 
-  const [raceName, setRaceName] = useState<string>("");
+  const [regatta, setRegatta] = useState<Regatta>();
+  const [race, setRace] = useState<Race>();
   const [boats, setBoats] = useState<Boat[]>([]);
-  const [startTime, setStartTime] = useState<string>("");
- // const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  // const [deleteModalOpen, setDeleteModalOpen] = useState(false);
 
   useEffect(() => {
-    if (location.state?.race?.name) {
-      setRaceName(location.state.race.name);
+    if (location.state?.race) {
+      setRace(location.state.race);
     } else if (raceId) {
       socket.emit("getRaceById", raceId, (res: EventResponse) => {
         if (res.error) {
           console.error("Failed to fetch race details:", res.error);
         } else {
           console.log("Received response:", res);
-  
+
           const { race, boats: fetchedBoats } = res.data;
           fetchedBoats.sort((a: Boat, b: Boat) => {
             if (!a.finishTime) return 1;
             if (!b.finishTime) return -1;
-            return new Date(a.finishTime).getTime() - new Date(b.finishTime).getTime();
+            return (
+              new Date(a.finishTime).getTime() -
+              new Date(b.finishTime).getTime()
+            );
           });
-  
-          setRaceName(race.name);
+
+          setRace(race);
           setBoats(fetchedBoats);
-          if (res.data.race.startTime) {
-            setStartTime(res.data.race.startTime);
-          }
+
+          socket.emit(
+            "getRegattaById",
+            race.regattaId,
+            (res: EventResponse) => {
+              if (res.error) {
+                console.error("Failed to fetch regatta:", res.error);
+              } else {
+                setRegatta(res.data.regatta);
+              }
+            }
+          );
         }
       });
     }
   }, [raceId, location.state]);
-  
+
   console.log("Current boats:", boats);
   const participants = boats.flatMap((boat) => boat.participantNames || []);
   console.log("Participants:", participants);
@@ -65,29 +81,35 @@ export default function RaceView() {
     });
   };
 
-  const raceStart = formatTime(startTime);
+  const raceStart = formatTime(race?.startTime);
 
   const boatsWithFinishTimes = boats.map((boat) => ({
     ...boat,
-    displayName: `${boat.name || "Unnamed Boat"} (${formatTime(boat.finishTime)})`,
+    displayName: `${boat.name || "Unnamed Boat"} (${formatTime(
+      boat.finishTime
+    )})`,
   }));
 
   console.log("Boats with times: ", boatsWithFinishTimes);
 
-  const boatTitles = boatsWithFinishTimes.map((eachBoat) => eachBoat.displayName);
+  const boatTitles = boatsWithFinishTimes.map(
+    (eachBoat) => eachBoat.displayName
+  );
+
+  const breadcrumbs: Breadcrumb[] = [
+    { name: "Home", href: "/home" },
+    { name: regatta?.name ?? "regatta", href: `/regatta/${regatta?._id}` },
+    { name: race?.name ?? "race" },
+  ];
 
   return (
-    <AppLayout title={raceName} subtitle="race" className="flex">
+    <AppLayout title={race?.name} subtitle="race" breadcrumbs={breadcrumbs}>
       <div className="grow flex flex-col lg:flex-row gap-3">
         <ResponsiveCard title="Race Start Time">
           <p>{raceStart}</p>
         </ResponsiveCard>
         <ResponsiveCard title="Boats in Race">
-          <List
-            ariaLabel="List of boats"
-            itemType="race"
-            items={boatTitles}
-          />
+          <List ariaLabel="List of boats" itemType="race" items={boatTitles} />
         </ResponsiveCard>
         <ResponsiveCard title="Participants in Race">
           <List
@@ -97,6 +119,6 @@ export default function RaceView() {
           />
         </ResponsiveCard>
       </div>
-    </AppLayout> 
+    </AppLayout>
   );
 }
