@@ -1,8 +1,8 @@
 export type Race = {
   _id?: string;
   name: string;
-  startTime?: Date;
-  finishTime?: Date;
+  startTime?: Date | string;
+  finishTime?: Date | string;
   regattaId: string;
   boatIds: string[];
 };

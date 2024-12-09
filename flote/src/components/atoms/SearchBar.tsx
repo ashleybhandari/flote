@@ -35,7 +35,7 @@ export default function SearchBar({ size = "sm", className }: Props) {
           className={`grow bg-transparent border-none focus:outline-none ${
             size === "sm" ? "py-2 pl-4" : "py-4 pl-6"
           }`}
-          placeholder="Search for a regatta, race, or participant"
+          placeholder="Search for a regatta, race, or boat"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
         ></input>

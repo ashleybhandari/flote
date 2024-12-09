@@ -26,15 +26,23 @@ export default function List({
       >
         {items.map((e, i) => {
           let href = "";
+          let isDisabled = false;
 
           if (itemType === "regatta") href = `/regatta/${e._id}`;
           if (itemType === "race")
             href = `/regatta/${e.regattaId}/race/${e._id}`;
           if (itemType === "boat")
             href = `/regatta/${e.regattaId}/boat/${e._id}`;
+            if (location.pathname === "/regatta/create") {
+              isDisabled = true;
+            }
 
           return (
-            <ListboxItem key={i} href={href}>
+            <ListboxItem
+              key={i}
+              // updated so when we're on the create page the user cannot access the boat page
+              href={isDisabled ? undefined : href}
+            >
               {e?.name ?? e}
             </ListboxItem>
           );

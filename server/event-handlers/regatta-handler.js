@@ -1,11 +1,11 @@
 import { Regatta, Race, Boat } from "../models/subscribers.js";
 
-
 export function RegattaHandler(io, socket) {
   socket.on("createRegatta", createRegatta);
   socket.on("getRegattas", getRegattas);
   socket.on("searchRegattas", searchRegattas);
   socket.on("getRegattaById", getRegattaById);
+  socket.on("deleteRegatta", deleteRegatta);
 }
 
 /**
@@ -74,7 +74,6 @@ async function searchRegattas(query, callback) {
   callback(response);
 }
 
-// temporarily testing displaying regatta info without messing up other calls
 /**
  * Fetch a single regatta's details by ID.
  * The callback is called with an object with a data field that holds the regatta:
@@ -98,3 +97,32 @@ async function getRegattaById(regattaId, callback) {
 
   callback(response);
 }  
+
+/**
+ * Delete a regatta by id.
+ * @param {string} regattaId
+ * @param {Function} callback
+ */
+async function deleteRegatta(regattaId, callback) {
+  const response = {};
+
+  try {
+    if (!regattaId) {
+      throw new Error("Regatta ID is required to delete a regatta.");
+    }
+
+    const regatta = await Regatta.findByIdAndDelete(regattaId);
+
+    if (!regatta) {
+      throw new Error("Regatta not found.");
+    }
+
+    await Boat.deleteMany({ regattaId });
+
+    response.data = { message: "Regatta deleted successfully" };
+  } catch (error) {
+    response.error = error.message;
+  }
+
+  callback(response);
+}
