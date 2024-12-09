@@ -2,11 +2,13 @@ import { useParams, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { socket } from "@src/socket";
 import { useAuth0 } from "@auth0/auth0-react";
+import { useNavigate } from "react-router-dom";
 
 import { Boat } from "@models/Boat";
 import { Race } from "@models/Race";
 import { Regatta } from "@models/Regatta";
 import { EventResponse } from "@src/models/EventResponse";
+import { Button } from "@nextui-org/button";
 
 import AppLayout from "@templates/AppLayout";
 import List from "@atoms/List";
@@ -15,16 +17,18 @@ import ResponsiveCard from "@molecules/ResponsiveCard";
 import CreateBoatModal from "@molecules/modals/CreateBoatModal";
 import CreateRaceModal from "@molecules/modals/CreateRaceModal";
 import EditTimekeepersModal from "@molecules/modals/EditTimekeepersModal";
-//for later - import ConfirmationModal from "@molecules/modals/ConfirmationModal";
+import ConfirmationModal from "@molecules/modals/ConfirmationModal";
 
 export default function RegattaView() {
   const { regattaId } = useParams();
   const location = useLocation();
   const { user } = useAuth0();
+  const navigate = useNavigate();
 
   const [boats, setBoats] = useState<Boat[]>([]);
   const [regattaName, setRegattaName] = useState<string>("");
   const [races, setRaces] = useState<Race[]>([]);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [timekeepers, setTimekeepers] = useState<string[]>([]);
   const [isModalOpen, setIsModalOpen] = useState({
     boats: false,
@@ -81,7 +85,7 @@ export default function RegattaView() {
   const handleCreateRace = (data: { name: string; addedBoats: string[] }) => {
     const selectedBoatIds = data.addedBoats
       .map((boatName) => boats.find((boat) => boat.name === boatName)?._id)
-      .filter((id): id is string => id !== undefined); // Ensure no undefined values
+      .filter((id): id is string => id !== undefined);
   
     const newRace: Race = {
       name: data.name,
@@ -96,6 +100,17 @@ export default function RegattaView() {
         const addedRace: Race = { ...newRace, _id: res.data.raceId };
         setRaces((prevRaces) => [...prevRaces, addedRace]);
         setIsModalOpen((m) => ({ ...m, races: false }));
+      }
+    });
+  };
+  
+  const deleteRegatta = () => {
+    socket.emit("deleteRegatta", regattaId, (res: EventResponse) => {
+      if (res.error) {
+        console.error("Failed to delete regatta:", res.error);
+      } else {
+        console.log("Regatta deleted successfully");
+        navigate(`/home`);
       }
     });
   };
@@ -142,22 +157,30 @@ export default function RegattaView() {
           }
         >
           <List ariaLabel="List of races" itemType="race" items={races} />
-        </ResponsiveCard>
-        <ResponsiveCard
-          title="Timekeepers"
-          action="edit"
-          onAction={
-            isRegattaAdmin
-              ? () => setIsModalOpen((m) => ({ ...m, timekeepers: true }))
-              : undefined
-          }
-        >
-          <List
-            ariaLabel="Timekeepers"
-            itemType="timekeeper"
-            items={timekeepers}
-          />
-        </ResponsiveCard>
+          </ResponsiveCard>
+          <ResponsiveCard
+            title="Timekeepers"
+            action="edit"
+            onAction={
+              isRegattaAdmin
+                ? () => setIsModalOpen((m) => ({ ...m, timekeepers: true }))
+                : undefined
+            }
+          >
+            <List
+              ariaLabel="Timekeepers"
+              itemType="timekeeper"
+              items={timekeepers}
+            />
+          </ResponsiveCard>
+          {isRegattaAdmin && (
+          <Button
+            color="danger"
+            onClick={() => setDeleteModalOpen(true)}
+            className="mt-3"
+          >
+            Delete
+          </Button>)}
       </div>
 
       <CreateBoatModal
@@ -180,6 +203,12 @@ export default function RegattaView() {
         onClose={() => setIsModalOpen((m) => ({ ...m, timekeepers: false }))}
         onSubmit={handleUpdateTimekeepers}
         regattaId={regatta?._id}
+      />
+      <ConfirmationModal
+        isOpen={deleteModalOpen}
+        message="Are you sure you want to delete this regatta?"
+        onClose={() => setDeleteModalOpen(false)}
+        onConfirm={deleteRegatta}
       />
     </AppLayout>
   );

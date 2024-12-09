@@ -119,6 +119,7 @@ async function deleteRegatta(regattaId, callback) {
     }
 
     await Boat.deleteMany({ regattaId });
+    await Race.deleteMany({ regattaId });
 
     response.data = { message: "Regatta deleted successfully" };
   } catch (error) {
