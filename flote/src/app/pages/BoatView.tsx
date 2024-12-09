@@ -5,14 +5,10 @@ import { Boat } from "@models/Boat";
 import { Regatta } from "@models/Regatta";
 
 import AppLayout from "@templates/AppLayout";
-import List from "@atoms/List";
-import ResponsiveCard from "@molecules/ResponsiveCard";
-// import StaticCard from "@atoms/cards/StaticCard";
-import { EventResponse } from "@src/models/EventResponse";
-// import PageSpinner from "@src/components/atoms/PageSpinner";
-
-
-
+import StaticCard from "@atoms/cards/StaticCard";
+import PageSpinner from "@src/components/atoms/PageSpinner";
+// import List from "@atoms/List";
+// import ResponsiveCard from "@molecules/ResponsiveCard";
 
 import { Button } from "@nextui-org/button";
 import { useAuth0 } from "@auth0/auth0-react";
@@ -83,7 +79,7 @@ export default function BoatView() {
     });
   };
 
-  if (!boat || !regatta) return <PageSpinner />;
+  if (!boat || !regatta) return {PageSpinner};
 
   const data = [
     {
