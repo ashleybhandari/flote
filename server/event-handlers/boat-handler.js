@@ -25,6 +25,10 @@ async function addBoats(boat, callback) {
 
     const doc = await new Boat(boat).save();
 
+    if (boat.raceId) {
+      await Boat.findByIdAndUpdate(doc._id, { $set: { raceId: boat.raceId } });
+    }
+
     response.data = { boatId: doc._id, boatName: doc.name };
   } catch (error) {
     response.error = error.message;
@@ -98,7 +102,7 @@ async function updateBoat(updateData, callback) {
   const response = {};
 
   try {
-    const { boatId, registrationId, name, participantNames, finishTime } = updateData;
+    const { boatId, registrationId, name, participantNames, raceId } = updateData;
     if (!boatId) {
       throw new Error("Boat ID is required to update a boat.");
     }
@@ -114,7 +118,6 @@ async function updateBoat(updateData, callback) {
     if (participantNames !== undefined) boat.participantNames = participantNames;
 
     await boat.save();
-
     response.data = boat;
   } catch (error) {
     response.error = error.message;
