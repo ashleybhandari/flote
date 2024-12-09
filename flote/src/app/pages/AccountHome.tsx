@@ -35,14 +35,18 @@ export default function AccountHome() {
   };
 
   useEffect(() => {
-    socket.emit("getRegattas", user?.sub, (res: EventResponse) => {
-      if (res.error) {
-        console.error("getRegattas failed:", res.error);
-      } else {
-        setRegattasAdmin(res.data.regattas.admin);
-        setRegattasTimekeeper(res.data.regattas.timekeeper);
+    socket.emit(
+      "getRegattas",
+      { id: user?.sub, email: user?.email },
+      (res: EventResponse) => {
+        if (res.error) {
+          console.error("getRegattas failed:", res.error);
+        } else {
+          setRegattasAdmin(res.data.regattas.admin);
+          setRegattasTimekeeper(res.data.regattas.timekeeper);
+        }
       }
-    });
+    );
   }, [user]);
 
   return (
