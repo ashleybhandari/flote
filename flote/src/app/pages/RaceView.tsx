@@ -11,6 +11,7 @@ import { Boat } from "@models/Boat";
 import { socket } from "@src/socket";
 import { EventResponse } from "@src/models/EventResponse";
 // import { format } from "date-fns";
+import {getCounterStr} from "./RaceTimer/timeListUtils.tsx"; 
 
 export default function RaceView() {
   const { raceId } = useParams();
@@ -51,8 +52,13 @@ export default function RaceView() {
   const participants = boats.flatMap((boat) => boat.participantNames || []);
   console.log("Participants:", participants);
 
-  const formatTime = (time?: Date | string) => {
-    if (!time) return "No finish time";
+  const formatTime = (time?: Date | string, boat: boolean) => {
+    if (!time) return "No Time Available";
+    if(boat){
+        time = new Date(time);
+        return getCounterStr(time.getTime());
+    }
+
     return new Date(time).toLocaleString("en-US", {
       month: "short",
       day: "numeric",
@@ -61,11 +67,11 @@ export default function RaceView() {
     });
   };
 
-  const raceStart = formatTime(startTime);
+  const raceStart = formatTime(startTime, false);
 
   const boatsWithFinishTimes = boats.map((boat) => ({
     ...boat,
-    displayName: `${boat.name || "Unnamed Boat"} (${formatTime(boat.finishTime)})`,
+    displayName: `${boat.name || "Unnamed Boat"} (${formatTime(boat.finishTime, true)})`,
   }));
 
   console.log("Boats with times: ", boatsWithFinishTimes);
