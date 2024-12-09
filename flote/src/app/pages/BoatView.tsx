@@ -119,17 +119,17 @@ export default function BoatView() {
             </li>
           ))}
         </ul>
-        {isRegattaAdmin && (
-          <div className="self-end flex items-center gap-2">
-            <Button color="danger" onClick={() => setDeleteModalOpen(true)}>
-              Delete Boat
-            </Button>
-            <Button color="primary" onClick={() => setEditModalOpen(true)}>
-              Edit Boat
-            </Button>
-          </div>
-        )}
       </StaticCard>
+      {isRegattaAdmin && (
+        <div className="self-end flex items-center gap-2">
+          <Button color="danger" onClick={() => setDeleteModalOpen(true)}>
+            Delete Boat
+          </Button>
+          <Button color="primary" onClick={() => setEditModalOpen(true)}>
+            Edit Boat
+          </Button>
+        </div>
+      )}
 
       <EditBoatModal
         isOpen={editModalOpen}
