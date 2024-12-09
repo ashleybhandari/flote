@@ -7,18 +7,22 @@ import ResponsiveCard from "@molecules/ResponsiveCard";
 // import StaticCard from "@atoms/cards/StaticCard";
 
 import { Boat } from "@models/Boat";
-
+//import { useNavigate } from "react-router-dom";
 import { socket } from "@src/socket";
+//import { Button } from "@nextui-org/button";
 import { EventResponse } from "@src/models/EventResponse";
+//import ConfirmationModal from "@molecules/modals/ConfirmationModal";
 // import { format } from "date-fns";
 
 export default function RaceView() {
   const { raceId } = useParams();
+  //const navigate = useNavigate();
   const location = useLocation();
 
   const [raceName, setRaceName] = useState<string>("");
   const [boats, setBoats] = useState<Boat[]>([]);
   const [startTime, setStartTime] = useState<string>("");
+ // const [deleteModalOpen, setDeleteModalOpen] = useState(false);
 
   useEffect(() => {
     if (location.state?.race?.name) {
@@ -82,7 +86,6 @@ export default function RaceView() {
           <List
             ariaLabel="List of boats"
             itemType="race"
-            // items={boats}
             items={boatTitles}
           />
         </ResponsiveCard>
@@ -94,6 +97,6 @@ export default function RaceView() {
           />
         </ResponsiveCard>
       </div>
-    </AppLayout>
+    </AppLayout> 
   );
 }
