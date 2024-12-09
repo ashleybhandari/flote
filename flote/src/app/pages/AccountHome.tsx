@@ -7,17 +7,31 @@ import { Regatta } from "@models/Regatta";
 import { socket } from "@src/socket";
 
 import AppLayout from "@templates/AppLayout";
+import CreateRegattaModal from "@molecules/modals/CreateRegattaModal";
 import List from "@atoms/List";
 import ResponsiveCard from "@molecules/ResponsiveCard";
 
 export default function AccountHome() {
   const [regattasAdmin, setRegattasAdmin] = useState<Regatta[]>([]);
   const [regattasTimekeeper, setRegattasTimekeeper] = useState<Regatta[]>([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const { user } = useAuth0();
   const navigate = useNavigate();
 
-  const handleAddRegatta = () => {
-    navigate("/regatta/create");
+  const handleAddRegatta = (data: any) => {
+    socket.emit(
+      "createRegatta",
+      { name: data.regattaName, adminId: user?.sub },
+      (res: EventResponse) => {
+        if (res.error) {
+          console.error("Regatta creation failed:", res.error);
+        } else {
+          navigate(`/regatta/${res.data.id}`, {
+            state: { regatta: res.data },
+          });
+        }
+      }
+    );
   };
 
   useEffect(() => {
@@ -28,10 +42,6 @@ export default function AccountHome() {
         setRegattasAdmin(res.data.regattas.admin);
         setRegattasTimekeeper(res.data.regattas.timekeeper);
       }
-    });
-
-    socket.on("newRegatta", (newRegatta) => {
-      setRegattasAdmin((prevRegattas) => [...prevRegattas, newRegatta]);
     });
   }, [user]);
 
@@ -44,7 +54,7 @@ export default function AccountHome() {
       <ResponsiveCard
         title="my regattas"
         action="add"
-        onAction={handleAddRegatta}
+        onAction={() => setIsModalOpen(true)}
       >
         <List
           ariaLabel="list of regattas you admin"
@@ -59,6 +69,11 @@ export default function AccountHome() {
           items={regattasTimekeeper}
         ></List>
       </ResponsiveCard>
+      <CreateRegattaModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSubmit={(data) => handleAddRegatta(data)}
+      ></CreateRegattaModal>
     </AppLayout>
   );
 }

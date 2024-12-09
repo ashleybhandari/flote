@@ -4,6 +4,7 @@ import { Boat } from "@models/Boat";
 import { Button } from "@nextui-org/button";
 import GenericModal from "@atoms/GenericModal";
 import { Input } from "@nextui-org/input";
+import TrashButton from "@atoms/icon-buttons/TrashButton";
 
 type Props = {
   isOpen: boolean;
@@ -145,14 +146,13 @@ export default function EditBoatModal({
       </Button>
       <div className="mt-4">
         <strong>Participants:</strong>
-        <ul className="list-disc pl-5">
+        <ul>
           {participants.map((participant, index) => (
-            <li
-              key={index}
-              className="cursor-pointer text-blue-500 hover:underline"
-              onClick={() => deleteParticipant(participant)}
-            >
-              {participant}
+            <li key={index}>
+              <TrashButton
+                onClick={() => deleteParticipant(participant)}
+              ></TrashButton>
+              <span>{participant}</span>
             </li>
           ))}
         </ul>

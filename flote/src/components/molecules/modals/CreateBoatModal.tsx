@@ -3,11 +3,12 @@ import { useState, useEffect } from "react";
 import { Button } from "@nextui-org/button";
 import GenericModal from "@atoms/GenericModal";
 import { Input } from "@nextui-org/input";
+import TrashButton from "@atoms/icon-buttons/TrashButton";
 
 type Props = {
   isOpen: boolean;
   onClose: () => void;
-  onCreate: (data: {
+  onSubmit: (data: {
     registrationId: string;
     name: string;
     participantNames: string[];
@@ -19,7 +20,7 @@ type Props = {
 export default function CreateBoatModal({
   isOpen,
   onClose,
-  onCreate,
+  onSubmit,
   existingParticipants = [],
   existingRegistrationIds = [],
 }: Props) {
@@ -93,7 +94,7 @@ export default function CreateBoatModal({
       return;
     }
 
-    onCreate({ registrationId, name, participantNames: participants });
+    onSubmit({ registrationId, name, participantNames: participants });
     setData({ registrationId: "", name: "", participantNames: "" });
     setParticipants([]);
     setParticipantError(null);
@@ -148,17 +149,17 @@ export default function CreateBoatModal({
       </Button>
       <div className="mt-4">
         <strong>Participants:</strong>
-        <ul className="list-disc pl-5">
+        <ul>
           {participants.map((participant, index) => (
-            <li
-              key={index}
-              className="cursor-pointer text-blue-500 hover:underline"
-              onClick={() => deleteParticipant(participant)}
-            >
-              {participant}
+            <li key={index}>
+              <TrashButton
+                onClick={() => deleteParticipant(participant)}
+              ></TrashButton>
+              <span>{participant}</span>
             </li>
           ))}
         </ul>
+        {participants.length === 0 && <div className="italic mt-2">None yet!</div>}
       </div>
       {formError && <p className="text-red-500 text-sm">{formError}</p>}
     </GenericModal>

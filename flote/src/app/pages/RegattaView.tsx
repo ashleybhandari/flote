@@ -109,7 +109,7 @@ export default function RegattaView() {
       <CreateBoatModal
         isOpen={isModalOpen.boats}
         onClose={() => setIsModalOpen((m) => ({ ...m, boats: false }))}
-        onCreate={handleCreateBoat}
+        onSubmit={handleCreateBoat}
         existingParticipants={boats.flatMap((boat) => boat.participantNames)}
         existingRegistrationIds={boats.map((boat) => boat.registrationId)}
       />
