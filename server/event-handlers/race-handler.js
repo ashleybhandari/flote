@@ -98,17 +98,3 @@ async function getRaceById(raceId, callback) {
 
   callback(response);
 }
-
-// async function getRaceById(raceId, userId, callback) {
-//   const response = {};
-//   try {
-//     const races = await Race.find({raceId: raceId});
-//     response.data = {
-//       race: { races, userId },
-//     };
-//   } catch (error) {
-//     response.error = error.message;
-//   }
-
-//   callback(response);
-// }

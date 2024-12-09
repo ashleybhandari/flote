@@ -13,22 +13,17 @@ import { Button } from "@nextui-org/button";
 import { Input } from "@nextui-org/input";
 import List from "@atoms/List";
 import ResponsiveCard from "@molecules/ResponsiveCard";
+import CreateModal from "@atoms/cards/CreateModal";
 
 export default function RegattaCreate() {
   const [timekeepers, setTimekeepers] = useState<Regatta[]>([]);
   const [boats, setBoats] = useState<Boat[]>([]);
   const [regattaName, setRegattaName] = useState<string>("");
   const [regattaId, setRegattaId] = useState<string | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const { user } = useAuth0();
   const navigate = useNavigate();
-
-  const MockBoat = (): Boat => ({
-    registrationId: "12345",
-    name: `Sailboat ${boats.length + 1}`,
-    participantNames: ["Avery", "Ryan"],
-    regattaId: regattaId || "",
-  });
 
   const regattaCreationHandler = () => {
     if (!regattaName.trim()) return;
@@ -67,57 +62,80 @@ export default function RegattaCreate() {
   };
 
   const addBoat = () => {
-    const newBoat = MockBoat();
-    newBoat.regattaId = regattaId;
+    setIsModalOpen(true);
+  };
 
-    setBoats((prevBoats) => {
-      const updatedBoats = [...prevBoats, newBoat];
-      console.log("Boat added:", newBoat);
-      return updatedBoats;
-    });
+  const handleCreateBoat = (data: { registrationId: string; name: string; participantNames: string[] }) => {
+    const newBoat: Boat = {
+      registrationId: data.registrationId,
+      name: data.name,
+      participantNames: data.participantNames,
+      regattaId: regattaId || "",
+    } as Boat;
+
+    setBoats((prevBoats) => [...prevBoats, newBoat]);
+
+    setIsModalOpen(false);
+  };
+
+  const getExistingParticipants = () => {
+    return boats.flatMap((boat) => boat.participantNames);
+  };
+
+  const getExistingRegistrationIds = () => {
+    return boats.map((boat) => boat.registrationId);
   };
 
   return (
-    <Background className="flex flex-col items-center justify-between min-h-screen overflow-hidden">
-      <AppLayout title="new regatta" className="flex flex-col gap-3 flex-grow">
-        <div className="mx-2 sm:mx-0">
-          <Input
-            aria-label="Enter Regatta name"
-            value={regattaName}
-            onChange={(x) => setRegattaName(x.target.value)}
-            label="regatta name"
-            isRequired
-          />
-        </div>
-        <div className="grow flex flex-col md:flex-row gap-3">
-          <ResponsiveCard title="Timekeepers">
-            <List
-              ariaLabel="List of timekeepers"
-              itemType="timekeeper"
-              items={timekeepers}
-              emptyContent="Add timekeepers"
+    <>
+      <Background className="flex flex-col items-center justify-between min-h-screen overflow-hidden">
+        <AppLayout title="new regatta" className="flex flex-col gap-3 flex-grow">
+          <div className="mx-2 sm:mx-0">
+            <Input
+              aria-label="Enter Regatta name"
+              value={regattaName}
+              onChange={(x) => setRegattaName(x.target.value)}
+              label="regatta name"
+              isRequired
             />
-          </ResponsiveCard>
-          <ResponsiveCard title="Boats" onAdd={addBoat}>
-            <List
-              ariaLabel="List of boats"
-              itemType="boat"
-              items={boats}
-              emptyContent="Add boats"
-            />
-          </ResponsiveCard>
-        </div>
-        <div className="h-14 mx-2 sm:mx-0">
-          <Button
-            color="secondary"
-            fullWidth
-            onClick={regattaCreationHandler}
-            className="h-full"
-          >
-            create regatta
-          </Button>
-        </div>
-      </AppLayout>
-    </Background>
+          </div>
+          <div className="grow flex flex-col md:flex-row gap-3">
+            <ResponsiveCard title="Timekeepers">
+              <List
+                ariaLabel="List of timekeepers"
+                itemType="timekeeper"
+                items={timekeepers}
+                emptyContent="Add timekeepers"
+              />
+            </ResponsiveCard>
+            <ResponsiveCard title="Boats" onAdd={addBoat}>
+              <List
+                ariaLabel="List of boats"
+                itemType="boat"
+                items={boats}
+                emptyContent="Add boats"
+              />
+            </ResponsiveCard>
+          </div>
+          <div className="h-14 mx-2 sm:mx-0">
+            <Button
+              color="secondary"
+              fullWidth
+              onClick={regattaCreationHandler}
+              className="h-full"
+            >
+              create regatta
+            </Button>
+          </div>
+        </AppLayout>
+      </Background>
+      <CreateModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onCreate={handleCreateBoat}
+        existingParticipants={getExistingParticipants()}
+        existingRegistrationIds={getExistingRegistrationIds()}
+      />
+    </>
   );
 }
