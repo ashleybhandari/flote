@@ -130,7 +130,6 @@ export default function CreateBoatModal({
         onChange={(e) => inputChange("name", e.target.value)}
         isRequired
       />
-
       <div className="mt-4">
         <h2>Participants</h2>
         <div>

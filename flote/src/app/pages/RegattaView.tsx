@@ -12,6 +12,7 @@ import AppLayout from "@templates/AppLayout";
 import List from "@atoms/List";
 import ResponsiveCard from "@molecules/ResponsiveCard";
 import CreateBoatModal from "@molecules/modals/CreateBoatModal";
+import EditTimekeepersModal from "@molecules/modals/EditTimekeepersModal";
 //for later - import ConfirmationModal from "@molecules/modals/ConfirmationModal";
 
 export default function RegattaView() {
@@ -22,7 +23,7 @@ export default function RegattaView() {
   const [boats, setBoats] = useState<Boat[]>([]);
   const [regattaName, setRegattaName] = useState<string>("");
   const [races, setRaces] = useState<Race[]>([]);
-  const [timekeepers, setTimekeepers] = useState([]);
+  const [timekeepers, setTimekeepers] = useState<string[]>([]);
   const [isModalOpen, setIsModalOpen] = useState({
     boats: false,
     timekeepers: false,
@@ -72,6 +73,24 @@ export default function RegattaView() {
     });
   };
 
+  const handleUpdateTimekeepers = (data: { timekeeperIds: string[] }) => {
+    const regattaId = regatta?._id;
+    const timekeeperIds = data.timekeeperIds;
+
+    socket.emit(
+      "updateTimekeepers",
+      { regattaId, timekeeperIds },
+      (res: EventResponse) => {
+        if (res.error) {
+          console.error("updateTimekeepers failed:", res.error);
+        } else {
+          setTimekeepers(timekeeperIds);
+          setIsModalOpen((m) => ({ ...m, timekeepers: false }));
+        }
+      }
+    );
+  };
+
   return (
     <AppLayout title={regattaName} subtitle="regatta" className="flex">
       <div className="grow flex flex-col lg:flex-row gap-3">
@@ -112,6 +131,12 @@ export default function RegattaView() {
         onSubmit={handleCreateBoat}
         existingParticipants={boats.flatMap((boat) => boat.participantNames)}
         existingRegistrationIds={boats.map((boat) => boat.registrationId)}
+      />
+      <EditTimekeepersModal
+        isOpen={isModalOpen.timekeepers}
+        onClose={() => setIsModalOpen((m) => ({ ...m, timekeepers: false }))}
+        onSubmit={handleUpdateTimekeepers}
+        regattaId={regatta?._id}
       />
     </AppLayout>
   );

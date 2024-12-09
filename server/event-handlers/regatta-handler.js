@@ -6,8 +6,7 @@ export function RegattaHandler(io, socket) {
   socket.on("searchRegattas", searchRegattas);
   socket.on("getRegattaById", getRegattaById);
   socket.on("deleteRegatta", deleteRegatta);
-  socket.on("addTimekeeper", addTimekeeper);
-  socket.on("removeTimekeeper", removeTimekeeper);
+  socket.on("updateTimekeepers", updateTimekeepers);
 }
 
 /**
@@ -98,7 +97,7 @@ async function getRegattaById(regattaId, callback) {
   }
 
   callback(response);
-}  
+}
 
 /**
  * Delete a regatta by id.
@@ -130,43 +129,17 @@ async function deleteRegatta(regattaId, callback) {
 }
 
 /**
- * Adds a timekeeper to a regatta. The callback is called with an empty object.
- * @param {string} regattaId
- * @param {string} timekeeperId
+ * Updates a regatta's timekeepers. The callback is called with an empty object.
+ * @param {{ regattaId: string, timekeeperIds: string[] }} data
  * @param {Function} callback
  */
-async function addTimekeeper(regattaId, timekeeperId, callback) {
+async function updateTimekeepers(data, callback) {
   const response = {};
 
   try {
-    const regatta = await new Regatta.findById(regattaId).exec();
-    regatta.timekeeperIds = [...regatta.timekeeperIds, timekeeperId];
-    await regatta.save();
-  } catch (error) {
-    response.error = error.message;
-  }
-
-  callback(response);
-}
-
-/**
- * Removes a timekeeper from a regatta. The callback is called with an empty
- * object.
- * @param {string} regattaId
- * @param {string} timekeeperId
- * @param {Function} callback
- */
-async function removeTimekeeper(regattaId, timekeeperId, callback) {
-  const response = {};
-
-  try {
-    const regatta = await new Regatta.findById(regattaId).exec();
-    const timekeeperIndex = regatta.timekeeperIds.indexOf(timekeeperId);
-
-    if (timekeeperIndex) {
-      regatta.timekeeperIs.splice(timekeeperIndex, 1);
-    }
-
+    const { regattaId, timekeeperIds } = data;
+    const regatta = await Regatta.findById(regattaId).exec();
+    regatta.timekeeperIds = timekeeperIds;
     await regatta.save();
   } catch (error) {
     response.error = error.message;

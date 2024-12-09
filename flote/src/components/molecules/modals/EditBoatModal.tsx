@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Boat } from "@models/Boat";
 
-import { Button } from "@nextui-org/button";
+import PlusButton from "@atoms/icon-buttons/PlusButton";
 import GenericModal from "@atoms/GenericModal";
 import { Input } from "@nextui-org/input";
 import TrashButton from "@atoms/icon-buttons/TrashButton";
@@ -127,28 +127,30 @@ export default function EditBoatModal({
         onChange={(e) => inputChange("name", e.target.value)}
         isRequired
       />
-      <Input
-        label="Participant Name"
-        placeholder="Enter Participant Name"
-        value={data.participantNames}
-        onChange={(e) => inputChange("participantNames", e.target.value)}
-        isRequired
-      />
-      {participantError && (
-        <p className="text-red-500 text-sm">{participantError}</p>
-      )}
-      <Button
-        color="primary"
-        onPress={addParticipant}
-        disabled={!data.participantNames.trim()}
-      >
-        Add Participant
-      </Button>
       <div className="mt-4">
-        <strong>Participants:</strong>
+        <h2>Participants</h2>
+        <div>
+          <div className="flex flex-row gap-3 items-center">
+            <Input
+              label="Participant Name"
+              placeholder="Enter Participant Name"
+              value={data.participantNames}
+              onChange={(e) => inputChange("participantNames", e.target.value)}
+              isRequired
+            />
+            <PlusButton
+              ariaLabel="Add participant"
+              onClick={addParticipant}
+              isDisabled={!data.participantNames.trim()}
+            />
+          </div>
+          {participantError && (
+            <p className="text-red-500 text-sm">{participantError}</p>
+          )}
+        </div>
         <ul>
           {participants.map((participant, index) => (
-            <li key={index}>
+            <li key={index} className="-mb-3">
               <TrashButton
                 onClick={() => deleteParticipant(participant)}
               ></TrashButton>
@@ -156,6 +158,9 @@ export default function EditBoatModal({
             </li>
           ))}
         </ul>
+        {participants.length === 0 && (
+          <div className="italic mt-2 ml-2">No participants yet!</div>
+        )}
       </div>
       {formError && <p className="text-red-500 text-sm">{formError}</p>}
     </GenericModal>
