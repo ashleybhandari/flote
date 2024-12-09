@@ -10,6 +10,7 @@ import { EventResponse } from "@src/models/EventResponse";
 
 import AppLayout from "@templates/AppLayout";
 import List from "@atoms/List";
+import { useNavigate } from "react-router-dom";
 import ResponsiveCard from "@molecules/ResponsiveCard";
 import CreateBoatModal from "@molecules/modals/CreateBoatModal";
 import EditTimekeepersModal from "@molecules/modals/EditTimekeepersModal";
@@ -29,6 +30,12 @@ export default function RegattaView() {
     timekeepers: false,
   });
   const [regatta, setRegatta] = useState<Regatta | null>(null);
+
+
+  const navigate = useNavigate();
+  const handleAddRace = () => {
+    navigate("/race/create");
+  };
 
   useEffect(() => {
     if (location.state?.regatta?.name) {
@@ -105,8 +112,8 @@ export default function RegattaView() {
         >
           <List ariaLabel="List of boats" itemType="boat" items={boats} />
         </ResponsiveCard>
-        <ResponsiveCard title="Races">
-          <List ariaLabel="List of races" itemType="race" items={races} />
+        <ResponsiveCard title="Races"  onAdd={handleAddRace}>
+          <List ariaLabel="List of races" itemType="race" items={races} onAdd={handleAddRace} />
         </ResponsiveCard>
         <ResponsiveCard
           title="Timekeepers"
