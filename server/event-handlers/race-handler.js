@@ -1,8 +1,63 @@
-import { Race } from "../models/subscribers.js";
+import { Race, Regatta, Boat } from "../models/subscribers.js";
 
 export function RaceHandler(io, socket) {
+  socket.on("createRace", createRace);
+  socket.on("updateRaces", updateRaces);
+  socket.on("deleteRaces", deleteRaces);
   socket.on("searchRaces", searchRaces);
   socket.on("getRaceById", getRaceById);
+}
+
+async function createRace(race, callback) {
+  const response = {};
+
+  try {
+    const doc = await new Race(race).save();
+    const raceId = doc._id;
+    
+    await Boat.updateMany(
+      { _id: { $in: race.boatIds } },
+      { $set: { raceId } }
+    );
+
+    response.data = { raceId: doc._id };
+  } catch (error) {
+    response.error = error.message;
+  }
+
+  callback(response);
+}
+
+async function updateRaces(userId) {
+  const response = {};
+
+  try {
+    const admin = await Race.findByIdAndUpdate({ adminId: userId });
+    const timekeeper = await Race.findByIdAndUpdate({ timekeeperIds: userId });
+    response.data = {
+      races: { admin, timekeeper },
+    };
+  } catch (error) {
+    response.error = error.message;
+  }
+
+  console.log("Race updated.")
+}
+
+async function deleteRaces(userId) {
+  const response = {};
+
+  try {
+    const admin = await Race.findByIdAndDelete({ adminId: userId });
+    const timekeeper = await Race.findByIdAndDelete({ timekeeperIds: userId });
+    response.data = {
+      races: { admin, timekeeper },
+    };
+  } catch (error) {
+    response.error = error.message;
+  }
+
+  console.log("Race deleted.")
 }
 
 /**
@@ -28,18 +83,19 @@ async function searchRaces(query, callback) {
   callback(response);
 }
 
-/**
- * Fetch a races by ID. The callback is called with an object with a data field
- * that holds the race: { race: Race }
- * @param {string} raceId
- * @param {Function} callback
- */
+
 async function getRaceById(raceId, callback) {
   const response = {};
-
   try {
     const race = await Race.findById(raceId).exec();
-    response.data = { race };
+    const boats = await Boat.find({ raceId }).exec();
+
+    if (!race) {
+      throw new Error("Race not found");
+    }
+
+    console.log("Boats fetched for race", boats);
+    response.data = { race, boats };
   } catch (error) {
     response.error = error.message;
   }

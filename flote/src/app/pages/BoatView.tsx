@@ -13,8 +13,8 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { EventResponse } from "@models/EventResponse";
 import { useNavigate } from "react-router-dom";
 
-import EditModal from "@atoms/cards/EditModal";
-import ConfirmationModal from "@atoms/cards/ConfirmationModal";
+import EditBoatModal from "@molecules/modals/EditBoatModal";
+import ConfirmationModal from "@molecules/modals/ConfirmationModal";
 
 export default function BoatView() {
   const { regattaId, boatId } = useParams();
@@ -124,7 +124,7 @@ export default function BoatView() {
         </ul>
       </StaticCard>
 
-      <EditModal
+      <EditBoatModal
         isOpen={editModalOpen}
         onClose={() => setEditModalOpen(false)}
         onUpdate={updateBoat}

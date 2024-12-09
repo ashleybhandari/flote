@@ -6,6 +6,7 @@ export function RegattaHandler(io, socket) {
   socket.on("searchRegattas", searchRegattas);
   socket.on("getRegattaById", getRegattaById);
   socket.on("deleteRegatta", deleteRegatta);
+  socket.on("updateTimekeepers", updateTimekeepers);
 }
 
 /**
@@ -86,8 +87,8 @@ async function getRegattaById(regattaId, callback) {
 
   try {
     const regatta = await Regatta.findById(regattaId).exec();
-    const races = await Race.find({regattaId: regattaId}).exec();
-    const boats = await Boat.find({regattaId: regattaId}).exec();
+    const races = await Race.find({ regattaId: regattaId }).exec();
+    const boats = await Boat.find({ regattaId: regattaId }).exec();
     if (!regatta) throw new Error("Regatta not found");
 
     response.data = { regatta, races, boats };
@@ -96,7 +97,7 @@ async function getRegattaById(regattaId, callback) {
   }
 
   callback(response);
-}  
+}
 
 /**
  * Delete a regatta by id.
@@ -120,6 +121,26 @@ async function deleteRegatta(regattaId, callback) {
     await Boat.deleteMany({ regattaId });
 
     response.data = { message: "Regatta deleted successfully" };
+  } catch (error) {
+    response.error = error.message;
+  }
+
+  callback(response);
+}
+
+/**
+ * Updates a regatta's timekeepers. The callback is called with an empty object.
+ * @param {{ regattaId: string, timekeeperIds: string[] }} data
+ * @param {Function} callback
+ */
+async function updateTimekeepers(data, callback) {
+  const response = {};
+
+  try {
+    const { regattaId, timekeeperIds } = data;
+    const regatta = await Regatta.findById(regattaId).exec();
+    regatta.timekeeperIds = timekeeperIds;
+    await regatta.save();
   } catch (error) {
     response.error = error.message;
   }

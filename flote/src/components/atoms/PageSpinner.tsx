@@ -1,7 +1,7 @@
 import { Spinner } from "@nextui-org/spinner";
 
 type Props = {
-  className: string;
+  className?: string;
 };
 
 export default function PageSpinner({ className }: Props) {
