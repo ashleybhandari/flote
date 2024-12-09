@@ -5,10 +5,8 @@ import { Boat } from "@models/Boat";
 import { Regatta } from "@models/Regatta";
 
 import AppLayout from "@templates/AppLayout";
-import StaticCard from "@atoms/cards/StaticCard";
 import PageSpinner from "@src/components/atoms/PageSpinner";
-// import List from "@atoms/List";
-// import ResponsiveCard from "@molecules/ResponsiveCard";
+import StaticCard from "@atoms/cards/StaticCard";
 
 import { Button } from "@nextui-org/button";
 import { useAuth0 } from "@auth0/auth0-react";
@@ -48,20 +46,16 @@ export default function BoatView() {
         }
       });
     }
-  }, [boatId]);
+  }, [boatId, regattaId, location.state]);
 
-  const updateBoat = (data: {
-    name: string;
-    registrationId: string;
-    participantNames: string[];
-  }) => {
+  const updateBoat = (data: { name: string; registrationId: string; participantNames: string[] }) => {
     const updatedBoat = {
       boatId: boatId,
       name: data.name,
       registrationId: data.registrationId,
-      participantNames: data.participantNames,
+      participantNames: data.participantNames
     };
-
+  
     socket.emit("updateBoat", updatedBoat, (res) => {
       if (res.error) {
         console.error("Failed to update boat:", res.error);
@@ -83,16 +77,13 @@ export default function BoatView() {
     });
   };
 
-  if (!boat || !regatta) return {PageSpinner};
+  if (!boat || !regatta) return <PageSpinner />;
 
   const data = [
     {
       key: "Regatta",
       value: (
-        <Link
-          to={`/regatta/${regattaId}`}
-          className="text-primary-500 underline"
-        >
+        <Link to={`/regatta/${regattaId}`} className="text-primary-500 underline">
           {regatta.name}
         </Link>
       ),
@@ -106,8 +97,8 @@ export default function BoatView() {
 
   return (
     <AppLayout title={boat.name} subtitle="boat">
-      <StaticCard title="details" className="flex flex-col">
-        <ul className="grow">
+      <StaticCard title="details">
+        <ul>
           {data.map((e, i) => (
             <li key={i}>
               <span className="font-bold">{e.key}: </span>
@@ -115,19 +106,22 @@ export default function BoatView() {
             </li>
           ))}
         </ul>
-        {isRegattaAdmin && (
-          <div className="self-end flex flex-row gap-2">
+        <ul>
+          {isRegattaAdmin && (
+          <>
+          <center>
             <Button color="primary" onClick={() => setEditModalOpen(true)}>
               Edit Boat
             </Button>
-            <Button
-              color="danger"
-              onClick={() => setDeleteModalOpen(true)}
-            >
+            <h1></h1>
+            <Button color="danger" onClick={() => setDeleteModalOpen(true)} className="mt-2">
               Delete Boat
             </Button>
-          </div>
+          </center>
+          </>
         )}
+
+        </ul>
       </StaticCard>
 
       <EditBoatModal
