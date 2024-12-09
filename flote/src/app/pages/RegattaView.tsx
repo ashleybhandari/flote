@@ -37,11 +37,13 @@ export default function RegattaView() {
     timekeepers: false,
   });
   const [regatta, setRegatta] = useState<Regatta | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
   //const navigate = useNavigate();
 
   useEffect(() => {
     if (location.state?.regatta?.name) {
       setRegattaName(location.state.regatta.name);
+      setIsLoading(false);
     } else if (regattaId) {
       socket.emit("getRegattaById", regattaId, (res: EventResponse) => {
         if (res.error) {
@@ -52,6 +54,7 @@ export default function RegattaView() {
           setRaces(res.data.races);
           setBoats(res.data.boats);
           setTimekeepers(res.data.regatta.timekeeperIds);
+          setIsLoading(false);
         }
       });
     }
@@ -143,7 +146,12 @@ export default function RegattaView() {
   ];
 
   return (
-    <AppLayout title={regattaName} subtitle="regatta" breadcrumbs={breadcrumbs}>
+    <AppLayout
+      isLoading={isLoading}
+      title={regattaName}
+      subtitle="regatta"
+      breadcrumbs={breadcrumbs}
+    >
       <div className="grow flex flex-col lg:flex-row gap-3">
         <ResponsiveCard
           title="Boats"

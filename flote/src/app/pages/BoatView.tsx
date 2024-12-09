@@ -25,6 +25,7 @@ export default function BoatView() {
   const [regatta, setRegatta] = useState<Regatta | null>(null);
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState({ regatta: true, boat: true });
   const { user } = useAuth0();
 
   useEffect(() => {
@@ -33,17 +34,20 @@ export default function BoatView() {
         console.error("Failed to fetch regatta:", res.error);
       } else {
         setRegatta(res.data.regatta);
+        setIsLoading((prev) => ({ ...prev, regatta: false }));
       }
     });
 
     if (location.state?.boat) {
       setBoat(location.state.boat);
+      setIsLoading((prev) => ({ ...prev, boat: false }));
     } else if (boatId && regattaId) {
       socket.emit("getBoatById", boatId, (res) => {
         if (res.error) {
           console.error("Failed to fetch boat:", res.error);
         } else {
           setBoat(res.data.boat || null);
+          setIsLoading((prev) => ({ ...prev, boat: false }));
         }
       });
     }
@@ -100,7 +104,12 @@ export default function BoatView() {
   const isRegattaAdmin = user?.sub === regatta.adminId;
 
   return (
-    <AppLayout title={boat.name} subtitle="boat" breadcrumbs={breadcrumbs}>
+    <AppLayout
+      isLoading={isLoading.regatta || isLoading.boat}
+      title={boat.name}
+      subtitle="boat"
+      breadcrumbs={breadcrumbs}
+    >
       <StaticCard title="details" className="flex flex-col">
         <ul className="grow">
           {data.map((e, i) => (
@@ -110,17 +119,17 @@ export default function BoatView() {
             </li>
           ))}
         </ul>
-        {isRegattaAdmin && (
-          <div className="self-end flex items-center gap-2">
-            <Button color="danger" onClick={() => setDeleteModalOpen(true)}>
-              Delete Boat
-            </Button>
-            <Button color="primary" onClick={() => setEditModalOpen(true)}>
-              Edit Boat
-            </Button>
-          </div>
-        )}
       </StaticCard>
+      {isRegattaAdmin && (
+        <div className="self-end flex items-center gap-2">
+          <Button color="danger" onClick={() => setDeleteModalOpen(true)}>
+            Delete Boat
+          </Button>
+          <Button color="primary" onClick={() => setEditModalOpen(true)}>
+            Edit Boat
+          </Button>
+        </div>
+      )}
 
       <EditBoatModal
         isOpen={editModalOpen}
