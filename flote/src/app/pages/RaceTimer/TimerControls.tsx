@@ -1,5 +1,6 @@
 import { Button } from "@nextui-org/react";
 import {renderTime, addTime, linkTime, unLinkTime, deleteTime} from "./timeListUtils.tsx";
+import {DNF_CODE, DNS_CODE, UNLAPPED_CODE} from "./RaceTimer.tsx";
 
 export function TimerControls ({setTimes, counter, start, isStopped, pause, resume, reset}){
     if(isStopped){
@@ -32,6 +33,31 @@ export function TimerControls ({setTimes, counter, start, isStopped, pause, resu
             onPress={() => addTime(counter, setTimes)}
             className="self-end w-32 m-6"
             >Lap </Button>
+
+            <Button
+            color="primary"
+            size="lg"
+            radius="sm"
+            onPress={() => addTime(UNLAPPED_CODE, setTimes)}
+            className="self-end w-32 m-6"
+            >Lap No Time</Button>
+
+            <Button
+            color="primary"
+            size="lg"
+            radius="sm"
+            onPress={() => addTime(DNF_CODE, setTimes)}
+            className="self-end w-32 m-6"
+            >Mark DNF</Button>
+
+
+            <Button
+            color="primary"
+            size="lg"
+            radius="sm"
+            onPress={() => addTime(DNS_CODE, setTimes)}
+            className="self-end w-32 m-6"
+            >Mark DNS</Button>
 
             </div>
 
