@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 
 import { Autocomplete, AutocompleteItem } from "@nextui-org/autocomplete";
+import EditableList from "@atoms/EditableList";
 import GenericModal from "@atoms/GenericModal";
 import { Input } from "@nextui-org/input";
 import PlusButton from "@atoms/icon-buttons/PlusButton";
-import TrashButton from "@atoms/icon-buttons/TrashButton";
 
 type Props = {
   isOpen: boolean;
@@ -138,19 +138,11 @@ export default function CreateRaceModal({
             <p className="text-red-500 text-sm">{boatDuplicateError}</p>
           )}
         </div>
-
-        <div className="mt-4">
-          {boats.length > 0 && (
-            <ul>
-              {boats.map((boat) => (
-                <li key={boat}>
-                  {boat}
-                  <TrashButton onClick={() => deleteBoat(boat)} />
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
+        <EditableList
+          items={boats}
+          onDelete={deleteBoat}
+          emptyMessage="No boats yet!"
+        />
       </div>
 
       {formError && <p className="text-red-500 text-sm">{formError}</p>}
