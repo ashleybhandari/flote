@@ -8,7 +8,6 @@ import Landing from "@pages/Landing";
 import RaceView from "@pages/RaceView";
 import RegattaView from "@pages/RegattaView";
 import Search from "@pages/Search";
-import RaceCreation from "@pages/RaceCreate";
 import BoatView from "@pages/BoatView";
 import RaceTimer from "@pages/RaceTimer/RaceTimer";
 
@@ -27,7 +26,6 @@ export default function App() {
         <Route path="/regatta/:regattaId" element={<RegattaView />} />
 
         <Route path="/race/:raceId" element={<RaceView />} />
-        <Route path="/race/create" element={<AuthenticationGuard component={RaceCreation} />} />
         <Route path="/regatta/:regattaId/race/:raceId" element={<RaceView />} />
         <Route path="/regatta/:regattaId/boat/:boatId" element={<BoatView />} />
         <Route path="/raceTimer/:raceId" element={<RaceTimer />} />

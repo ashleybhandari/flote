@@ -29,18 +29,19 @@ async function createRegatta(regatta, callback) {
 }
 
 /**
- * Gets all regattas the user with the specified ID admins and timekeeps. The
- * callback is called with an object with a data field that holds the regattas:
- * { regattas: { admin: Regatta[], timekeeper: Regatta[] } }.
- * @param {string} userId
+ * Gets all regattas the user with the specified id/email admins and timekeeps.
+ * The callback is called with an object with a data field that holds the
+ * regattas: { regattas: { admin: Regatta[], timekeeper: Regatta[] } }.
+ * @param {{id: string, email: string}} data
  * @param {Function} callback
  */
-async function getRegattas(userId, callback) {
+async function getRegattas(data, callback) {
   const response = {};
+  const { id, email } = data;
 
   try {
-    const admin = await Regatta.find({ adminId: userId }).exec();
-    const timekeeper = await Regatta.find({ timekeeperIds: userId }).exec();
+    const admin = await Regatta.find({ adminId: id }).exec();
+    const timekeeper = await Regatta.find({ timekeeperIds: email }).exec();
 
     response.data = {
       regattas: { admin, timekeeper },
@@ -119,6 +120,7 @@ async function deleteRegatta(regattaId, callback) {
     }
 
     await Boat.deleteMany({ regattaId });
+    await Race.deleteMany({ regattaId });
 
     response.data = { message: "Regatta deleted successfully" };
   } catch (error) {
