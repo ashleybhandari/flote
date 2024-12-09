@@ -26,11 +26,22 @@ export default function RaceView() {
   const [regatta, setRegatta] = useState<Regatta>();
   const [race, setRace] = useState<Race>();
   const [boats, setBoats] = useState<Boat[]>([]);
+  const [isLoading, setIsLoading] = useState({ regatta: true, race: true });
   // const [deleteModalOpen, setDeleteModalOpen] = useState(false);
 
   useEffect(() => {
+    socket.emit("getRegattaById", race?.regattaId, (res: EventResponse) => {
+      if (res.error) {
+        console.error("Failed to fetch regatta:", res.error);
+      } else {
+        setRegatta(res.data.regatta);
+        setIsLoading((prev) => ({ ...prev, regatta: false }));
+      }
+    });
+
     if (location.state?.race) {
       setRace(location.state.race);
+      setIsLoading((prev) => ({ ...prev, race: false }));
     } else if (raceId) {
       socket.emit("getRaceById", raceId, (res: EventResponse) => {
         if (res.error) {
@@ -50,18 +61,7 @@ export default function RaceView() {
 
           setRace(race);
           setBoats(fetchedBoats);
-
-          socket.emit(
-            "getRegattaById",
-            race.regattaId,
-            (res: EventResponse) => {
-              if (res.error) {
-                console.error("Failed to fetch regatta:", res.error);
-              } else {
-                setRegatta(res.data.regatta);
-              }
-            }
-          );
+          setIsLoading((prev) => ({ ...prev, race: false }));
         }
       });
     }
@@ -103,7 +103,12 @@ export default function RaceView() {
   ];
 
   return (
-    <AppLayout title={race?.name} subtitle="race" breadcrumbs={breadcrumbs}>
+    <AppLayout
+      isLoading={isLoading.regatta || isLoading.race}
+      title={race?.name}
+      subtitle="race"
+      breadcrumbs={breadcrumbs}
+    >
       <div className="grow flex flex-col lg:flex-row gap-3">
         <ResponsiveCard title="Race Start Time">
           <p>{raceStart}</p>
