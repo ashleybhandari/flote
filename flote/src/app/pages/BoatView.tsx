@@ -48,14 +48,18 @@ export default function BoatView() {
     }
   }, [boatId, regattaId, location.state]);
 
-  const updateBoat = (data: { name: string; registrationId: string; participantNames: string[] }) => {
+  const updateBoat = (data: {
+    name: string;
+    registrationId: string;
+    participantNames: string[];
+  }) => {
     const updatedBoat = {
       boatId: boatId,
       name: data.name,
       registrationId: data.registrationId,
-      participantNames: data.participantNames
+      participantNames: data.participantNames,
     };
-  
+
     socket.emit("updateBoat", updatedBoat, (res) => {
       if (res.error) {
         console.error("Failed to update boat:", res.error);
@@ -83,7 +87,10 @@ export default function BoatView() {
     {
       key: "Regatta",
       value: (
-        <Link to={`/regatta/${regattaId}`} className="text-primary-500 underline">
+        <Link
+          to={`/regatta/${regattaId}`}
+          className="text-primary-500 underline"
+        >
           {regatta.name}
         </Link>
       ),
@@ -97,8 +104,8 @@ export default function BoatView() {
 
   return (
     <AppLayout title={boat.name} subtitle="boat">
-      <StaticCard title="details">
-        <ul>
+      <StaticCard title="details" className="flex flex-col">
+        <ul className="grow">
           {data.map((e, i) => (
             <li key={i}>
               <span className="font-bold">{e.key}: </span>
@@ -106,22 +113,16 @@ export default function BoatView() {
             </li>
           ))}
         </ul>
-        <ul>
-          {isRegattaAdmin && (
-          <>
-          <center>
+        {isRegattaAdmin && (
+          <div className="self-end flex items-center gap-2">
+            <Button color="danger" onClick={() => setDeleteModalOpen(true)}>
+              Delete Boat
+            </Button>
             <Button color="primary" onClick={() => setEditModalOpen(true)}>
               Edit Boat
             </Button>
-            <h1></h1>
-            <Button color="danger" onClick={() => setDeleteModalOpen(true)} className="mt-2">
-              Delete Boat
-            </Button>
-          </center>
-          </>
+          </div>
         )}
-
-        </ul>
       </StaticCard>
 
       <EditBoatModal
