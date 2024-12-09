@@ -30,7 +30,7 @@ export default function App() {
         <Route path="/race/create" element={<AuthenticationGuard component={RaceCreation} />} />
         <Route path="/regatta/:regattaId/race/:raceId" element={<RaceView />} />
         <Route path="/regatta/:regattaId/boat/:boatId" element={<BoatView />} />
-        <Route path="raceTimer" element={<RaceTimer />} />
+        <Route path="/raceTimer/:raceId" element={<RaceTimer />} />
       </Routes>
     </NextUIProvider>
   );

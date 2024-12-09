@@ -2,7 +2,7 @@ import { Button } from "@nextui-org/react";
 import {renderTime, addTime, linkTime, unLinkTime, deleteTime} from "./timeListUtils.tsx";
 import {DNF_CODE, DNS_CODE, UNLAPPED_CODE} from "./RaceTimer.tsx";
 
-export function TimerControls ({setTimes, counter, start, isStopped, pause, resume, reset}){
+export function TimerControls ({setTimes, counter, start, isStopped, pause, resume, reset, boatIds, boatDBIds }){
     if(isStopped){
         return(
                 <div>
