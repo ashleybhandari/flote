@@ -1,27 +1,37 @@
 import AccordionCard from "@atoms/cards/AccordionCard";
-import PlusButton from "@atoms/icon-buttons/PlusButton";
+import ActionButton from "@atoms/icon-buttons/ActionButton";
 import StaticCard from "@atoms/cards/StaticCard";
 
 type Props = {
   title: string;
-  onAdd?: () => void;
+  action?: "add" | "edit";
+  onAction?: () => void;
   children: React.ReactNode;
 };
 
-export default function ResponsiveCard({ title, onAdd, children }: Props) {
-  const addButton = onAdd ? (
-    <PlusButton ariaLabel="Create new" onClick={onAdd} />
-  ) : undefined;
+export default function ResponsiveCard({
+  title,
+  action,
+  onAction,
+  children,
+}: Props) {
+  const actionButton =
+    action && onAction ? (
+      <ActionButton
+        isAdding={action === "add"}
+        onAction={onAction}
+      ></ActionButton>
+    ) : undefined;
 
   return (
     <>
       <div className="w-full hidden md:block">
-        <StaticCard title={title} addButton={addButton}>
+        <StaticCard title={title} actionButton={actionButton}>
           {children}
         </StaticCard>
       </div>
       <div className="w-full block md:hidden">
-        <AccordionCard title={title} addButton={addButton}>
+        <AccordionCard title={title} actionButton={actionButton}>
           {children}
         </AccordionCard>
       </div>

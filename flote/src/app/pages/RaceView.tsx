@@ -29,14 +29,14 @@ export default function RaceView() {
           console.error("Failed to fetch race details:", res.error);
         } else {
           console.log("Received response:", res);
-
+  
           const { race, boats: fetchedBoats } = res.data;
           fetchedBoats.sort((a: Boat, b: Boat) => {
             if (!a.finishTime) return 1;
             if (!b.finishTime) return -1;
             return new Date(a.finishTime).getTime() - new Date(b.finishTime).getTime();
           });
-
+  
           setRaceName(race.name);
           setBoats(fetchedBoats);
           if (res.data.race.startTime) {
@@ -46,9 +46,10 @@ export default function RaceView() {
       });
     }
   }, [raceId, location.state]);
-
-  console.log("Current boats:", boats)
+  
+  console.log("Current boats:", boats);
   const participants = boats.flatMap((boat) => boat.participantNames || []);
+  console.log("Participants:", participants);
 
   const formatTime = (time?: Date | string) => {
     if (!time) return "No finish time";

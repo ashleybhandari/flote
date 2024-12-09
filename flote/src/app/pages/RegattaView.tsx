@@ -10,10 +10,12 @@ import { EventResponse } from "@src/models/EventResponse";
 
 import AppLayout from "@templates/AppLayout";
 import List from "@atoms/List";
-import { useNavigate } from "react-router-dom";
+//import { useNavigate } from "react-router-dom";
 import ResponsiveCard from "@molecules/ResponsiveCard";
-import CreateModal from "@atoms/cards/CreateModal";
-//for later - import ConfirmationModal from "@atoms/cards/ConfirmationModal";
+import CreateBoatModal from "@molecules/modals/CreateBoatModal";
+import CreateRaceModal from "@molecules/modals/CreateRaceModal";
+import EditTimekeepersModal from "@molecules/modals/EditTimekeepersModal";
+//for later - import ConfirmationModal from "@molecules/modals/ConfirmationModal";
 
 export default function RegattaView() {
   const { regattaId } = useParams();
@@ -23,15 +25,14 @@ export default function RegattaView() {
   const [boats, setBoats] = useState<Boat[]>([]);
   const [regattaName, setRegattaName] = useState<string>("");
   const [races, setRaces] = useState<Race[]>([]);
-  const [timekeepers, setTimekeepers] = useState([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [timekeepers, setTimekeepers] = useState<string[]>([]);
+  const [isModalOpen, setIsModalOpen] = useState({
+    boats: false,
+    races: false,
+    timekeepers: false,
+  });
   const [regatta, setRegatta] = useState<Regatta | null>(null);
-
-
-  const navigate = useNavigate();
-  const handleAddRace = () => {
-    navigate("/race/create");
-  };
+  //const navigate = useNavigate();
 
   useEffect(() => {
     if (location.state?.regatta?.name) {
@@ -52,8 +53,13 @@ export default function RegattaView() {
   }, [regattaId, location.state]);
 
   const isRegattaAdmin = user?.sub === regatta?.adminId;
+  const isRegattaTimekeeper = Array.isArray(regatta?.timekeeperIds) && user?.sub && regatta.timekeeperIds.includes(user.sub);
 
-  const handleCreateBoat = (data: { registrationId: string; name: string; participantNames: string[] }) => {
+  const handleCreateBoat = (data: {
+    registrationId: string;
+    name: string;
+    participantNames: string[];
+  }) => {
     const newBoat: Boat = {
       registrationId: data.registrationId,
       name: data.name,
@@ -67,31 +73,113 @@ export default function RegattaView() {
       } else {
         const addedBoat: Boat = { ...newBoat, _id: res.data.boatId };
         setBoats((prevBoats) => [...prevBoats, addedBoat]);
-        setIsModalOpen(false);
+        setIsModalOpen((m) => ({ ...m, boats: false }));
       }
     });
+  };
+
+  const handleCreateRace = (data: { name: string; addedBoats: string[] }) => {
+    const selectedBoatIds = data.addedBoats
+      .map((boatName) => boats.find((boat) => boat.name === boatName)?._id)
+      .filter((id): id is string => id !== undefined); // Ensure no undefined values
+  
+    const newRace: Race = {
+      name: data.name,
+      boatIds: selectedBoatIds,
+      regattaId: regattaId || "",
+    };
+  
+    socket.emit("createRace", newRace, (res: EventResponse) => {
+      if (res.error) {
+        console.error("Race creation failed:", res.error);
+      } else {
+        const addedRace: Race = { ...newRace, _id: res.data.raceId };
+        setRaces((prevRaces) => [...prevRaces, addedRace]);
+        setIsModalOpen((m) => ({ ...m, races: false }));
+      }
+    });
+  };
+  
+  const handleUpdateTimekeepers = (data: { timekeeperIds: string[] }) => {
+    const regattaId = regatta?._id;
+    const timekeeperIds = data.timekeeperIds;
+
+    socket.emit(
+      "updateTimekeepers",
+      { regattaId, timekeeperIds },
+      (res: EventResponse) => {
+        if (res.error) {
+          console.error("updateTimekeepers failed:", res.error);
+        } else {
+          setTimekeepers(timekeeperIds);
+          setIsModalOpen((m) => ({ ...m, timekeepers: false }));
+        }
+      }
+    );
   };
 
   return (
     <AppLayout title={regattaName} subtitle="regatta" className="flex">
       <div className="grow flex flex-col lg:flex-row gap-3">
-        <ResponsiveCard title="Boats" onAdd={isRegattaAdmin ? () => setIsModalOpen(true) : undefined}>
+        <ResponsiveCard
+          title="Boats"
+          action="add"
+          onAction={
+            isRegattaAdmin
+              ? () => setIsModalOpen((m) => ({ ...m, boats: true }))
+              : undefined
+          }
+        >
           <List ariaLabel="List of boats" itemType="boat" items={boats} />
         </ResponsiveCard>
-        <ResponsiveCard title="Races"  onAdd={handleAddRace}>
-          <List ariaLabel="List of races" itemType="race" items={races} onAdd={handleAddRace} />
+        <ResponsiveCard
+          title="Races"
+          action="add"
+          onAction={
+            ( isRegattaAdmin || isRegattaTimekeeper )
+              ? () => setIsModalOpen((m) => ({ ...m, races: true }))
+              : undefined
+          }
+        >
+          <List ariaLabel="List of races" itemType="race" items={races} />
         </ResponsiveCard>
-        <ResponsiveCard title="Timekeepers">
-          <List ariaLabel="Timekeepers" itemType="timekeeper" items={timekeepers} />
+        <ResponsiveCard
+          title="Timekeepers"
+          action="edit"
+          onAction={
+            isRegattaAdmin
+              ? () => setIsModalOpen((m) => ({ ...m, timekeepers: true }))
+              : undefined
+          }
+        >
+          <List
+            ariaLabel="Timekeepers"
+            itemType="timekeeper"
+            items={timekeepers}
+          />
         </ResponsiveCard>
       </div>
 
-      <CreateModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onCreate={handleCreateBoat}
+      <CreateBoatModal
+        isOpen={isModalOpen.boats}
+        onClose={() => setIsModalOpen((m) => ({ ...m, boats: false }))}
+        onSubmit={handleCreateBoat}
         existingParticipants={boats.flatMap((boat) => boat.participantNames)}
         existingRegistrationIds={boats.map((boat) => boat.registrationId)}
+      />
+      <CreateRaceModal
+        isOpen={isModalOpen.races}
+        onClose={() => setIsModalOpen((m) => ({ ...m, races: false }))}
+        onSubmit={handleCreateRace}
+        existingBoats={boats.map((boat) => boat.name).filter((name): name is string => !!name)}
+        existingRaces={races.map((race) => race.name)}
+        unavailableBoats={races.flatMap((race) => race.boatIds)}
+      />
+      <EditTimekeepersModal
+        isOpen={isModalOpen.timekeepers}
+        onClose={() => setIsModalOpen((m) => ({ ...m, timekeepers: false }))}
+        onSubmit={handleUpdateTimekeepers}
+        regattaId={regatta?._id}
       />
     </AppLayout>
   );

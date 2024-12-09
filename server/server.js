@@ -1,4 +1,4 @@
-import { env } from 'node:process';
+import { env } from "node:process";
 import { createRequire } from "module";
 import { createServer } from "http";
 import { BoatHandler } from "./event-handlers/boat-handler.js";
@@ -39,7 +39,9 @@ app.get("/", (req, res) => {
 const mongoose = require("mongoose");
 mongoose
   .connect(
-    "mongodb+srv://" + process.env.USER_PASS + "@flotedbcluster.qq2og.mongodb.net/?retryWrites=true&w=majority&appName=flotEdbCluster"
+    "mongodb+srv://" +
+      process.env.USER_PASS +
+      "@flotedbcluster.qq2og.mongodb.net/?retryWrites=true&w=majority&appName=flotEdbCluster"
   )
   .then(() => console.log("Connected to database"))
   .catch((err) => console.error("Database connection error:", err));

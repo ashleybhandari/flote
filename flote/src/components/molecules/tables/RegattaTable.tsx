@@ -43,8 +43,9 @@ export default function RegattaTable({ searchQuery }: Props) {
         if (res.error) {
           console.error("getRegattaById failed:", res.error);
         } else {
-          const races = res.data.races.sort((r1, r2) => r1.startTime > r2.startTime ? r2 : r1);
-          const date = races ? races[0].startTime : "TBD";
+          const races = res.data.races || [];
+          const sortedRaces = races.sort((r1, r2) => r1.startTime > r2.startTime ? r2 : r1);
+          const date = sortedRaces.length > 0 ? new Date(sortedRaces[0].startTime).toLocaleDateString() : "TBD";
 
           const row: SearchTableRow = {
             id: regatta._id!,
