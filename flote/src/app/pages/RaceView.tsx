@@ -65,7 +65,7 @@ export default function RaceView() {
         }
       });
     }
-  }, [raceId, location.state]);
+  }, [raceId, race?.regattaId, location.state]);
 
   console.log("Current boats:", boats);
   const participants = boats.flatMap((boat) => boat.participantNames || []);
