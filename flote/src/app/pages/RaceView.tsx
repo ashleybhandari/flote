@@ -7,7 +7,6 @@ import ResponsiveCard from "@molecules/ResponsiveCard";
 // import StaticCard from "@atoms/cards/StaticCard";
 
 import { Boat } from "@models/Boat";
-import { Race } from "@models/Race";
 
 import { socket } from "@src/socket";
 import { EventResponse } from "@src/models/EventResponse";
@@ -32,6 +31,12 @@ export default function RaceView() {
           console.log("Received response:", res);
 
           const { race, boats: fetchedBoats } = res.data;
+          fetchedBoats.sort((a: Boat, b: Boat) => {
+            if (!a.finishTime) return 1;
+            if (!b.finishTime) return -1;
+            return new Date(a.finishTime).getTime() - new Date(b.finishTime).getTime();
+          });
+
           setRaceName(race.name);
           setBoats(fetchedBoats);
           if (res.data.race.startTime) {
@@ -45,17 +50,39 @@ export default function RaceView() {
   console.log("Current boats:", boats)
   const participants = boats.flatMap((boat) => boat.participantNames || []);
 
+  const formatTime = (time?: Date | string) => {
+    if (!time) return "No finish time";
+    return new Date(time).toLocaleString("en-US", {
+      month: "short",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  };
+
+  const raceStart = formatTime(startTime);
+
+  const boatsWithFinishTimes = boats.map((boat) => ({
+    ...boat,
+    displayName: `${boat.name || "Unnamed Boat"} (${formatTime(boat.finishTime)})`,
+  }));
+
+  console.log("Boats with times: ", boatsWithFinishTimes);
+
+  const boatTitles = boatsWithFinishTimes.map((eachBoat) => eachBoat.displayName);
+
   return (
     <AppLayout title={raceName} subtitle="race" className="flex">
       <div className="grow flex flex-col lg:flex-row gap-3">
         <ResponsiveCard title="Race Start Time">
-          <p>{startTime}</p>
+          <p>{raceStart}</p>
         </ResponsiveCard>
         <ResponsiveCard title="Boats in Race">
           <List
             ariaLabel="List of boats"
             itemType="race"
-            items={boats}
+            // items={boats}
+            items={boatTitles}
           />
         </ResponsiveCard>
         <ResponsiveCard title="Participants in Race">
