@@ -10,7 +10,6 @@ import { socket } from "@src/socket";
 
 import AppLayout from "@templates/AppLayout";
 import List from "@atoms/List";
-import PageBreadcrumbs from "@atoms/PageBreadcrumbs";
 import ResponsiveCard from "@molecules/ResponsiveCard";
 // import StaticCard from "@atoms/cards/StaticCard";
 
@@ -98,13 +97,13 @@ export default function RaceView() {
   );
 
   const breadcrumbs: Breadcrumb[] = [
+    { name: "Home", href: "/home" },
     { name: regatta?.name ?? "regatta", href: `/regatta/${regatta?._id}` },
     { name: race?.name ?? "race" },
   ];
 
   return (
-    <AppLayout title={race?.name} subtitle="race" className="flex flex-col">
-      <PageBreadcrumbs items={breadcrumbs} />
+    <AppLayout title={race?.name} subtitle="race" breadcrumbs={breadcrumbs}>
       <div className="grow flex flex-col lg:flex-row gap-3">
         <ResponsiveCard title="Race Start Time">
           <p>{raceStart}</p>

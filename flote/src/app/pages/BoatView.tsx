@@ -1,7 +1,7 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useParams, useLocation, Link } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 import { socket } from "@src/socket";
 
 import { Boat } from "@models/Boat";
@@ -11,7 +11,6 @@ import { Regatta } from "@models/Regatta";
 
 import AppLayout from "@templates/AppLayout";
 import { Button } from "@nextui-org/button";
-import PageBreadcrumbs from "@atoms/PageBreadcrumbs";
 import PageSpinner from "@src/components/atoms/PageSpinner";
 import StaticCard from "@atoms/cards/StaticCard";
 
@@ -93,6 +92,7 @@ export default function BoatView() {
   ];
 
   const breadcrumbs: Breadcrumb[] = [
+    { name: "Home", href: "/home" },
     { name: regatta.name, href: `/regatta/${regattaId}` },
     { name: boat.name! },
   ];
@@ -100,8 +100,7 @@ export default function BoatView() {
   const isRegattaAdmin = user?.sub === regatta.adminId;
 
   return (
-    <AppLayout title={boat.name} subtitle="boat">
-      <PageBreadcrumbs items={breadcrumbs} />
+    <AppLayout title={boat.name} subtitle="boat" breadcrumbs={breadcrumbs}>
       <StaticCard title="details" className="flex flex-col">
         <ul className="grow">
           {data.map((e, i) => (

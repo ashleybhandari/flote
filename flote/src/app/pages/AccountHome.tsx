@@ -46,11 +46,7 @@ export default function AccountHome() {
   }, [user]);
 
   return (
-    <AppLayout
-      title="home"
-      className="flex flex-col md:flex-row gap-3"
-      hideBackButton
-    >
+    <AppLayout title="home" className="md:flex-row">
       <ResponsiveCard
         title="my regattas"
         action="add"

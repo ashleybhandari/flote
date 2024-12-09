@@ -5,12 +5,13 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { useNavigate } from "react-router-dom";
 
 import { Boat } from "@models/Boat";
+import { Breadcrumb } from "@models/Breadcrumb";
 import { Race } from "@models/Race";
 import { Regatta } from "@models/Regatta";
 import { EventResponse } from "@src/models/EventResponse";
-import { Button } from "@nextui-org/button";
 
 import AppLayout from "@templates/AppLayout";
+import { Button } from "@nextui-org/button";
 import List from "@atoms/List";
 //import { useNavigate } from "react-router-dom";
 import ResponsiveCard from "@molecules/ResponsiveCard";
@@ -136,8 +137,13 @@ export default function RegattaView() {
     );
   };
 
+  const breadcrumbs: Breadcrumb[] = [
+    { name: "Home", href: "/home" },
+    { name: regatta?.name ?? "regatta" },
+  ];
+
   return (
-    <AppLayout title={regattaName} subtitle="regatta" className="flex flex-col">
+    <AppLayout title={regattaName} subtitle="regatta" breadcrumbs={breadcrumbs}>
       <div className="grow flex flex-col lg:flex-row gap-3">
         <ResponsiveCard
           title="Boats"
