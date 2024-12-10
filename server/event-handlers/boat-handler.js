@@ -98,7 +98,7 @@ async function updateBoat(updateData, callback) {
   const response = {};
 
   try {
-    const { boatId, registrationId, name, participantNames, finishTime } = updateData;
+    const { boatId, registrationId, name, participantNames, finishTime, dns } = updateData;
     if (!boatId) {
       throw new Error("Boat ID is required to update a boat.");
     }
@@ -113,6 +113,7 @@ async function updateBoat(updateData, callback) {
     if (name !== undefined) boat.name = name;
     if (participantNames !== undefined) boat.participantNames = participantNames;
     if (finishTime !== undefined) boat.finishTime = finishTime;
+    if (dns !== undefined) boat.dns = dns;
 
     await boat.save();
 

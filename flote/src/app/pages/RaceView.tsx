@@ -17,6 +17,7 @@ import ResponsiveCard from "@molecules/ResponsiveCard";
 //import { Button } from "@nextui-org/button";
 //import ConfirmationModal from "@molecules/modals/ConfirmationModal";
 // import { format } from "date-fns";
+import {getCounterStr} from "./RaceTimer/timeListUtils.tsx"; 
 
 export default function RaceView() {
   const { raceId } = useParams();
@@ -65,14 +66,19 @@ export default function RaceView() {
         }
       });
     }
-  }, [raceId, race?.regattaId, location.state]);
-
+  });
+  
   console.log("Current boats:", boats);
   const participants = boats.flatMap((boat) => boat.participantNames || []);
   console.log("Participants:", participants);
 
-  const formatTime = (time?: Date | string) => {
-    if (!time) return "No finish time";
+  const formatTime = (time?: Date | string, boat: boolean) => {
+    if (!time) return "No Time Available";
+    if(boat){
+        time = new Date(time);
+        return getCounterStr(time.getTime());
+    }
+
     return new Date(time).toLocaleString("en-US", {
       month: "short",
       day: "numeric",
@@ -80,15 +86,12 @@ export default function RaceView() {
       minute: "2-digit",
     });
   };
-
-  const raceStart = formatTime(race?.startTime);
+  const raceStart = formatTime(race?.startTime, false);
 
   const boatsWithFinishTimes = boats.map((boat) => ({
     ...boat,
-    displayName: `${boat.name || "Unnamed Boat"} (${formatTime(
-      boat.finishTime
-    )})`,
-  }));
+    displayName: `${boat.name || "Unnamed Boat"} (${formatTime(boat.finishTime, true)})`,
+    }));
 
   console.log("Boats with times: ", boatsWithFinishTimes);
 
