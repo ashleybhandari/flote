@@ -38,7 +38,7 @@ export function markBoatUnLapped(boatID){
 }
 
 export function markBoatDNS(boatID){
-    let updateData = { boatId: boatID, finishTime: null, dns: true } 
+    let updateData = { boatId: boatID, finishTime: -3, dns: true } 
     socket.emit("updateBoat", updateData, (res) => {
             if(res.error){
                 console.log(res.error);
@@ -63,8 +63,21 @@ export function getBoatIDs(raceID, setBoatIDs, setBoatDBIds){
     ); 
 }
 
-export function updateStartTime(){
+export function hasStartTime(raceID, setAlreadyRec){
+    let update = (res) => {
+        if(res.error){
+            return; 
+        }
+        setAlreadyRec((alreadyRec) => (res.startTime !== undefined && res.startTime !== -1));
+    }
 
+    socket.emit("getRaceById",
+        raceID,
+        update
+    ); 
+}
+export function updateStartTime(raceID, startTime){
+    socket.emit(" 
 }
 
 export function updateEndTime(){

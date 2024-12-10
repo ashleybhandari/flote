@@ -24,6 +24,7 @@ export default function RaceTimer(){
     const [counter, { start, isStopped, pause, resume, reset }] = useTimer(0);
     const [times, setTimes] = useState([]);
     const [linkingIndex, setLinkingIndex] = useState(-1);
+    const [raceOver, setRaceOver] = useState(false);
     //step 1 is to get the race by race id 
     const {raceId} = useParams();
     const [boatIds, setBoatIds] = useState(["boat ID 1", "abcdefg", "foo", "Red October"]); 
@@ -50,7 +51,7 @@ export default function RaceTimer(){
             
         </div>
         <div className="raceControls justify-self-end">
-            <TimerControls setTimes = {setTimes} counter = {counter} start = {start} isStopped = {isStopped} pause = {pause} resume = {resume}  reset = {reset} boatIds ={boatIds} boatDBIds = {boatDBIds}/>
+            <TimerControls setTimes = {setTimes} counter = {counter} start = {start} isStopped = {isStopped} pause = {pause} resume = {resume}  reset = {reset} boatIds ={boatIds} boatDBIds = {boatDBIds} raceOver = {raceOver} setRaceOver = {setRaceOver}/>
         </div>
     </div>
 
