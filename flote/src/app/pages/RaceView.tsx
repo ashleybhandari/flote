@@ -7,6 +7,7 @@ import { EventResponse } from "@src/models/EventResponse";
 import { Race } from "@src/models/Race";
 import { Regatta } from "@src/models/Regatta";
 import { socket } from "@src/socket";
+import { useAuth0 } from "@auth0/auth0-react";
 
 import AppLayout from "@templates/AppLayout";
 import List from "@atoms/List";
@@ -24,6 +25,7 @@ export default function RaceView() {
   //const navigate = useNavigate();
   const location = useLocation();
 
+  const { user } = useAuth0();
   const [regatta, setRegatta] = useState<Regatta>();
   const [race, setRace] = useState<Race>();
   const [boats, setBoats] = useState<Boat[]>([]);
@@ -99,6 +101,24 @@ export default function RaceView() {
     (eachBoat) => eachBoat.displayName
   );
 
+  const isRegattaAdmin = user?.sub === regatta?.adminId;
+  const isRegattaTimekeeper =
+      Array.isArray(regatta?.timekeeperIds) &&
+      user?.sub &&
+      regatta.timekeeperIds.includes(user.sub);
+
+  const getStartRaceButton = (rId, r) => {
+        const canStart = isRegattaAdmin || isRegattaTimekeeper; 
+        console.log(rId);
+        let href = "/RaceTimer/" + rId;
+        if(!canStart) return (<> </>);
+        return( 
+        <a href = {href} className = "">
+            Start Race
+        </a>);
+
+  } 
+    
   const breadcrumbs: Breadcrumb[] = [
     { name: "Home", href: "/home" },
     { name: regatta?.name ?? "regatta", href: `/regatta/${regatta?._id}` },
@@ -127,6 +147,9 @@ export default function RaceView() {
           />
         </ResponsiveCard>
       </div>
+      {getStartRaceButton(raceId, race)}
     </AppLayout>
   );
 }
+
+
