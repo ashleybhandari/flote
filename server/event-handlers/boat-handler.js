@@ -112,6 +112,7 @@ async function updateBoat(updateData, callback) {
     if (registrationId !== undefined) boat.registrationId = registrationId;
     if (name !== undefined) boat.name = name;
     if (participantNames !== undefined) boat.participantNames = participantNames;
+    if (finishTime !== undefined) boat.finishTime = finishTime;
 
     await boat.save();
 
