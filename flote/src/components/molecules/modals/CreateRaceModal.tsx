@@ -95,7 +95,7 @@ export default function CreateRaceModal({
 
   const availableBoats = existingBoats.filter(
     (boat) => !unavailableBoats.includes(boat)
-  ); // Filter out unavailable boats
+  );
 
   return (
     <GenericModal

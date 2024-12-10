@@ -1,4 +1,5 @@
 import { Boat } from "../models/subscribers.js";
+import { Race } from "../models/subscribers.js";
 
 export function BoatHandler(io, socket) {
   socket.on("addBoats", addBoats);
@@ -157,11 +158,21 @@ async function deleteBoat(boatId, callback) {
       throw new Error("Boat ID is required to delete a boat.");
     }
 
-    const boat = await Boat.findByIdAndDelete(boatId);
-
+    const boat = await Boat.findById(boatId);
     if (!boat) {
       throw new Error("Boat not found.");
     }
+
+    const raceId = boat.raceId;
+    
+    if (raceId) {
+      await Race.updateOne(
+        { _id: raceId },
+        { $pull: { boatIds: boatId } }
+      );
+    }
+
+    await Boat.findByIdAndDelete(boatId);
 
     response.data = { message: "Boat deleted successfully" };
   } catch (error) {
