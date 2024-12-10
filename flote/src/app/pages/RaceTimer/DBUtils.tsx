@@ -1,6 +1,11 @@
 import { socket } from "@src/socket";
 import {DNF_CODE, DNS_CODE, UNLAPPED_CODE} from "./RaceTimer.tsx";
 
+export function startRace(raceID, boatIDs){
+    clearAllBoats(boatIDs);
+    updateStartTime(raceID, boatIDs);
+}
+
 export function clearAllBoats(boatIDs){
     boatIDs.map((boatID) => 
         markBoatUnLapped(boatID)
@@ -77,7 +82,6 @@ export function hasStartTime(raceID, setAlreadyRec){
     ); 
 }
 export function updateStartTime(raceID, startTime){
-    socket.emit(" 
 }
 
 export function updateEndTime(){

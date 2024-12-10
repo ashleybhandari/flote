@@ -12,9 +12,11 @@ import SearchBar from "@atoms/SearchBar";
 import HeaderProfile from "@atoms/HeaderProfile";
 import {renderTime, getCounterStr, addTime, linkTime, unLinkTime, deleteTime} from "./timeListUtils.tsx";
 import {TimerControls} from "./TimerControls.tsx";
+import {AlreadyRecordedWarning} from "./AlreadyRecordedWarning.tsx";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useParams } from "react-router-dom";
-import { getBoatIDs } from "./DBUtils.tsx";
+import { getBoatIDs, hasStartTime } from "./DBUtils.tsx";
+//no, I will not organize my imports
 
 export const UNLAPPED_CODE = -1; 
 export const DNF_CODE = -2;
@@ -25,13 +27,14 @@ export default function RaceTimer(){
     const [times, setTimes] = useState([]);
     const [linkingIndex, setLinkingIndex] = useState(-1);
     const [raceOver, setRaceOver] = useState(false);
-    //step 1 is to get the race by race id 
     const {raceId} = useParams();
     const [boatIds, setBoatIds] = useState(["boat ID 1", "abcdefg", "foo", "Red October"]); 
     const [boatDBIds, setBoatDBIds] = useState([]);
-
+    const [alreadyRec, setAlreadyRec] = useState(false);
     useEffect(() => {
        getBoatIDs(raceId, setBoatIds, setBoatDBIds); 
+       hasStartTime(raceId, setAlreadyRec);
+
     },[raceId, boatIds, boatDBIds] ); 
     const { user } = useAuth0();
        
@@ -51,11 +54,12 @@ export default function RaceTimer(){
             
         </div>
         <div className="raceControls justify-self-end">
-            <TimerControls setTimes = {setTimes} counter = {counter} start = {start} isStopped = {isStopped} pause = {pause} resume = {resume}  reset = {reset} boatIds ={boatIds} boatDBIds = {boatDBIds} raceOver = {raceOver} setRaceOver = {setRaceOver}/>
+            <TimerControls setTimes = {setTimes} counter = {counter} start = {start} isStopped = {isStopped} pause = {pause} resume = {resume}  reset = {reset} boatIds ={boatIds} boatDBIds = {boatDBIds} raceOver = {raceOver} setRaceOver = {setRaceOver} raceId = {raceId}/>
         </div>
     </div>
 
     <TimeLinker boatIds = {boatIds} times = {times} setTimes = {setTimes} linkingIndex = {linkingIndex} setLinkingIndex = {setLinkingIndex} boatDBIds = {boatDBIds}/>
+    <AlreadyRecordedWarning alreadyRec = {alreadyRec} setAlreadyRec = {setAlreadyRec}/>
   </div>
 
 }

@@ -1,8 +1,8 @@
 import { Button } from "@nextui-org/react";
 import {renderTime, addTime, linkTime, unLinkTime, deleteTime} from "./timeListUtils.tsx";
 import {DNF_CODE, DNS_CODE, UNLAPPED_CODE} from "./RaceTimer.tsx";
-
-export function TimerControls ({setTimes, counter, start, isStopped, pause, resume, reset, boatIds, boatDBIds, raceOver, setRaceOver}){
+import {startRace} from "./DBUtils.tsx"; 
+export function TimerControls ({setTimes, counter, start, isStopped, pause, resume, reset, boatIds, boatDBIds, raceOver, setRaceOver, raceId }){
     if(raceOver){
         return;
     }
@@ -13,7 +13,7 @@ export function TimerControls ({setTimes, counter, start, isStopped, pause, resu
                 color="primary"
                 size="lg"
                 radius="sm"
-                onPress={start}
+                onPress={() => {start(); startRace(raceId, boatDBIds)}}
                 className="self-end w-32 m-6"
                 >Start </Button>
                 </div>
