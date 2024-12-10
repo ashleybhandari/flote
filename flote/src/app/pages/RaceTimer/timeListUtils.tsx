@@ -5,7 +5,7 @@ import {clearAllBoats, updateBoatTime, markBoatDNF, markBoatDNS} from "./DBUtils
 export function renderTime(count, time, index, setTimes, linkingIndex, setLinkingIndex, boatIds, boatDBIds){
     return (
     <li key={index} className="flex flex-row items-center"> 
-        <div>{renderCount(time, count, index, setTimes)}</div> 
+        <div>{renderCount(time, count, index, setTimes, boatIds, boatDBIds)}</div> 
         <div className="grow">{renderBoatInfo(time, index, setTimes, linkingIndex, setLinkingIndex, boatIds, boatDBIds)}</div>
         <Button
             color="danger"
@@ -19,7 +19,7 @@ export function renderTime(count, time, index, setTimes, linkingIndex, setLinkin
 }
 
 //either renders a lap button or the time
-export function renderCount(time, count, index, setTimes){
+export function renderCount(time, count, index, setTimes, boatIds, boatDBIds){
     if(time[0] == DNF_CODE){
         return <div className="m-6">DNF</div>
     }
@@ -38,7 +38,7 @@ export function renderCount(time, count, index, setTimes){
                 size="lg"
                 radius="sm"
                 onPress={() => {
-                    updateCountOfTime(index, count, setTimes);  
+                    updateCountOfTime(index, count, setTimes, boatIds, boatDBIds);  
                     }}
                 className="self-end w-32 m-6"
                 >Lap</Button>
@@ -168,8 +168,12 @@ export function updateCountOfTime(index: number, newCount: number, setTimes, boa
                 if(i == index){
                     item[0] = newCount;
                     let boatRaceId = item[1];
-                    if(boatRaceId !== null)
-                        updateBoatTime(findBoatDBId(boatRaceId, boatIds, boatDBIds), newCount); 
+                    if(boatRaceId != null){
+                        console.log(boatRaceId);
+                        //updateBoatTime(findBoatDBId(boatRaceId, boatIds, boatDBIds), newCount); 
+                        console.log(boatIds);
+                        console.log(boatDBIds);
+                    }
                 }
                 return item;
             });
