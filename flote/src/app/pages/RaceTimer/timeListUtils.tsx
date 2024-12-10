@@ -139,6 +139,8 @@ export function unLinkTime(index: number, setTimes, boatIds, boatDBIds){
     setTimes((times)=>{
             return times.map((time, i) => {
                     if(index === i){
+                        let boatRaceId = time[1];
+                        updateBoatTime(findBoatDBId(boatRaceId, boatIds, boatDBIds), DNF_CODE); 
                         time[1] = null;
                         needSort = time[0] == DNS_CODE || time[0] == DNF_CODE;
                     }
@@ -149,7 +151,13 @@ export function unLinkTime(index: number, setTimes, boatIds, boatDBIds){
 }
 
 export function deleteTime(index: number, setTimes, boatIds, boatDBIds){
+    //rms time from db
     setTimes((times) => {
+                
+            let boatRaceId = times[index][1];
+            if(boatRaceId !== null)
+                updateBoatTime(findBoatDBId(boatRaceId, boatIds, boatDBIds), DNF_CODE); 
+
             return times.filter((item, i) => i !== index);
     });
 }
@@ -159,6 +167,9 @@ export function updateCountOfTime(index: number, newCount: number, setTimes, boa
             return times.map((item, i) =>{
                 if(i == index){
                     item[0] = newCount;
+                    let boatRaceId = item[1];
+                    if(boatRaceId !== null)
+                        updateBoatTime(findBoatDBId(boatRaceId, boatIds, boatDBIds), newCount); 
                 }
                 return item;
             });

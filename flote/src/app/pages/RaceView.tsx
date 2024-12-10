@@ -86,8 +86,7 @@ export default function RaceView() {
       minute: "2-digit",
     });
   };
-
-  const raceStart = formatTime(startTime, false);
+  const raceStart = formatTime(race?.startTime, false);
 
   const boatsWithFinishTimes = boats.map((boat) => ({
     ...boat,
