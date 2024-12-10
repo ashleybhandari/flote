@@ -1,14 +1,24 @@
 import { socket } from "@src/socket";
-
+import {DNF_CODE, DNS_CODE, UNLAPPED_CODE} from "./RaceTimer.tsx";
 
 export function clearAllBoats(boatIDs){
     boatIDs.map((boatID) => 
-        markBoatDNF(boatID)
+        markBoatUnLapped(boatID)
     ); 
 }
 
 export function updateBoatTime(boatID, time){
     //step 1 : get the boat 
+    if(time === UNLAPPED_CODE){
+        markBoatUnLapped(boatID);
+        return;
+    }
+
+    if(time === DNS_CODE){
+        markBoatDNS(boatID);
+        return;
+    }
+
     let updateData = { boatId: boatID, finishTime: time, dns: false } 
     socket.emit("updateBoat", updateData, (res) => {
             if(res.error){
@@ -18,7 +28,7 @@ export function updateBoatTime(boatID, time){
    
 }
 
-export function markBoatDNF(boatID){
+export function markBoatUnLapped(boatID){
     let updateData = { boatId: boatID, finishTime: null, dns: false } 
     socket.emit("updateBoat", updateData, (res) => {
             if(res.error){
