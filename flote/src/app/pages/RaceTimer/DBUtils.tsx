@@ -3,7 +3,7 @@ import {DNF_CODE, DNS_CODE, UNLAPPED_CODE} from "./RaceTimer.tsx";
 
 export function startRace(raceID, boatIDs){
     clearAllBoats(boatIDs);
-    updateStartTime(raceID, boatIDs);
+    updateStartTime(raceID, new Date());
 }
 
 export function clearAllBoats(boatIDs){
@@ -73,7 +73,9 @@ export function hasStartTime(raceID, setAlreadyRec){
         if(res.error){
             return; 
         }
-        setAlreadyRec((alreadyRec) => (res.startTime !== undefined && res.startTime !== -1));
+        let st = res.data.race.startTime;
+        let aR = !(st === undefined || st === -1);
+        setAlreadyRec((alreadyRec) => aR);
     }
 
     socket.emit("getRaceById",
@@ -82,8 +84,20 @@ export function hasStartTime(raceID, setAlreadyRec){
     ); 
 }
 export function updateStartTime(raceID, startTime){
+    let updateData = { raceId: raceID, startTime: startTime } 
+    socket.emit("updateRaces", updateData, (res) => {
+            if(res.error){
+                console.log(res.error);
+            }
+    });
 }
 
-export function updateEndTime(){
+export function updateEndTime(raceID){
+    let updateData = { raceId: raceID, finishTime: new Date() } 
+    socket.emit("updateRaces", updateData, (res) => {
+            if(res.error){
+                console.log(res.error);
+            }
+    });
 
 }
