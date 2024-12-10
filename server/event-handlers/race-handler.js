@@ -28,20 +28,33 @@ async function createRace(race, callback) {
   callback(response);
 }
 
-async function updateRaces(userId) {
+async function updateRaces(updateData, callback) {
   const response = {};
 
   try {
-    const admin = await Race.findByIdAndUpdate({ adminId: userId });
-    const timekeeper = await Race.findByIdAndUpdate({ timekeeperIds: userId });
-    response.data = {
-      races: { admin, timekeeper },
-    };
+    const { name, raceId, startTime, finishTime, boatIds } = updateData;
+    if (!raceId) {
+      throw new Error("Race ID is required to update a race.");
+    }
+
+    const race = await Race.findById(raceId);
+
+    if (!race) {
+      throw new Error("Race not found.");
+    }
+
+    if (name !== undefined) race.name = name;
+    if (startTime !== undefined) race.startTime = startTime;
+    if (finishTime !== undefined) race.finishTime = finishTime;
+    if (boatIds !== undefined) race.boatIds = boatIds;
+    
+    await race.save();
+    response.data = race;
   } catch (error) {
     response.error = error.message;
   }
 
-  console.log("Race updated.")
+  callback(response);
 }
 
 async function deleteRaces(userId) {
