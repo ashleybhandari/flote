@@ -13,11 +13,11 @@ import { EventResponse } from "@src/models/EventResponse";
 import AppLayout from "@templates/AppLayout";
 import { Button } from "@nextui-org/button";
 import List from "@atoms/List";
-//import { useNavigate } from "react-router-dom";
 import ResponsiveCard from "@molecules/ResponsiveCard";
 import CreateBoatModal from "@molecules/modals/CreateBoatModal";
 import CreateRaceModal from "@molecules/modals/CreateRaceModal";
 import EditTimekeepersModal from "@molecules/modals/EditTimekeepersModal";
+import EditRegattaModal from "@molecules/modals/EditRegattaModal";
 import ConfirmationModal from "@molecules/modals/ConfirmationModal";
 
 export default function RegattaView() {
@@ -30,6 +30,7 @@ export default function RegattaView() {
   const [regattaName, setRegattaName] = useState<string>("");
   const [races, setRaces] = useState<Race[]>([]);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [editModalOpen, setEditModalOpen] = useState(false);
   const [timekeepers, setTimekeepers] = useState<string[]>([]);
   const [isModalOpen, setIsModalOpen] = useState({
     boats: false,
@@ -38,7 +39,6 @@ export default function RegattaView() {
   });
   const [regatta, setRegatta] = useState<Regatta | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  //const navigate = useNavigate();
 
   useEffect(() => {
     if (location.state?.regatta?.name) {
@@ -140,6 +140,24 @@ export default function RegattaView() {
     );
   };
 
+  const updateRegatta = (data: {
+    name: string;
+  }) => {
+    const updatedBoat = {
+      regattaId: regattaId,
+      name: data.name,
+    };
+
+    socket.emit("updateRegatta", updatedBoat, (res) => {
+      if (res.error) {
+        console.error("Failed to update regatta:", res.error);
+      } else {
+        console.log("Regatta updated successfully", res.data);
+        setRegatta(res.data);
+      }
+    });
+  };
+
   const breadcrumbs: Breadcrumb[] = [
     { name: "Home", href: "/home" },
     { name: regatta?.name ?? "regatta" },
@@ -193,9 +211,14 @@ export default function RegattaView() {
       </div>
       <div className="mt-3 text-end">
         {isRegattaAdmin && (
+          <div>
           <Button color="danger" onClick={() => setDeleteModalOpen(true)}>
             Delete Regatta
           </Button>
+          <Button color="primary" onClick={() => setEditModalOpen(true)}>
+            Edit Name
+          </Button>
+          </div>
         )}
       </div>
 
@@ -210,7 +233,7 @@ export default function RegattaView() {
         isOpen={isModalOpen.races}
         onClose={() => setIsModalOpen((m) => ({ ...m, races: false }))}
         onSubmit={handleCreateRace}
-        existingBoats={boats
+        existingBoats={boats.filter((x) => x.raceId === undefined)
           .map((boat) => boat.name)
           .filter((name): name is string => !!name)}
         existingRaces={races.map((race) => race.name)}
@@ -221,6 +244,12 @@ export default function RegattaView() {
         onClose={() => setIsModalOpen((m) => ({ ...m, timekeepers: false }))}
         onSubmit={handleUpdateTimekeepers}
         regattaId={regatta?._id}
+      />
+      <EditRegattaModal
+        isOpen={editModalOpen}
+        onUpdate={updateRegatta}
+        onClose={() => setEditModalOpen(false)}
+        regatta={regatta!}
       />
       <ConfirmationModal
         isOpen={deleteModalOpen}
