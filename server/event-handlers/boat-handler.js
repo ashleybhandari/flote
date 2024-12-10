@@ -62,9 +62,26 @@ async function searchBoats(query, callback) {
   const response = {};
 
   try {
-    const boats = await Boat.find({
-      name: new RegExp(query, "i"),
+    const regex = new RegExp(query, "i");
+
+    const nameMatch = await Boat.find({ name: regex }).exec();
+    const idMatch = await Boat.find({ registrationId: regex }).exec();
+    const participantMatch = await Boat.find({
+      participantNames: regex,
     }).exec();
+
+    const matches = [...nameMatch, ...idMatch, ...participantMatch];
+    const boats = [];
+    const addedIds = [];
+
+    matches.forEach((boat) => {
+      const id = boat._id.toString();
+      const isNew = !addedIds.includes(id);
+      if (isNew) {
+        boats.push(boat);
+        addedIds.push(id);
+      }
+    });
 
     response.data = { boats };
   } catch (error) {
@@ -77,7 +94,7 @@ async function searchBoats(query, callback) {
 async function getBoatsById(registrationId, callback) {
   const response = {};
   try {
-    const boat = await Boat.find({registrationId: registrationId}).exec();
+    const boat = await Boat.find({ registrationId: registrationId }).exec();
     const participants = boat.participantNames;
     response.data = {
       boats: { boat, participants },
@@ -98,7 +115,8 @@ async function updateBoat(updateData, callback) {
   const response = {};
 
   try {
-    const { boatId, registrationId, name, participantNames, finishTime, dns } = updateData;
+    const { boatId, registrationId, name, participantNames, finishTime, dns } =
+      updateData;
     if (!boatId) {
       throw new Error("Boat ID is required to update a boat.");
     }
@@ -111,7 +129,8 @@ async function updateBoat(updateData, callback) {
 
     if (registrationId !== undefined) boat.registrationId = registrationId;
     if (name !== undefined) boat.name = name;
-    if (participantNames !== undefined) boat.participantNames = participantNames;
+    if (participantNames !== undefined)
+      boat.participantNames = participantNames;
     if (finishTime !== undefined) boat.finishTime = finishTime;
     if (dns !== undefined) boat.dns = dns;
 
@@ -163,12 +182,9 @@ async function deleteBoat(boatId, callback) {
     }
 
     const raceId = boat.raceId;
-    
+
     if (raceId) {
-      await Race.updateOne(
-        { _id: raceId },
-        { $pull: { boatIds: boatId } }
-      );
+      await Race.updateOne({ _id: raceId }, { $pull: { boatIds: boatId } });
     }
 
     await Boat.findByIdAndDelete(boatId);
