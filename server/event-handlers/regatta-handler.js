@@ -21,8 +21,8 @@ async function createRegatta(regatta, callback) {
   const response = {};
 
   try {
-    const doc = await new Regatta(regatta).save();
-    response.data = { id: doc._id };
+    const regatta = await new Regatta(regatta).save();
+    response.data = { regatta };
   } catch (error) {
     response.error = error.message;
   }

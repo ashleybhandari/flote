@@ -28,7 +28,7 @@ export default function AccountHome() {
           console.error("Regatta creation failed:", res.error);
         } else {
           navigate(`/regatta/${res.data.id}`, {
-            state: { regatta: res.data },
+            state: { regatta: res.data.regatta },
           });
         }
       }
