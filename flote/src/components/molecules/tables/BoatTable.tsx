@@ -40,15 +40,12 @@ export default function BoatTable({ searchQuery }: Props) {
     setRows([]);
 
     boats.forEach((boat) => {
+      let date = "TBD";
       socket.emit("getRaceById", boat.raceId, (res: EventResponse) => {
         if (res.error) {
-          console.error("getRegattaById failed:", res.error);
-        } else {
           const startTime = res.data.race?.startTime;
-          const date = startTime
-            ? new Date(startTime).toLocaleDateString()
-            : "TBD";
-
+          if (startTime) date = new Date(startTime).toLocaleDateString();
+        } else {
           const row: SearchTableRow = {
             id: boat._id!,
             date,
