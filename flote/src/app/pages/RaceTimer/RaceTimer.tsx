@@ -14,7 +14,7 @@ import {renderTime, getCounterStr, addTime, linkTime, unLinkTime, deleteTime} fr
 import {TimerControls} from "./TimerControls.tsx";
 import {AlreadyRecordedWarning} from "./AlreadyRecordedWarning.tsx";
 import { useAuth0 } from "@auth0/auth0-react";
-import { useParams useLocation} from "react-router-dom";
+import { useParams, useLocation} from "react-router-dom";
 import { getBoatIDs, hasStartTime } from "./DBUtils.tsx";
 //no, I will not organize my imports
 
@@ -34,9 +34,11 @@ export default function RaceTimer(){
     const location = useLocation();
     useEffect(() => {
        getBoatIDs(raceId, setBoatIds, setBoatDBIds); 
-       hasStartTime(raceId, setAlreadyRec);
-
     },[raceId, boatIds, boatDBIds] ); 
+
+    useEffect(() => {
+       hasStartTime(raceId, setAlreadyRec);
+    }, []); 
 
     const { user } = useAuth0();
        
