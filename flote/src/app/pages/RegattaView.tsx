@@ -114,7 +114,6 @@ export default function RegattaView() {
       if (res.error) {
         console.error("Failed to delete regatta:", res.error);
       } else {
-        console.log("Regatta deleted successfully");
         navigate(`/home`);
       }
     });
@@ -148,7 +147,6 @@ export default function RegattaView() {
       if (res.error) {
         console.error("Failed to update regatta:", res.error);
       } else {
-        console.log("Regatta updated successfully", res.data);
         setRegatta(res.data);
       }
     });
