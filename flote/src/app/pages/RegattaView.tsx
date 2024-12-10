@@ -27,7 +27,6 @@ export default function RegattaView() {
   const navigate = useNavigate();
 
   const [boats, setBoats] = useState<Boat[]>([]);
-  const [regattaName, setRegattaName] = useState<string>("");
   const [races, setRaces] = useState<Race[]>([]);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [editModalOpen, setEditModalOpen] = useState(false);
@@ -41,8 +40,8 @@ export default function RegattaView() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    if (location.state?.regatta?.name) {
-      setRegattaName(location.state.regatta.name);
+    if (location.state?.regatta) {
+      setRegatta(location.state.regatta);
       setIsLoading(false);
     } else if (regattaId) {
       socket.emit("getRegattaById", regattaId, (res: EventResponse) => {
@@ -50,7 +49,6 @@ export default function RegattaView() {
           console.error("Failed to fetch regatta details:", res.error);
         } else {
           setRegatta(res.data.regatta);
-          setRegattaName(res.data.regatta.name);
           setRaces(res.data.races);
           setBoats(res.data.boats);
           setTimekeepers(res.data.regatta.timekeeperIds);
@@ -140,9 +138,7 @@ export default function RegattaView() {
     );
   };
 
-  const updateRegatta = (data: {
-    name: string;
-  }) => {
+  const updateRegatta = (data: { name: string }) => {
     const updatedBoat = {
       regattaId: regattaId,
       name: data.name,
@@ -166,7 +162,7 @@ export default function RegattaView() {
   return (
     <AppLayout
       isLoading={isLoading}
-      title={regattaName}
+      title={regatta?.name}
       subtitle="regatta"
       breadcrumbs={breadcrumbs}
     >
@@ -209,18 +205,16 @@ export default function RegattaView() {
           />
         </ResponsiveCard>
       </div>
-      <div className="mt-3 text-end">
-        {isRegattaAdmin && (
-          <div>
+      {isRegattaAdmin && (
+        <div className="self-end flex items-center gap-2">
           <Button color="danger" onClick={() => setDeleteModalOpen(true)}>
             Delete Regatta
           </Button>
           <Button color="primary" onClick={() => setEditModalOpen(true)}>
             Edit Name
           </Button>
-          </div>
-        )}
-      </div>
+        </div>
+      )}
 
       <CreateBoatModal
         isOpen={isModalOpen.boats}
@@ -233,7 +227,8 @@ export default function RegattaView() {
         isOpen={isModalOpen.races}
         onClose={() => setIsModalOpen((m) => ({ ...m, races: false }))}
         onSubmit={handleCreateRace}
-        existingBoats={boats.filter((x) => x.raceId === undefined)
+        existingBoats={boats
+          .filter((x) => x.raceId === undefined)
           .map((boat) => boat.name)
           .filter((name): name is string => !!name)}
         existingRaces={races.map((race) => race.name)}
