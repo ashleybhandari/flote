@@ -17,7 +17,6 @@ export function BoatHandler(io, socket) {
  */
 async function addBoats(boat, callback) {
   const response = {};
-  console.log("Received boat data:", boat);
 
   try {
     if (!boat.regattaId) {

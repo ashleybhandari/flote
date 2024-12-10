@@ -14,11 +14,8 @@ async function createRace(race, callback) {
   try {
     const doc = await new Race(race).save();
     const raceId = doc._id;
-    
-    await Boat.updateMany(
-      { _id: { $in: race.boatIds } },
-      { $set: { raceId } }
-    );
+
+    await Boat.updateMany({ _id: { $in: race.boatIds } }, { $set: { raceId } });
 
     response.data = { raceId: doc._id };
   } catch (error) {
@@ -28,7 +25,8 @@ async function createRace(race, callback) {
   callback(response);
 }
 
-const updateRace = async (updateData) => {
+const updateRace = async (updateData, callback) => {
+  const response = {};
   const { raceId, name, boatIds } = updateData;
 
   if (!raceId) {
@@ -41,19 +39,15 @@ const updateRace = async (updateData) => {
       return { error: "Race not found" };
     }
 
-    if (name) {
-      race.name = name;
-    }
-    if (boatIds) {
-      race.boats = boatIds;
-    }
+    if (name) race.name = name;
+    if (boatIds) race.boats = boatIds;
 
-    const updatedRace = await race.save();
-    return { data: updatedRace };
+    await race.save();
   } catch (error) {
-    console.error("Error updating race:", error);
-    return { error: "An error occurred while updating the race" };
+    response.error = error.message;
   }
+
+  callback(response);
 };
 
 async function deleteRace(raceIdData, callback) {
@@ -64,7 +58,7 @@ async function deleteRace(raceIdData, callback) {
       throw new Error("Race ID is required to delete a race.");
     }
 
-    await Boat.updateMany({ "raceId" : raceIdData }, {$unset: {raceId:1} });
+    await Boat.updateMany({ raceId: raceIdData }, { $unset: { raceId: 1 } });
 
     const race = await Race.findByIdAndDelete(raceIdData);
 
@@ -103,7 +97,6 @@ async function searchRaces(query, callback) {
   callback(response);
 }
 
-
 async function getRaceById(raceId, callback) {
   const response = {};
   try {
@@ -114,7 +107,6 @@ async function getRaceById(raceId, callback) {
       throw new Error("Race not found");
     }
 
-    console.log("Boats fetched for race", boats);
     response.data = { race, boats };
   } catch (error) {
     response.error = error.message;

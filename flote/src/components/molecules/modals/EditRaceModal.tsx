@@ -38,17 +38,14 @@ export default function EditRaceModal({
   };
 
   const submit = () => {
-    const { name } = data;
-    if (!name.trim()) {
+    if (!data.name.trim()) {
       setFormError(
         "All fields must be filled out."
       );
       return;
     }
-
-    onUpdate({
-      name,
-    });
+    
+    onUpdate(data);
     onClose();
   };
 
