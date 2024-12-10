@@ -100,14 +100,12 @@ export default function RaceView() {
       raceId: raceId,
       name: data.name,
     };
-    console.log(updatedRace);
 
     socket.emit("updateRace", updatedRace, (res: EventResponse) => {
       if (res.error) {
         console.error("Failed to update race:", res.error);
       } else {
-        console.log("Race updated successfully", res.data);
-        setRace((r) => ({ ...r, name: data.name } as Race));
+        setRace(res.data.race);
       }
     });
   };
@@ -117,7 +115,6 @@ export default function RaceView() {
       if (res.error) {
         console.error("Failed to delete race:", res.error);
       } else {
-        console.log("Race deleted successfully");
         navigate(`/regatta/${regatta?._id}`);
       }
     });

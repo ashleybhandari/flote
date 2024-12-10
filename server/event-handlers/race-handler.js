@@ -43,6 +43,7 @@ const updateRace = async (updateData, callback) => {
     if (boatIds) race.boats = boatIds;
 
     await race.save();
+    response.data = { race };
   } catch (error) {
     response.error = error.message;
   }

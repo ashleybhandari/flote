@@ -69,7 +69,6 @@ export default function BoatView() {
       if (res.error) {
         console.error("Failed to update boat:", res.error);
       } else {
-        console.log("Boat updated successfully", res.data);
         setBoat(res.data);
       }
     });
@@ -80,7 +79,6 @@ export default function BoatView() {
       if (res.error) {
         console.error("Failed to delete boat:", res.error);
       } else {
-        console.log("Boat deleted successfully");
         navigate(`/regatta/${regattaId}`);
       }
     });

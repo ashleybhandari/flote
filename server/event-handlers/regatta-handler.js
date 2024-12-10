@@ -14,15 +14,15 @@ export function RegattaHandler(io, socket) {
 /**
  * Creates a new regatta. The callback is called with an object with a data
  * field that holds the ID of the newly created regatta: { id: string }.
- * @param {Regatta} regatta
+ * @param {Regatta} data
  * @param {Function} callback
  */
-async function createRegatta(regatta, callback) {
+async function createRegatta(data, callback) {
   const response = {};
 
   try {
-    const doc = await new Regatta(regatta).save();
-    response.data = { id: doc._id };
+    const regatta = await new Regatta(data).save();
+    response.data = { regatta };
   } catch (error) {
     response.error = error.message;
   }

@@ -12,7 +12,6 @@ export default function Landing() {
   const { isAuthenticated, loginWithRedirect } = useAuth0();
   const navigate = useNavigate();
 
-  // TODO remove, change redirect_uri to /home
   useEffect(() => {
     if (isAuthenticated) navigate("/home");
   }, [isAuthenticated, navigate]);

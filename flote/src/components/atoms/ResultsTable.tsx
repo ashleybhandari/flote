@@ -42,12 +42,14 @@ export default function ResultsTable({
 
       return r.sort((a, b) => {
         const column = descriptor.column as keyof SearchTableRow;
-        const first = a[column]?.toString() ?? "";
-        const second = b[column]?.toString() ?? "";
+        const first = a[column]?.toString().toLowerCase() ?? "";
+        const second = b[column]?.toString().toLowerCase() ?? "";
         let cmp;
 
         if (descriptor.column === "date") {
-          cmp = new Date(first) < new Date(second) ? -1 : 1;
+          if (first === "tbd") cmp = -1;
+          else if (second === "tbd") cmp = 1;
+          else cmp = new Date(first) < new Date(second) ? -1 : 1;
         } else {
           cmp =
             (parseInt(first) || first) < (parseInt(second) || second) ? -1 : 1;
