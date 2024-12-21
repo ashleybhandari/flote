@@ -12,6 +12,7 @@
     "express-openid-connect": "^2.17.1",
     "mongodb": "^6.10.0",
     "mongoose": ">=8.8.3",
+    "path-to-regexp": "^2.4.0",
     "socket.io": "^4.8.1"
   },
   "devDependencies": {
